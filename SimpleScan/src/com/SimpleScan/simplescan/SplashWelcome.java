@@ -1,17 +1,35 @@
 package com.SimpleScan.simplescan;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends Activity {
+public class SplashWelcome extends Activity {
 
+	GifPlayer gPlayer ; 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_welcome);
+        gPlayer = (GifPlayer)findViewById(R.id.gifScan);
+            
+        
+        TimerTask task = new TimerTask()
+        {
+        	public void run()
+        	{
+        		finish();
+        		startActivity(new Intent(SplashWelcome.this, Main.class));
+        	}
+        };
+        Timer openning = new Timer();
+        openning.schedule(task, 1500);
     }
 
 
