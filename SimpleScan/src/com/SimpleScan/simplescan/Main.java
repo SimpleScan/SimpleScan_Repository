@@ -23,21 +23,25 @@ public class Main extends FragmentActivity implements OnItemClickListener
 	private String[] menu;
 	private ActionBarDrawerToggle drawerListener;
 	private FragmentManager fManager;
-	//private FragmentTransaction fTransaction;
+
 	protected void onCreate(Bundle saveInstatnceState)
 	{
 		super.onCreate(saveInstatnceState);
 		setContentView(R.layout.activity_main);
+		
+		//enable the action bar
 		getActionBar().setHomeButtonEnabled(true);
 		getActionBar().setDisplayHomeAsUpEnabled(true);		
 		menu = getResources().getStringArray(R.array.menu);
+		//Set up the List view for the menu
 		listView = (ListView)findViewById(R.id.drawerList);		
 		listView.setAdapter(new ArrayAdapter<String>(this,R.layout.custom_list_item,menu));
 		listView.setOnItemClickListener(this);
+		// drawer menu 
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 		drawerListener = new ActionBarDrawerToggle(this,drawerLayout,R.string.drawer_open,R.string.drawer_close);
 		drawerLayout.setDrawerListener(drawerListener);
-		
+		// fragment manager
 		fManager = getSupportFragmentManager();
 		FragmentTransaction fTransaction  = fManager.beginTransaction();
 		FragmentOverall fragmentOverall = new FragmentOverall();
