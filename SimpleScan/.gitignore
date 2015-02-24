@@ -83,6 +83,3 @@ local.properties
 
 # TeXlipse plugin
 .texlipse
-
-### Alias ####
-apply-gitignore = !git ls-files -ci --exclude-standard -z | xargs -0r git rm --cached
