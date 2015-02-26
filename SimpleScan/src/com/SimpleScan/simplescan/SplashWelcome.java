@@ -17,9 +17,10 @@ public class SplashWelcome extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        gPlayer = (GifPlayer)findViewById(R.id.gifScan);
-            
         
+        startActivity(new Intent(SplashWelcome.this, Main.class));
+        /* comment out the anime temporarily 
+        gPlayer = (GifPlayer)findViewById(R.id.gifScan);       
         TimerTask task = new TimerTask()
         {
         	public void run()
@@ -29,7 +30,7 @@ public class SplashWelcome extends Activity {
         	}
         };
         Timer openning = new Timer();
-        openning.schedule(task, 1500);
+        openning.schedule(task, 1500);*/
     }
 
 
