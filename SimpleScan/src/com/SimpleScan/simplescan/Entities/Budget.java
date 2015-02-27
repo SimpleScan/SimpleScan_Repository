@@ -3,6 +3,8 @@ package com.SimpleScan.simplescan.Entities;
 import java.io.Serializable;
 import java.util.Date;
 
+// TEST TEST TEST ///
+
 /**
  * @author pearse1
  * 
