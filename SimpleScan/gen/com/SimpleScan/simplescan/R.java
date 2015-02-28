@@ -1652,10 +1652,11 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f09002e;
         public static final int action_mode_bar_stub=0x7f09002d;
         public static final int action_mode_close_button=0x7f090020;
-        public static final int action_settings=0x7f090046;
+        public static final int action_settings=0x7f090048;
         public static final int activity_chooser_view_content=0x7f090021;
         public static final int always=0x7f090014;
         public static final int beginning=0x7f09001b;
+        public static final int button=0x7f090047;
         public static final int checkbox=0x7f090029;
         public static final int collapseActionView=0x7f090015;
         public static final int decor_content_parent=0x7f09002f;
@@ -1669,6 +1670,7 @@ containing a value of this type.
         public static final int end=0x7f09001c;
         public static final int expand_activities_button=0x7f090022;
         public static final int expanded_menu=0x7f090028;
+        public static final int field=0x7f090046;
         public static final int home=0x7f090000;
         public static final int homeAsUp=0x7f09000e;
         public static final int icon=0x7f090026;
@@ -1766,7 +1768,8 @@ containing a value of this type.
         public static final int fragment_contacts=0x7f03001a;
         public static final int fragment_expenses=0x7f03001b;
         public static final int fragment_overall=0x7f03001c;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001d;
+        public static final int main=0x7f03001d;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001e;
     }
     public static final class menu {
         public static final int main=0x7f0d0000;
@@ -1833,6 +1836,7 @@ containing a value of this type.
         public static final int drawer_close=0x7f0a0014;
         public static final int drawer_open=0x7f0a0013;
         public static final int hello_world=0x7f0a0011;
+        public static final int ocr_name=0x7f0a0015;
     }
     public static final class style {
         /** 

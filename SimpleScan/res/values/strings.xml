@@ -11,5 +11,6 @@
         <item >View Expenses</item>
         <item >View Contact List</item>
     </string-array>
+    <string name="ocr_name">SimpleScan_OCR</string>
 
 </resources>
