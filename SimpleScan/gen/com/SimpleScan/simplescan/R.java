@@ -1636,8 +1636,7 @@ containing a value of this type.
         public static final int abc_textfield_search_default_mtrl_alpha=0x7f020031;
         public static final int abc_textfield_search_material=0x7f020032;
         public static final int ic_launcher=0x7f020033;
-        public static final int left_dropdown_arrow=0x7f020034;
-        public static final int scan_anime=0x7f020035;
+        public static final int scan_anime=0x7f020034;
     }
     public static final class id {
         public static final int action_bar=0x7f090031;
