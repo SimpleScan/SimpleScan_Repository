@@ -1,13 +1,15 @@
 package com.SimpleScan.simplescan;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,7 +30,9 @@ public class OCR extends Activity {
 	protected Button _button;
 	protected ImageView _image;
 	protected TextView _field;
+	protected String _appPath = Environment.getExternalStorageDirectory() + "/SimpleScan";
 	protected String _path;
+	protected String _tessPath = Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract";
 	protected String _traindataPath;
 	protected boolean _taken;
 	
@@ -46,20 +50,44 @@ public class OCR extends Activity {
         _button = ( Button ) findViewById( R.id.button ); //get id/button from main.xml
         _button.setOnClickListener( new ButtonClickHandler() );
         
-        File im_direct = new File( Environment.getExternalStorageDirectory() + "/photo_capture/images" );
+        File app_dir = new File(_appPath);
+        if(!app_dir.exists()) {
+        	if(app_dir.mkdir()) {
+        		Log.i( "app_dir", "app_dir made" );
+        		CopyAssets();
+        	}
+        	else Log.i( "app_dir", "app_dir could not be made" );
+        }
+        else Log.i( "app_dir", "app_dir exists" );
+        
+        
+        //File im_direct = new File( Environment.getExternalStorageDirectory() + "/photo_capture/images" );
+        File im_direct = new File( Environment.getExternalStorageDirectory() + "/SimpleScan/images" );
         if(!im_direct.exists()) {
         	if(im_direct.mkdir()) {
         		
         	}
         }
-        _path = Environment.getExternalStorageDirectory() + "/photo_capture/images/make_machine_example.jpg";
+        //_path = Environment.getExternalStorageDirectory() + "/photo_capture/images/make_machine_example.jpg";
+        _path = Environment.getExternalStorageDirectory() + "/SimpleScan/images/recipt_image.jpg";
         
-        _traindataPath = Environment.getExternalStorageDirectory() + "/photo_capture/tesseract/tessdata";
+
+        File tess_dir = new File(_tessPath);
+        if(!tess_dir.exists()) {
+        	if(tess_dir.mkdir()) {
+        		Log.i( "tess_dir", "tess_dir made" );
+        	}
+        	else Log.i( "tess_dir", "tess_dir could not be made" );
+        }
+        else Log.i( "tess_dir", "tess_dir exists" );
+        
+        //_traindataPath = Environment.getExternalStorageDirectory() + "/photo_capture/tesseract/tessdata";
+        _traindataPath = Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract/tessdata";
         File traindata_direct = new File(_traindataPath);
         if(!traindata_direct.exists()) {
         	if(traindata_direct.mkdir()) {
         		Log.i( "traindata", "directory made" );
-        		//copyAssets();
+        		CopyAssets();
         	}
         	else Log.i( "traindata", "traindata_direct could not be made" );
         }
@@ -115,7 +143,7 @@ public class OCR extends Activity {
     	_taken = true;
     	
     	BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 3; //down-sampling the image
+        options.inSampleSize = 4; //down-sampling the image
     	
     	Bitmap bitmap = BitmapFactory.decodeFile( _path, options ); //create a bitmap from _path with options
     	
@@ -156,18 +184,21 @@ public class OCR extends Activity {
     	
     	_image.setImageBitmap(bitmap); //Assign the bitmap to ImageView
     	
-    	_field.setVisibility( View.GONE );
+    	//_field.setVisibility( View.GONE );
     	
     	
     	TessBaseAPI baseApi = new TessBaseAPI();
     	Log.i("tessrect", "new tess object created");
-    	baseApi.init(Environment.getExternalStorageDirectory() + "/photo_capture/tesseract/", "eng");
+    	//baseApi.init(Environment.getExternalStorageDirectory() + "/photo_capture/tesseract/", "eng");
+    	baseApi.init(Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract/", "eng");
     	Log.i("tessrect", "initialized");
     	// Eg. baseApi.init("/mnt/sdcard/tesseract/tessdata/eng.traineddata", "eng");
     	baseApi.setImage(bitmap);
     	Log.i("tessrect", "bitmap/image set");
     	String recognizedText = baseApi.getUTF8Text();
-    	Log.d("tessrect", recognizedText);
+    	//Log.d("tessrect", recognizedText);    	
+    	_field.setText(recognizedText);
+ 
     	baseApi.end();
     	
     }
@@ -191,6 +222,41 @@ public class OCR extends Activity {
     protected void onSaveInstanceState( Bundle outState ) { //When the device is rotated, this is called
     														//Save any details about app into a Bundle object
     	outState.putBoolean( OCR.PHOTO_TAKEN, _taken );
+    }
+    
+    private void CopyAssets() {
+        AssetManager assetManager = getAssets();
+        String[] files = null;
+        try {
+            files = assetManager.list("tessdata");
+        } catch (IOException e) {
+            Log.e("tag", e.getMessage());
+        }
+ 
+        for(String filename : files) {
+            System.out.println("File name => "+filename);
+            InputStream in = null;
+            OutputStream out = null;
+            try {
+              in = assetManager.open("tessdata/"+filename);   // if files resides inside the "Files" directory itself
+              out = new FileOutputStream(_traindataPath +"/" + filename);
+              copyFile(in, out);
+              in.close();
+              in = null;
+              out.flush();
+              out.close();
+              out = null;
+            } catch(Exception e) {
+                Log.e("tag", e.getMessage());
+            }
+        }
+    }
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while((read = in.read(buffer)) != -1){
+          out.write(buffer, 0, read);
+        }
     }
 }
 
