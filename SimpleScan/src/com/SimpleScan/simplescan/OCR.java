@@ -31,9 +31,10 @@ public class OCR extends Activity {
 	protected ImageView _image;
 	protected TextView _field;
 	protected String _appPath = Environment.getExternalStorageDirectory() + "/SimpleScan";
-	protected String _path;
+	protected String _ImgDirPath = Environment.getExternalStorageDirectory() + "/SimpleScan/images";
+	protected String _ImgPath = Environment.getExternalStorageDirectory() + "/SimpleScan/images/recipt_image.jpg";
 	protected String _tessPath = Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract";
-	protected String _traindataPath;
+	protected String _traindataPath = Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract/tessdata";
 	protected boolean _taken;
 	
 	protected static final String PHOTO_TAKEN	= "photo_taken";
@@ -54,58 +55,52 @@ public class OCR extends Activity {
         if(!app_dir.exists()) {
         	if(app_dir.mkdir()) {
         		Log.i( "app_dir", "app_dir made" );
-        		CopyAssets();
+        		
+        		File im_direct = new File( Environment.getExternalStorageDirectory() + "/SimpleScan/images" );
+                if(!im_direct.exists()) {
+                	if(im_direct.mkdir()) {
+                		
+                	}
+                }
+        		
+                File tess_dir = new File(_tessPath);
+                if(!tess_dir.exists()) {
+                	if(tess_dir.mkdir()) {
+                		Log.i( "tess_dir", "tess_dir made" );
+                		
+                		File traindata_direct = new File(_traindataPath);
+                        if(!traindata_direct.exists()) {
+                        	if(traindata_direct.mkdir()) {
+                        		Log.i( "traindata", "directory made" );
+                        		CopyAssets();
+                        	}
+                        	else Log.i( "traindata", "traindata_direct could not be made" );
+                        }
+                        else Log.i( "traindata", "traindata_direct exists" );
+                		
+                	}
+                	else Log.i( "tess_dir", "tess_dir could not be made" );
+                }
+                else Log.i( "tess_dir", "tess_dir exists" );
+        		
         	}
         	else Log.i( "app_dir", "app_dir could not be made" );
         }
-        else Log.i( "app_dir", "app_dir exists" );
-        
-        
-        //File im_direct = new File( Environment.getExternalStorageDirectory() + "/photo_capture/images" );
-        File im_direct = new File( Environment.getExternalStorageDirectory() + "/SimpleScan/images" );
-        if(!im_direct.exists()) {
-        	if(im_direct.mkdir()) {
-        		
-        	}
-        }
-        //_path = Environment.getExternalStorageDirectory() + "/photo_capture/images/make_machine_example.jpg";
-        _path = Environment.getExternalStorageDirectory() + "/SimpleScan/images/recipt_image.jpg";
-        
-
-        File tess_dir = new File(_tessPath);
-        if(!tess_dir.exists()) {
-        	if(tess_dir.mkdir()) {
-        		Log.i( "tess_dir", "tess_dir made" );
-        	}
-        	else Log.i( "tess_dir", "tess_dir could not be made" );
-        }
-        else Log.i( "tess_dir", "tess_dir exists" );
-        
-        //_traindataPath = Environment.getExternalStorageDirectory() + "/photo_capture/tesseract/tessdata";
-        _traindataPath = Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract/tessdata";
-        File traindata_direct = new File(_traindataPath);
-        if(!traindata_direct.exists()) {
-        	if(traindata_direct.mkdir()) {
-        		Log.i( "traindata", "directory made" );
-        		CopyAssets();
-        	}
-        	else Log.i( "traindata", "traindata_direct could not be made" );
-        }
-        else Log.i( "traindata", "traindata_direct exists" );
+        else Log.i( "app_dir", "app_dir exists" );        
     }
     
     public class ButtonClickHandler implements View.OnClickListener 
     {
     	public void onClick( View view ){
-    		Log.i("MakeMachine", "ButtonClickHandler.onClick()" );
+    		Log.i("xml Button", "ButtonClickHandler.onClick()" );
     		startCameraActivity();
     	}
     }
     
     protected void startCameraActivity()
     {
-    	Log.i("MakeMachine", "startCameraActivity()" );
-    	File file = new File( _path );
+    	Log.i("native_camApp", "startCameraActivity()" );
+    	File file = new File( _ImgPath );
     	Uri outputFileUri = Uri.fromFile( file );
     	
     	Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE );
@@ -118,11 +113,11 @@ public class OCR extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) 
     {	
-    	Log.i( "MakeMachine", "resultCode: " + resultCode );
+    	Log.i( "result_from_camera", "resultCode: " + resultCode );
     	switch( resultCode )
     	{
     		case 0:
-    			Log.i( "MakeMachine", "User cancelled" );
+    			Log.i( "result_from_camera", "User cancelled" );
     			break;
     			
     		case -1:
@@ -138,18 +133,25 @@ public class OCR extends Activity {
     
     protected void onPhotoTaken() throws IOException
     {
-    	Log.i( "MakeMachine", "onPhotoTaken" );
+    	Log.i( "photo_taken", "onPhotoTaken" );
     	
     	_taken = true;
     	
     	BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 4; //down-sampling the image
     	
-    	Bitmap bitmap = BitmapFactory.decodeFile( _path, options ); //create a bitmap from _path with options
+    	Bitmap bitmap = BitmapFactory.decodeFile( _ImgPath, options ); //create a bitmap from _ImgPath with options
+    	bitmap = correct_photo(bitmap);
+
+    	_image.setImageBitmap(bitmap); //Assign the bitmap to ImageView
+    	String recognizedText = detect_text(bitmap);
     	
+    	_field.setText(recognizedText);
     	
-    	//correcting photo for OCR(tess-two)
-    	ExifInterface exif = new ExifInterface( _path );
+    }
+    
+    protected Bitmap correct_photo(Bitmap bitmap) throws IOException { //correcting photo for OCR(tess-two)
+    	ExifInterface exif = new ExifInterface( _ImgPath );
     	int exifOrientation = exif.getAttributeInt(
     	        ExifInterface.TAG_ORIENTATION,
     	        ExifInterface.ORIENTATION_NORMAL);
@@ -181,33 +183,30 @@ public class OCR extends Activity {
     	}
     	bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
     	
-    	
-    	_image.setImageBitmap(bitmap); //Assign the bitmap to ImageView
-    	
-    	//_field.setVisibility( View.GONE );
-    	
-    	
+    	return bitmap;
+    }
+    
+    protected String detect_text(Bitmap bitmap){
     	TessBaseAPI baseApi = new TessBaseAPI();
-    	Log.i("tessrect", "new tess object created");
-    	//baseApi.init(Environment.getExternalStorageDirectory() + "/photo_capture/tesseract/", "eng");
+    	Log.i("tessrect", "new tess object created");   	
     	baseApi.init(Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract/", "eng");
     	Log.i("tessrect", "initialized");
     	// Eg. baseApi.init("/mnt/sdcard/tesseract/tessdata/eng.traineddata", "eng");
+    	
     	baseApi.setImage(bitmap);
     	Log.i("tessrect", "bitmap/image set");
+    	
     	String recognizedText = baseApi.getUTF8Text();
-    	//Log.d("tessrect", recognizedText);    	
-    	_field.setText(recognizedText);
- 
+    	
     	baseApi.end();
     	
+    	return recognizedText;
     }
-
     
     @Override 
     protected void onRestoreInstanceState( Bundle savedInstanceState){ //When the rotation is complete
     																  //restore from Bundle object
-    	Log.i( "MakeMachine", "onRestoreInstanceState()");
+    	Log.i( "restoreFrom_bundle", "onRestoreInstanceState()");
     	if( savedInstanceState.getBoolean( OCR.PHOTO_TAKEN ) ) {
     		try {
 				onPhotoTaken();
@@ -251,6 +250,7 @@ public class OCR extends Activity {
             }
         }
     }
+    
     private void copyFile(InputStream in, OutputStream out) throws IOException {
         byte[] buffer = new byte[1024];
         int read;
