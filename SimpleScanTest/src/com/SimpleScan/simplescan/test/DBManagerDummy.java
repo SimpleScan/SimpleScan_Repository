@@ -23,11 +23,13 @@ public class DBManagerDummy {
 	}
 	
 	public void createExpenseData1(){
-		
+		db = dbHelper.getWritableDatabase();
+		db.execSQL(DBTestScripts.ExpenseScripts.INSERT_EXPENSE1_5);
 	}	
 	
 	public void budgetData1(){
-		
+		db = dbHelper.getWritableDatabase();
+		db.execSQL(DBTestScripts.BudgetScripts.INSERT_BUDGET1);
 	}
 	
 	public void imageData1(){
@@ -48,6 +50,15 @@ public class DBManagerDummy {
 	
 	public void reminderData1(){
 		
+	}
+	
+	public void close(){
+		if(dbHelper != null){
+			dbHelper.close();
+		}
+		if(db != null){
+			db.close();
+		}
 	}
 	
 }

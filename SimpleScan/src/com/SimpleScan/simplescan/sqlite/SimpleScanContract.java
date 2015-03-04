@@ -13,6 +13,7 @@ public class SimpleScanContract {
 	public static final  String DATABASE_NAME = "simplescan.db";
 	private static final String TEXT_TYPE = " TEXT";
 	private static final String INTEGER_TYPE = " INTEGER";	
+	private static final String REAL_TYPE = " REAL";	
 	private static final String COMMA_SEP = ",";
 	
 	/**
@@ -42,17 +43,18 @@ public class SimpleScanContract {
 		public static final String COLUMN_NAME_TITLE = "title";
 		public static final String COLUMN_NAME_CATEGORY_ID = "categoryid";
 		public static final String COLUMN_NAME_SHARED_ID = "sharedid";
-		public static final String COLUMN_NAME_IMAGE_ID = "imageid";
+		public static final String COLUMN_NAME_IMAGE_TITLE = "imagetitle";
+		public static final String COLUMN_NAME_IMAGE_PATH = "imagepath";
 		
 		public static final String CREATE_TABLE = "CREATE TABLE " +
 	            TABLE_NAME + " (" +
 	            _ID + " INTEGER PRIMARY KEY," +
-	            COLUMN_NAME_AMOUNT + TEXT_TYPE + COMMA_SEP +	            
+	            COLUMN_NAME_AMOUNT + REAL_TYPE + COMMA_SEP +	         	
 	            COLUMN_NAME_DATE + TEXT_TYPE + COMMA_SEP +
 	            COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
 	            COLUMN_NAME_CATEGORY_ID + TEXT_TYPE + COMMA_SEP +	
 	            COLUMN_NAME_SHARED_ID + TEXT_TYPE + COMMA_SEP +	
-	            COLUMN_NAME_IMAGE_ID + TEXT_TYPE + ");";
+	            COLUMN_NAME_IMAGE_TITLE + TEXT_TYPE + ");";
 		public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 	}
 	
@@ -102,14 +104,16 @@ public class SimpleScanContract {
 	/** Represents a budget table */
 	public static abstract class BudgetTable implements BaseColumns {
 		public static final String TABLE_NAME = "budget";
-		public static final String COLUMN_NAME_AMOUNT = "amount";
+		public static final String COLUMN_NAME_ORIGINAL_AMOUNT = "originalamount";
+		public static final String COLUMN_NAME_CURRENT_AMOUNT = "currentamount";
 		public static final String COLUMN_NAME_START_DATE = "startdate";
 		public static final String COLUMN_NAME_END_DATE = "enddate";		
 		
 		public static final String CREATE_TABLE = "CREATE TABLE " +
 	            TABLE_NAME + " (" +
 	            _ID + " INTEGER PRIMARY KEY," +
-	            COLUMN_NAME_AMOUNT + TEXT_TYPE + COMMA_SEP +	            
+	            COLUMN_NAME_ORIGINAL_AMOUNT + REAL_TYPE + COMMA_SEP +	
+	            COLUMN_NAME_CURRENT_AMOUNT + REAL_TYPE + COMMA_SEP +	
 	            COLUMN_NAME_START_DATE + TEXT_TYPE + COMMA_SEP +
 	            COLUMN_NAME_END_DATE + TEXT_TYPE + ");";
 		public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;

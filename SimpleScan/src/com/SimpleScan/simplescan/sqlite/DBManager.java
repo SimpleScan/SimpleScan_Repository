@@ -10,6 +10,7 @@ import com.SimpleScan.simplescan.Entities.Budget;
 import com.SimpleScan.simplescan.Entities.Category;
 import com.SimpleScan.simplescan.Entities.Expense;
 import com.SimpleScan.simplescan.Entities.SimpleScanImage;
+import com.SimpleScan.simplescan.Entities.User;
 
 /**
  * @author pearse1
@@ -28,6 +29,15 @@ public class DBManager {
 		dbHelper = new DBHelper(context);
 	}
 
+	/**
+	 * Gets the user's info.
+	 * 
+	 * @return user info
+	 */
+	public User getUserInfo(){
+		return null;
+	}
+	
 	/**
 	 * Gets a list of all expenses.
 	 * @return List<Expense>
@@ -57,7 +67,7 @@ public class DBManager {
 	 * @param category the category
 	 * @param image a scanned image of the expense.
 	 */
-	public void addExpense(int amount, Date date, String title, Category category, SimpleScanImage image){
+	public void addExpense(Expense expense){
 		
 	}
 	
