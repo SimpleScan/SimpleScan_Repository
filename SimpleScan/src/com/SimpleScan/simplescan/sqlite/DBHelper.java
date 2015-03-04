@@ -23,6 +23,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(SimpleScanContract.CategoryTable.CREATE_TABLE);
         db.execSQL(SimpleScanContract.ContactTable.CREATE_TABLE);
         db.execSQL(SimpleScanContract.ExpenseTable.CREATE_TABLE);
+        db.execSQL(SimpleScanContract.ImageTable.CREATE_TABLE);
         db.execSQL(SimpleScanContract.ReminderTable.CREATE_TABLE);
         db.execSQL(SimpleScanContract.SharedExpenseTable.CREATE_TABLE);
         db.execSQL(SimpleScanContract.UserTable.CREATE_TABLE);
@@ -35,6 +36,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(SimpleScanContract.CategoryTable.DELETE_TABLE);
         db.execSQL(SimpleScanContract.ContactTable.DELETE_TABLE);
         db.execSQL(SimpleScanContract.ExpenseTable.DELETE_TABLE);
+        db.execSQL(SimpleScanContract.ImageTable.DELETE_TABLE);
         db.execSQL(SimpleScanContract.ReminderTable.DELETE_TABLE);
         db.execSQL(SimpleScanContract.SharedExpenseTable.DELETE_TABLE);
         db.execSQL(SimpleScanContract.UserTable.DELETE_TABLE);

@@ -130,4 +130,18 @@ public class SimpleScanContract {
 	            COLUMN_NAME_END_MESSAGE + TEXT_TYPE + ");";
 		public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 	}
+	
+	/** Represents a image table */
+	public static abstract class ImageTable implements BaseColumns {
+		public static final String TABLE_NAME = "image";
+		public static final String COLUMN_NAME_NAME = "name";
+		public static final String COLUMN_NAME_PATH = "path";			
+		
+		public static final String CREATE_TABLE = "CREATE TABLE " +
+	            TABLE_NAME + " (" +
+	            _ID + " INTEGER PRIMARY KEY," +
+	            COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +	            
+	            COLUMN_NAME_PATH + TEXT_TYPE + ");";
+		public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+	}
 }
