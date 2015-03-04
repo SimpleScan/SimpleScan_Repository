@@ -4,13 +4,13 @@ import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.SimpleScan.simplescan.Entities.Budget;
-import com.SimpleScan.simplescan.Entities.Category;
 import com.SimpleScan.simplescan.Entities.Expense;
-import com.SimpleScan.simplescan.Entities.SimpleScanImage;
 import com.SimpleScan.simplescan.Entities.User;
+import com.SimpleScan.simplescan.sqlite.SimpleScanContract.UserTable;
 
 /**
  * @author pearse1
@@ -34,8 +34,23 @@ public class DBManager {
 	 * 
 	 * @return user info
 	 */
-	public User getUserInfo(){
-		return null;
+	public User getUserInfo(){		
+		db = dbHelper.getReadableDatabase();
+		
+		User user = new User();
+		
+		// Define a projection that specifies which columns from the database
+        String[] columns = {
+                UserTable._ID,
+                UserTable.COLUMN_NAME_USERNAME,                
+        };
+
+        Cursor c = queryDatabase(UserTable.TABLE_NAME, columns, null, null, null, null, null);
+
+        c.moveToFirst();
+        user.setName(c.getString(c.getColumnIndexOrThrow(UserTable.COLUMN_NAME_USERNAME)));
+		
+		return user;
 	}
 	
 	/**
@@ -44,7 +59,7 @@ public class DBManager {
 	 */
 	public List<Expense> getExpenses(){
 		db = dbHelper.getReadableDatabase();
-		db.close();
+		
 		return null;
 	}
 	
@@ -111,5 +126,20 @@ public class DBManager {
 		if(db != null){
 			db.close();
 		}
+	}
+	
+	private Cursor queryDatabase(String tableName, String [] columns, String selection,
+								String [] selectionArgs, String groupBy, String having, String orderBy){
+		Cursor c = db.query(
+                tableName,  // The table to query
+                columns,                               // The columns to return
+                selection,                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                groupBy,                                     // don't group the rows
+                having,                                     // don't filter by row groups
+                orderBy                                 // The sort order
+        );
+		
+		return c;
 	}
 }
