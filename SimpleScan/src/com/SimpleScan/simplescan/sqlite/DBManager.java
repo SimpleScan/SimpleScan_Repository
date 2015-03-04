@@ -20,6 +20,7 @@ public class DBManager {
 
 	private DBHelper dbHelper = null;
 	private SQLiteDatabase db = null;
+	
 	/**
 	 * Default Constructor
 	 */
@@ -32,6 +33,8 @@ public class DBManager {
 	 * @return List<Expense>
 	 */
 	public List<Expense> getExpenses(){
+		db = dbHelper.getReadableDatabase();
+		db.close();
 		return null;
 	}
 	
@@ -44,11 +47,18 @@ public class DBManager {
 		return null;
 	}
 	
+	
 	/**
-	 * Adds an expense into the database.
+	 * Adds an expense to the database
+	 * 
+	 * @param amount the amount
+	 * @param date the date of the expense
+	 * @param title the title/description
+	 * @param category the category
+	 * @param image a scanned image of the expense.
 	 */
 	public void addExpense(int amount, Date date, String title, Category category, SimpleScanImage image){
-		// TODO: Image id? Shared id?
+		
 	}
 	
 	/**
@@ -59,5 +69,37 @@ public class DBManager {
 		return null;		
 	}
 	
+	/**
+	 * Creates a new budget in the database
+	 * 
+	 * @param amount the amount
+	 * @param startDate start date
+	 * @param endDate end date
+	 */
+	public void createBudget(int amount, Date startDate, Date endDate){
+		
+	}
 	
+	/**
+	 * Updates the budget to new values
+	 * 
+	 * @param amount the amount
+	 * @param startDate start date
+	 * @param endDate end date
+	 */
+	public void updateBudget(int amount, Date startDate, Date endDate){
+		
+	}
+	
+	/**
+	 * Closes any remaining open connections.
+	 */
+	public void close(){
+		if(dbHelper != null){
+			dbHelper.close();
+		}
+		if(db != null){
+			db.close();
+		}
+	}
 }
