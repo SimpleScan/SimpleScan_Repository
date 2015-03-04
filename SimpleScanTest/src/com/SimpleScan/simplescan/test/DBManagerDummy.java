@@ -17,13 +17,14 @@ public class DBManagerDummy {
 		dbHelper = new DBHelper(context);
 	}
 	
-	public void expenseData1(){
-		
+	public void createUserData1(){
+		db = dbHelper.getWritableDatabase();
+		db.execSQL(DBTestScripts.UserScripts.INSERT_USER1);
 	}
 	
-	public void userData1(){
+	public void createExpenseData1(){
 		
-	}
+	}	
 	
 	public void budgetData1(){
 		
