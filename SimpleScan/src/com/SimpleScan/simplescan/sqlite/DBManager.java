@@ -1,5 +1,6 @@
 package com.SimpleScan.simplescan.sqlite;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.SimpleScan.simplescan.Entities.Budget;
 import com.SimpleScan.simplescan.Entities.Expense;
 import com.SimpleScan.simplescan.Entities.User;
+import com.SimpleScan.simplescan.sqlite.SimpleScanContract.ExpenseTable;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract.UserTable;
 
 /**
@@ -58,9 +60,7 @@ public class DBManager {
 	 * @return List<Expense>
 	 */
 	public List<Expense> getExpenses(){
-		db = dbHelper.getReadableDatabase();
-		
-		return null;
+		return getAllExpenses(""); // no LIMIT
 	}
 	
 	/**
@@ -69,9 +69,55 @@ public class DBManager {
 	 * @return List<Expense>
 	 */
 	public List<Expense> getExpenses(int numOfExpenses){
-		return null;
+		return getAllExpenses(" LIMIT " + numOfExpenses); // has LIMIT
 	}
 	
+	/**
+	 * Helper function for getExpenses
+	 * @param limit number of last expenses to retrieve.
+	 * @return List<Expense>
+	 */
+	private List<Expense> getAllExpenses(String limit){
+		db = dbHelper.getReadableDatabase();		
+		
+		// Define a projection that specifies which columns from the database
+        String[] columns = {
+                ExpenseTable._ID,
+                ExpenseTable.COLUMN_NAME_AMOUNT,
+                ExpenseTable.COLUMN_NAME_DATE,
+                ExpenseTable.COLUMN_NAME_TITLE,
+        };
+		
+        String sortBy = ExpenseTable.COLUMN_NAME_DATE + " DESC " + limit;
+        
+        Cursor c = queryDatabase(ExpenseTable.TABLE_NAME, columns, null, null, null, null, sortBy);        
+        
+		return loadExpenses(c);		
+	}
+	
+	/**
+	 * Moves over the returned results from the database and loads the information into
+	 * a list of expenses.
+	 * 
+	 * @param c Cursor
+	 * @return List<Expense>
+	 */
+	private List<Expense> loadExpenses(Cursor c){
+		List<Expense> expenses = new ArrayList<Expense>();
+		c.moveToFirst();
+		
+		while(!c.isAfterLast()){
+        	Expense e = new Expense();
+			e.setTitle(c.getString(c.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_TITLE)));
+			e.setAmount(c.getDouble(c.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_AMOUNT)));
+			e.setDate(c.getString(c.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_DATE)));
+			
+			expenses.add(e);
+			c.moveToNext();
+        }
+		
+		return expenses;
+	}
 	
 	/**
 	 * Adds an expense to the database
@@ -128,6 +174,18 @@ public class DBManager {
 		}
 	}
 	
+	/**
+	 * Main query function.
+	 * 
+	 * @param tableName the table name
+	 * @param columns the columns to return
+	 * @param selection WHERE columns
+	 * @param selectionArgs WHERE values
+	 * @param groupBy group by
+	 * @param having having
+	 * @param orderBy ordering/limit
+	 * @return
+	 */
 	private Cursor queryDatabase(String tableName, String [] columns, String selection,
 								String [] selectionArgs, String groupBy, String having, String orderBy){
 		Cursor c = db.query(
