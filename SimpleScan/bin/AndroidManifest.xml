@@ -7,6 +7,15 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="21" />
+    
+    <uses-permission android:name="android.permission.CAMERA" /> 
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
+    <uses-feature android:name="android.hardware.camera" />
+    
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />  
 
     <application
         android:allowBackup="true"
@@ -22,8 +31,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <!-- lock the screenOrientation for now. May implement this if we have more time on the UI design -->
         <activity 
-            android:name=".Main"
+            android:name=".Main"         	
             android:screenOrientation="portrait"
             />
     </application>

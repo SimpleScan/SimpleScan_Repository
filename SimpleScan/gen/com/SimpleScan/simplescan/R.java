@@ -1636,10 +1636,20 @@ containing a value of this type.
         public static final int abc_textfield_search_default_mtrl_alpha=0x7f020031;
         public static final int abc_textfield_search_material=0x7f020032;
         public static final int ic_launcher=0x7f020033;
-        public static final int left_dropdown_arrow=0x7f020034;
-        public static final int scan_anime=0x7f020035;
+        public static final int scan_anime=0x7f020034;
     }
     public static final class id {
+        public static final int SE_btnDel=0x7f090050;
+        public static final int SE_btnShare=0x7f09004f;
+        public static final int SE_editAmount=0x7f09004d;
+        public static final int SE_editCate=0x7f09004e;
+        public static final int SE_editDate=0x7f09004c;
+        public static final int SE_editName=0x7f09004b;
+        public static final int SE_im=0x7f090047;
+        public static final int SE_txtAmount=0x7f090049;
+        public static final int SE_txtCate=0x7f09004a;
+        public static final int SE_txtDate=0x7f090048;
+        public static final int SE_txtName=0x7f090046;
         public static final int action_bar=0x7f090031;
         public static final int action_bar_activity_content=0x7f090003;
         public static final int action_bar_container=0x7f090030;
@@ -1653,7 +1663,7 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f09002e;
         public static final int action_mode_bar_stub=0x7f09002d;
         public static final int action_mode_close_button=0x7f090020;
-        public static final int action_settings=0x7f090046;
+        public static final int action_settings=0x7f090051;
         public static final int activity_chooser_view_content=0x7f090021;
         public static final int always=0x7f090014;
         public static final int beginning=0x7f09001b;
@@ -1767,7 +1777,8 @@ containing a value of this type.
         public static final int fragment_contacts=0x7f03001a;
         public static final int fragment_expenses=0x7f03001b;
         public static final int fragment_overall=0x7f03001c;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001d;
+        public static final int fragment_share_expense=0x7f03001d;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001e;
     }
     public static final class menu {
         public static final int main=0x7f0d0000;
