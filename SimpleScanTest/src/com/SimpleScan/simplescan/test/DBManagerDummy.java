@@ -27,7 +27,7 @@ public class DBManagerDummy {
 		db.execSQL(DBTestScripts.ExpenseScripts.INSERT_EXPENSE1_5);
 	}	
 	
-	public void budgetData1(){
+	public void createBudgetData1(){
 		db = dbHelper.getWritableDatabase();
 		db.execSQL(DBTestScripts.BudgetScripts.INSERT_BUDGET1);
 	}

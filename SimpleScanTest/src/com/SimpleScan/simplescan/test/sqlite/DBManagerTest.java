@@ -59,12 +59,9 @@ public class DBManagerTest extends AndroidTestCase {
     public void testAddExpenseNoImage(){
     	setUp();
     	dbTest.createExpenseData1();
-    	Expense newExpense = new Expense();
-    	newExpense.setAmount(ExpenseScripts.AMOUNT6);
-    	newExpense.setDate(ExpenseScripts.DATE6);
-    	newExpense.setTitle(ExpenseScripts.TITLE6);
+    	dbTest.createBudgetData1();
     	
-    	db.addExpense(newExpense);
+    	db.addExpense(ExpenseScripts.AMOUNT6, ExpenseScripts.DATE6, ExpenseScripts.TITLE6, null, null, null);
     	List<Expense> expenses = db.getExpenses();
     	assertNotNull(expenses);
     	

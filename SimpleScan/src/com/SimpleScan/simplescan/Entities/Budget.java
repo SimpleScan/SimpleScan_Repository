@@ -14,9 +14,9 @@ public class Budget implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private int amount;
-	private Date startDate;
-	private Date endDate;
+	private double amount;
+	private String startDate;
+	private String endDate;
 	
 	/**
 	 * Public Constructor.
@@ -25,27 +25,29 @@ public class Budget implements Serializable {
 		
 	}
 
-	public int getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(int amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 
-	public Date getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
-	}	
+	}
+
+
 }
