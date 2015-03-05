@@ -32,17 +32,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--
+
         <activity
             android:name=".CameraActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        -->
+            android:screenOrientation="portrait"/>
+       
         <!-- lock the screenOrientation for now. May implement this if we have more time on the UI design -->
         <activity 
             android:name=".Main"         	
