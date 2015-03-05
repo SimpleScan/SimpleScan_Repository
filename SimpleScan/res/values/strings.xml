@@ -10,6 +10,7 @@
         <item >Overall</item>
         <item >View Expenses</item>
         <item >View Contact List</item>
+        <item >Share Expense</item>
     </string-array>
 
 </resources>

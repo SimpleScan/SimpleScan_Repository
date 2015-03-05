@@ -104,6 +104,9 @@ public class Main extends FragmentActivity implements OnItemClickListener
 				fTransaction.replace(R.id.mainContent, new FragmentContact());
 				fTransaction.commit();	
 				break;
+			case 3:
+				fTransaction.replace(R.id.mainContent, new FragmentShareExpense());
+				fTransaction.commit();	
 			default:
 				break;
 			
