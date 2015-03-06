@@ -1,11 +1,23 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/contact_frame">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+		android:background="@drawable/customborder">
+		
+        <ImageView
+            android:id="@+id/contactImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/txtContact"
+            android:layout_marginRight="14dp"
+            android:layout_toLeftOf="@+id/txtContact"
+            android:contentDescription="@string/contact_description"
+            android:src="@drawable/ic_contact_icon" />
 
         <TextView
             android:id="@+id/txtContact"
@@ -13,11 +25,53 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="80dp"
-            android:text="Contact List"
-            android:textSize="20sp"
-            />
-
+            android:layout_marginTop="36dp"
+            android:text="@string/contact_title"
+            android:textSize="20sp" />
+  
     </RelativeLayout>
+
+		<RelativeLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent" >
+
+		    <ImageView
+		        android:id="@+id/addContactImage"
+		        android:layout_width="15dp"
+		        android:layout_height="15dp"
+		        android:layout_alignTop="@+id/addContact"
+		        android:layout_toLeftOf="@+id/addContact"
+		        android:src="@drawable/ic_add_contact" />
+
+		    <TextView
+		        android:id="@+id/addContact"
+		        android:onClick="onClick"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentBottom="true"
+		        android:layout_centerHorizontal="true"
+		        android:layout_marginBottom="20dp"
+		        android:text="@string/contact_add"
+		        android:textSize="15sp" />
+
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentLeft="true"
+		        android:layout_alignParentRight="true"
+		        android:layout_alignParentTop="true"
+		        android:layout_marginTop="86dp"
+		        android:orientation="vertical"
+		        android:background="@drawable/contact_entry_border" >
+
+		        <TextView
+		            android:id="@+id/contact_name"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_gravity="center"
+		            android:text="@string/contact_name"
+		            android:textSize="15sp" />
+		    </LinearLayout>
+		</RelativeLayout>
 
 </FrameLayout>
