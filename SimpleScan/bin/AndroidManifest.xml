@@ -22,8 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <!-- lock the screenOrientation for now. May implement this if we have more time on the UI design -->
         <activity 
-            android:name=".Main"
+            android:name=".Main"         	
             android:screenOrientation="portrait"
             />
     </application>
