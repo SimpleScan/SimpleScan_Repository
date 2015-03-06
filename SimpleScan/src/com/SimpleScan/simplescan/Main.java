@@ -44,10 +44,11 @@ public class Main extends FragmentActivity implements OnItemClickListener
 		// fragment manager
 		fManager = getSupportFragmentManager();
 		FragmentTransaction fTransaction  = fManager.beginTransaction();
-		FragmentOverall fragmentOverall = new FragmentOverall();
+		FragmentOverview fragmentOverall = new FragmentOverview();
 		fTransaction.add(R.id.mainContent,fragmentOverall);
 		fTransaction.commit();
 	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem)
 	{
@@ -81,6 +82,7 @@ public class Main extends FragmentActivity implements OnItemClickListener
 		selectItem(position);
 		
 	}
+	
 	public void selectItem(int position) 
 	{
 		listView.setItemChecked(position, true);
@@ -89,15 +91,20 @@ public class Main extends FragmentActivity implements OnItemClickListener
 		Toast.makeText(getBaseContext(), "On fragment : "+menu[position],Toast.LENGTH_SHORT).show();
 		/*
 		 * need to research how to implement backstack here
+		 * 
+		 * --That would be fTransaction.addToBackStack(String optionalTransactionName), 
+		 * --but I don't think it's necessary for the menu. It could get really 
+		 * --cluttered for anyone who likes to navigate with the back button.
+		 * --Dan
 		 */
 		switch (position)
 		{
 			case 0:
-				fTransaction.replace(R.id.mainContent,new FragmentOverall());
+				fTransaction.replace(R.id.mainContent,new FragmentOverview());
 				fTransaction.commit();	
 				break;
 			case 1:
-				fTransaction.replace(R.id.mainContent, new FragmentExpense());
+				fTransaction.replace(R.id.mainContent, new FragmentExpenses());
 				fTransaction.commit();	
 				break;
 			case 2:
@@ -114,10 +121,10 @@ public class Main extends FragmentActivity implements OnItemClickListener
 		drawerLayout.closeDrawers();
 		
 	}
+	
 	public void setTitle(String title)
 	{
 		getActionBar().setTitle(title);
 		
 	}
-	
 }

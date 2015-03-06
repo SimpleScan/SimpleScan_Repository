@@ -1,22 +1,60 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <TextView
-            android:id="@+id/txtExpense"
+        <Spinner
+            android:id="@+id/E_categoriesSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@+id/E_text1" />
+
+        <ListView
+            android:id="@+id/E_fullExpensesListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/E_addExpenseButton"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/E_categoriesSpinner"
+            android:layout_marginTop="16dp" >
+        </ListView>
+
+        <Button
+            android:id="@+id/E_addExpenseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:text="+" />
+
+        <TextView
+            android:id="@+id/E_text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/E_categoriesSpinner"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="80dp"
-            android:text="Expenses fragment"
-            android:textSize="20sp"
-            />
+            android:layout_marginLeft="62dp"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:text="Categories:"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <CheckBox
+            android:id="@+id/E_sharedCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/E_addExpenseButton"
+            android:layout_alignBottom="@+id/E_addExpenseButton"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:text="Display Shared Only" />
 
     </RelativeLayout>
 

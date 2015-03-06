@@ -74,5 +74,9 @@ public class Expense implements Serializable {
 	public void setImagepath(String imagepath) {
 		this.imagepath = imagepath;
 	}
+	
+	public String toString() {
+		return date + amount + title;
+	}
 
 }
