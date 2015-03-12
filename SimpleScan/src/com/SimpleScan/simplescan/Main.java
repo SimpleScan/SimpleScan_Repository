@@ -30,6 +30,12 @@ public class Main extends FragmentActivity implements OnItemClickListener
 	private String[] menu;
 	private ActionBarDrawerToggle drawerListener;
 	private FragmentManager fManager;
+	
+	//key pair for restore the instance state 
+	static final String STATE_SCORE = "mainScore";
+	static final String STATE_LEVEL = "mainLevel";
+	private int mCurrentScore;
+	private int mCurrentLevel;
 
 	protected void onCreate(Bundle saveInstatnceState)
 	{
@@ -54,6 +60,32 @@ public class Main extends FragmentActivity implements OnItemClickListener
 		FragmentOverview fragmentOverall = new FragmentOverview();
 		fTransaction.add(R.id.mainContent,fragmentOverall);
 		fTransaction.commit();
+	}
+	
+	/*
+	 * Kevin
+	 * @see android.support.v4.app.FragmentActivity#onSaveInstanceState(android.os.Bundle)
+	 */
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	    // Save the user's current state
+	    savedInstanceState.putInt(STATE_SCORE, mCurrentScore);
+	    savedInstanceState.putInt(STATE_LEVEL, mCurrentLevel);
+	    
+	    // Always call the superclass so it can save the view hierarchy state
+	    super.onSaveInstanceState(savedInstanceState);
+	}
+	/*
+	 * Kevin
+	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
+	 */
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+	    // Always call the superclass so it can restore the view hierarchy
+	    super.onRestoreInstanceState(savedInstanceState);
+	   
+	    // Restore state members from saved instance
+	    mCurrentScore = savedInstanceState.getInt(STATE_SCORE);
+	    mCurrentLevel = savedInstanceState.getInt(STATE_LEVEL);
 	}
 	
 	@Override
@@ -156,15 +188,15 @@ public class Main extends FragmentActivity implements OnItemClickListener
 				);
 		
 		Toast.makeText(getBaseContext(), "Expense Created",Toast.LENGTH_SHORT).show();
-		openEditExpenseFragment(view, newExpense);
+		//openEditExpenseFragment(view, newExpense);
 	}
 	
-	public void openEditExpenseFragment(View view, Expense expense) {
+	/*public void openEditExpenseFragment(View view, Expense expense) {
 		setTitle("Edit Expense");
 		FragmentTransaction fTransaction  = fManager.beginTransaction();
 		Fragment fragment = FragmentEditExpense.createNewInstance(expense);
 		fTransaction.replace(R.id.mainContent, fragment);
 		fTransaction.addToBackStack("Opening EditExpenseFragment");
 		fTransaction.commit();	
-	}
+	}*/
 }
