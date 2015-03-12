@@ -12,12 +12,16 @@ import java.util.List;
 import com.SimpleScan.simplescan.Camera.CameraEngine;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -28,6 +32,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class CameraActivity extends Activity implements SurfaceHolder.Callback, View.OnClickListener, Camera.PictureCallback, Camera.ShutterCallback {
 
@@ -39,8 +45,13 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     Button focusButton;
     SurfaceView cameraFrame;
     CameraEngine cameraEngine;
-    Bitmap bitmap;
     
+    Button saveButton;
+    Button retakeButton;
+	ImageView PreviewImage;
+	TextView OCRtext;
+	//Bitmap bitmap;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,14 +78,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         Log.d(TAG, "Camera engine started");
     }
     
-    @Override
-	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {	
-	}
-
-	@Override
-	public void surfaceDestroyed(SurfaceHolder holder) {
-	}
-
 	@Override
     protected void onResume() {
         super.onResume();
@@ -122,37 +125,92 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     
 
     @Override
-    public void onPictureTaken(byte[] data, Camera camera) {
-
-        File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-        
-        if (pictureFile == null){
-            Log.d("PictureCallback", "Error creating media file, check storage permissions: ");
-            return;
-        } else if (data == null) {
+    public void onPictureTaken(byte[] data, Camera camera) { 	
+    	if (data == null) {
             Log.d(TAG, "Got null data");
             return;
         }
-
-        try {
-            FileOutputStream fos = new FileOutputStream(pictureFile);
-            fos.write(data);
-            fos.close();
-        } catch (FileNotFoundException e) {
-            Log.d("PictureCallback", "File not found: " + e.getMessage());
-        } catch (IOException e) {
-            Log.d("PictureCallback", "Error accessing file: " + e.getMessage());
-        }
+    	
+        Bitmap bitmap = createPreviewBitmap(data);
         
-        bitmap = BitmapFactory.decodeFile(pictureFile.getPath());
+        setPreview(bitmap);
+    }
+    
+    public Bitmap createPreviewBitmap(byte[] data) {
+    	
+    	BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 4; //down-sampling the image
+        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);   
+        
+        //Rotating bitmap to the right orientation
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        
+        return bitmap;
+    }
+    
+    public void setPreview(final Bitmap bitmap) {
+    	setContentView(R.layout.image_preview);
+    	
+    	PreviewImage = (ImageView) findViewById(R.id.previewImage);
+        OCRtext = (TextView) findViewById(R.id.OCRtext);
+        saveButton = (Button) findViewById(R.id.saveButton);
+        retakeButton = (Button) findViewById(R.id.retakeButton);
+        
+        PreviewImage.setImageBitmap(bitmap); //Assign the bitmap to ImageView
+        saveButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Log.i("saveButton", "clicked");
+				try {
+					saveBitmap (bitmap);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+        
+        retakeButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Log.i("retakeButton", "clicked");				
+				restartCamera();
+			}
+		});
+        
+    }
+    
+    public void restartCamera() {
+    	//Restarting Activity
+    	if (Build.VERSION.SDK_INT >= 11) {
+		    recreate();
+		} else {
+		    Intent intent = getIntent();
+		    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		    finish();
+		    
+		    overridePendingTransition(0, 0);
+		    startActivity(intent);
+		}   	
+    }
+    
+    public void saveBitmap (Bitmap bitmap) throws IOException {
+    	
+    	File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+    	
+    	if (pictureFile == null){
+            Log.d(TAG, "Error creating media file, check storage permissions: ");
+            return;
+        }
+    	
+    	FileOutputStream fos = new FileOutputStream(pictureFile);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        fos.close();  
     }
 
-	
-	@Override
-    public void onShutter() {
-
-    }
-	
 	/** Create a file Uri for saving an image or video */
     private static Uri getOutputMediaFileUri(int type){
           return Uri.fromFile(getOutputMediaFile(type));
@@ -163,9 +221,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "CameraApp");
-        // This location works best if you want the created images to be shared
-        // between applications and persist after your app has been uninstalled.
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "SimpleScan");
 
         // Create the storage directory if it does not exist
         if (! mediaStorageDir.exists()){
@@ -186,6 +242,19 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         }
 
         return mediaFile;
+    }
+    
+    @Override
+	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {	
+	}
+
+	@Override
+	public void surfaceDestroyed(SurfaceHolder holder) {
+	}
+	
+	@Override
+    public void onShutter() {
+
     }
 }
 

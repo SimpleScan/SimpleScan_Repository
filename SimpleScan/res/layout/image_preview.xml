@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_horizontal|center_vertical">
+    
+    <RelativeLayout android:layout_width="fill_parent"
+    				android:layout_height="wrap_content"
+    				android:layout_weight="6"
+    				android:gravity="center_horizontal|center_vertical">
+
+	    <TextView
+	        android:id="@+id/OCRtext"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_above="@+id/saveButton"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@id/image"
+	        android:gravity="center_horizontal"
+	        android:text="No Image"
+	        android:textSize="25dp" />
+
+	    <Button
+	        android:id="@+id/retakeButton"
+	        android:layout_width="109dp"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_below="@+id/OCRtext"
+	        android:text="Retake" />
+
+	    <ImageView
+	        android:id="@+id/previewImage"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_above="@+id/OCRtext"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:gravity="center_horizontal" />
+
+	    <Button
+	        android:id="@+id/saveButton"
+	        android:layout_width="109dp"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_alignParentLeft="true"
+	        android:text="Save" />
+    		   
+   	</RelativeLayout>
+	
+</LinearLayout>
