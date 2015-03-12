@@ -16,9 +16,10 @@ public class Expense implements Serializable {
 	private String title;
 	private String date;
 	private boolean paid;
-	
+	private Category category;
+
 	private String imageTitle;
-	private String imagepath;
+	private String imagePath;
 	
 	/**
 	 * Public Constructor.
@@ -58,6 +59,14 @@ public class Expense implements Serializable {
 	public void setPaid(boolean paid) {
 		this.paid = paid;
 	}
+	
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
 
 	public String getImageTitle() {
 		return imageTitle;
@@ -67,12 +76,12 @@ public class Expense implements Serializable {
 		this.imageTitle = imageTitle;
 	}
 
-	public String getImagepath() {
-		return imagepath;
+	public String getImagePath() {
+		return imagePath;
 	}
 
-	public void setImagepath(String imagepath) {
-		this.imagepath = imagepath;
+	public void setImagePath(String imagepath) {
+		this.imagePath = imagepath;
 	}
 	
 	public String toString() {

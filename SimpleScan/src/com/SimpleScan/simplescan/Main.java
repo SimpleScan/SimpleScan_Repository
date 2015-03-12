@@ -1,7 +1,14 @@
 package com.SimpleScan.simplescan;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.SimpleScan.simplescan.Entities.Expense;
+import com.SimpleScan.simplescan.sqlite.DBManager;
+
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -100,7 +107,7 @@ public class Main extends FragmentActivity implements OnItemClickListener
 		switch (position)
 		{
 			case 0:
-				fTransaction.replace(R.id.mainContent,new FragmentOverview());
+				fTransaction.replace(R.id.mainContent, new FragmentOverview());
 				fTransaction.commit();	
 				break;
 			case 1:
@@ -126,5 +133,38 @@ public class Main extends FragmentActivity implements OnItemClickListener
 	{
 		getActionBar().setTitle(title);
 		
+	}
+	
+	public void addExpenseFragment(View view) {
+		// Get today's date to set as default
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+		
+		// Create the expense and save it
+		Expense newExpense = new Expense();
+		newExpense.setAmount(0.);
+		newExpense.setDate(sdf.format(date));
+		newExpense.setTitle("expense");
+		DBManager dbManager = new DBManager(this);
+		dbManager.addExpense(
+				newExpense.getAmount(), 
+				newExpense.getDate(), 
+				newExpense.getTitle(), 
+				newExpense.getCategory(), 
+				newExpense.getImageTitle(), 
+				newExpense.getImagePath()
+				);
+		
+		Toast.makeText(getBaseContext(), "Expense Created",Toast.LENGTH_SHORT).show();
+		openEditExpenseFragment(view, newExpense);
+	}
+	
+	public void openEditExpenseFragment(View view, Expense expense) {
+		setTitle("Edit Expense");
+		FragmentTransaction fTransaction  = fManager.beginTransaction();
+		Fragment fragment = FragmentEditExpense.createNewInstance(expense);
+		fTransaction.replace(R.id.mainContent, fragment);
+		fTransaction.addToBackStack("Opening EditExpenseFragment");
+		fTransaction.commit();	
 	}
 }

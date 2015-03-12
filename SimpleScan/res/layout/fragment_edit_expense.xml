@@ -1,0 +1,114 @@
+<FrameLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <Button
+            android:id="@+id/EE_deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:text="Delete" />
+
+        <TextView
+            android:id="@+id/EE_textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignBottom="@+id/EE_editName"
+            android:gravity="center"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="175dp"
+            android:text="Name:" />
+
+        <TextView
+            android:id="@+id/EE_textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/EE_textView1"
+            android:layout_below="@+id/EE_textView1"
+            android:layout_alignBottom="@+id/EE_editDate"
+            android:gravity="center"
+            android:text="Date:" />
+
+        <TextView
+            android:id="@+id/EE_textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/EE_textView2"
+            android:layout_below="@+id/EE_textView2"
+            android:layout_alignBottom="@+id/EE_editAmount"
+            android:gravity="center"
+            android:text="Amount:" />
+
+        <EditText
+            android:id="@+id/EE_editName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="178dp"
+            android:layout_marginRight="50dp"
+            android:layout_toRightOf="@id/EE_textView1" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/EE_editDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_below="@+id/EE_editName"
+            android:layout_toRightOf="@id/EE_textView2"
+            android:layout_alignRight="@+id/EE_editName"
+            android:inputType="date" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/EE_editAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_below="@+id/EE_editDate"
+            android:layout_toRightOf="@id/EE_textView3"
+            android:layout_alignRight="@+id/EE_editDate"
+            android:inputType="number" >
+        </EditText>
+
+        <Button
+            android:id="@+id/EE_saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/EE_deleteButton"
+            android:text="Save" />
+        
+        <RadioGroup 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/EE_editAmount"
+            android:layout_below="@+id/EE_editAmount"
+            android:orientation="horizontal" >
+            
+	        <RadioButton
+	            android:id="@+id/EE_expenseRadio"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:checked="true"
+	            android:text="Expense" />
+	
+	        <RadioButton
+	            android:id="@+id/EE_earningRadio"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Earning" />
+        </RadioGroup>
+
+    </RelativeLayout>
+
+</FrameLayout>

@@ -12,5 +12,6 @@
         <item >View Contact List</item>
         <item >Share Expense</item>
     </string-array>
+    <string name="dateFormat">MM/dd/yyyy</string>
 
 </resources>

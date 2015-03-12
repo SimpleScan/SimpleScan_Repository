@@ -14,6 +14,7 @@ public class FragmentShareExpense extends Fragment
 	{
 		// Required empty public constructor
 	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) 
@@ -25,9 +26,10 @@ public class FragmentShareExpense extends Fragment
 			@Override
 			public void onClick(View v) {
 				// To Tai: u can just change the class name here to navigate to your scan bill class 
-				startActivity(new Intent(getActivity(),SplashWelcome.class));
+				startActivity(new Intent(getActivity(), CameraActivity.class));
 			}
 		});
 		return v;
 	}
+	
 }
