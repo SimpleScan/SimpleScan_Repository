@@ -143,7 +143,7 @@ public class DBManager {
         db.insert(ExpenseTable.TABLE_NAME, null, values);
         //insertIntoDatabase(ExpenseTable.TABLE_NAME, null, values);
         
-        updateBudget(amount);
+        //updateBudget(amount);
 	}
 	
 	/**

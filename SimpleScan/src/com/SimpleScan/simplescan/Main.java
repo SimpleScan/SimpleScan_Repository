@@ -1,11 +1,5 @@
 package com.SimpleScan.simplescan;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import com.SimpleScan.simplescan.Entities.Expense;
-import com.SimpleScan.simplescan.sqlite.DBManager;
-
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -164,39 +158,24 @@ public class Main extends FragmentActivity implements OnItemClickListener
 	public void setTitle(String title)
 	{
 		getActionBar().setTitle(title);
-		
 	}
 	
-	public void addExpenseFragment(View view) {
-		// Get today's date to set as default
-		Date date = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-		
-		// Create the expense and save it
-		Expense newExpense = new Expense();
-		newExpense.setAmount(0.);
-		newExpense.setDate(sdf.format(date));
-		newExpense.setTitle("expense");
-		DBManager dbManager = new DBManager(this);
-		dbManager.addExpense(
-				newExpense.getAmount(), 
-				newExpense.getDate(), 
-				newExpense.getTitle(), 
-				newExpense.getCategory(), 
-				newExpense.getImageTitle(), 
-				newExpense.getImagePath()
-				);
-		
-		Toast.makeText(getBaseContext(), "Expense Created",Toast.LENGTH_SHORT).show();
-		//openEditExpenseFragment(view, newExpense);
-	}
-	
-	/*public void openEditExpenseFragment(View view, Expense expense) {
-		setTitle("Edit Expense");
+	/**
+	 * Replaces the current mainContent fragment with a new one.
+	 * 
+	 * @param newFragment The new Fragment to display
+	 * @param fragmentName The Fragment's name, to display as the title
+	 * @param addToBackStack true if it should be added to the backstack
+	 * 
+	 * TODO: If there will be advanced backstack operations, a way to add backstack names
+	 */
+	public void changeFragment(Fragment newFragment, String fragmentName, boolean addToBackStack) {
+		setTitle(fragmentName);
 		FragmentTransaction fTransaction  = fManager.beginTransaction();
-		Fragment fragment = FragmentEditExpense.createNewInstance(expense);
-		fTransaction.replace(R.id.mainContent, fragment);
-		fTransaction.addToBackStack("Opening EditExpenseFragment");
+		fTransaction.replace(R.id.mainContent, newFragment);
+		if (addToBackStack) {
+			fTransaction.addToBackStack(null);
+		}
 		fTransaction.commit();	
-	}*/
+	}
 }

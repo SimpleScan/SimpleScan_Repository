@@ -10,9 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
+import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
 import com.SimpleScan.simplescan.sqlite.DBManager;
@@ -36,6 +38,15 @@ public class FragmentExpenses extends Fragment
 		
 		// Create the list of expenses
 		buildExpensesList(v);
+
+	    Button addButton = (Button) v.findViewById(R.id.E_addExpenseButton);
+		addButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				addExpenseFragment();
+			}
+		});
 		
 		return v;
 	}
@@ -78,5 +89,13 @@ public class FragmentExpenses extends Fragment
 					android.R.layout.simple_list_item_1, expensesList);
 			listView.setAdapter(adapter);
 		}
+	}
+	
+	public void addExpenseFragment() {
+		getActivity().setTitle("Edit Expense");
+		Fragment fragment = FragmentShareExpense.createNewExpense(getActivity());
+		
+		Toast.makeText(getActivity().getBaseContext(), "Expense Created",Toast.LENGTH_SHORT).show();
+		((Main) getActivity()).changeFragment(fragment, "Edit Expense", true);
 	}
 }

@@ -75,6 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/SE_txtAmount"
             android:layout_toRightOf="@+id/SE_txtName"
+            android:inputType="date" 
             android:ems="8" />
 
         <EditText
@@ -83,6 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/SE_txtCate"
             android:layout_toRightOf="@+id/SE_txtName"
+            android:inputType="number"
             android:ems="8" />
 
         <EditText
