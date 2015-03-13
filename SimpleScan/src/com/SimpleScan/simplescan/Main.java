@@ -156,9 +156,10 @@ public class Main extends FragmentActivity implements OnItemClickListener
 				);
 		
 		Toast.makeText(getBaseContext(), "Expense Created",Toast.LENGTH_SHORT).show();
-		openEditExpenseFragment(view, newExpense);
+		//openEditExpenseFragment(view, newExpense);
 	}
 	
+	/*
 	public void openEditExpenseFragment(View view, Expense expense) {
 		setTitle("Edit Expense");
 		FragmentTransaction fTransaction  = fManager.beginTransaction();
@@ -167,4 +168,5 @@ public class Main extends FragmentActivity implements OnItemClickListener
 		fTransaction.addToBackStack("Opening EditExpenseFragment");
 		fTransaction.commit();	
 	}
+	*/
 }

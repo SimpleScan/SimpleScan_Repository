@@ -1,15 +1,13 @@
 package com.SimpleScan.simplescan;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import com.SimpleScan.simplescan.Camera.CameraEngine;
+import com.SimpleScan.simplescan.Camera.DragRectView;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,23 +15,20 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
-import android.hardware.Camera.PictureCallback;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class CameraActivity extends Activity implements SurfaceHolder.Callback, View.OnClickListener, Camera.PictureCallback, Camera.ShutterCallback {
 
@@ -48,9 +43,10 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     
     Button saveButton;
     Button retakeButton;
+    TextView OCRtext;
 	ImageView PreviewImage;
-	TextView OCRtext;
-	//Bitmap bitmap;
+	
+	private DragRectView Rectview;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,7 +156,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         
         PreviewImage.setImageBitmap(bitmap); //Assign the bitmap to ImageView
         saveButton.setOnClickListener(new View.OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				Log.i("saveButton", "clicked");
@@ -172,14 +167,30 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 			}
 		});
         
-        retakeButton.setOnClickListener(new View.OnClickListener() {
-			
+        retakeButton.setOnClickListener(new View.OnClickListener() {		
 			@Override
 			public void onClick(View v) {
 				Log.i("retakeButton", "clicked");				
 				restartCamera();
 			}
 		});
+        
+        Rectview = (DragRectView) findViewById(R.id.dragRect);
+        if (null != Rectview) {
+        	Rectview.setOnUpCallback(new DragRectView.OnUpCallback() {
+                @Override
+                public void onRectFinished(final Rect rect) {
+                    Toast.makeText(getApplicationContext(), 
+                    		"Rect is ("+rect.left+", "+rect.top+", "+rect.right+", "+rect.bottom+")",
+                    		Toast.LENGTH_LONG).show();
+                    Bitmap bitmap1 = Bitmap.createScaledBitmap(((BitmapDrawable) PreviewImage.getDrawable()).getBitmap(), PreviewImage.getWidth(), PreviewImage.getHeight(), false);
+                    System.out.println(rect.height()+"    "+bitmap1.getHeight()+"      "+rect.width()+"    "+bitmap1.getWidth());
+                    if (rect.height() <= bitmap1.getHeight() && rect.width() <= bitmap1.getWidth()) {
+                        Bitmap croppedBitmap = Bitmap.createBitmap(bitmap1, Rectview.getLeft(), Rectview.getTop(), Rectview.getWidth(), Rectview.getHeight());  
+                    }
+                }
+            });
+        }
         
     }
     
