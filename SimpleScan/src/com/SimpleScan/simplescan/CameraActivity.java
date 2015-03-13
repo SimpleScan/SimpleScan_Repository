@@ -45,12 +45,17 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     SurfaceView cameraFrame;
     CameraEngine cameraEngine;
     
+    Bitmap bitmap;
+    
     Button saveButton;
     Button retakeButton;
     TextView OCRtext;
 	ImageView PreviewImage;
 	
 	private DragRectView Rectview;
+	
+	protected boolean _preview;
+	protected static final String PREVIEWING	= "previewing";
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,18 +87,22 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     protected void onResume() {
         super.onResume();
 
-        cameraFrame = (SurfaceView) findViewById(R.id.camera_frame);
-        shutterButton = (Button) findViewById(R.id.shutter_button);
-        focusButton = (Button) findViewById(R.id.focus_button);
-        
-        shutterButton.setOnClickListener(this);
-        focusButton.setOnClickListener(this);
-
-        SurfaceHolder surfaceHolder = cameraFrame.getHolder();
-        surfaceHolder.addCallback(this);
-        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-
-        cameraFrame.setOnClickListener(this);
+        if(_preview) {
+        	setPreview();
+        } else{
+        	cameraFrame = (SurfaceView) findViewById(R.id.camera_frame);
+	        shutterButton = (Button) findViewById(R.id.shutter_button);
+	        focusButton = (Button) findViewById(R.id.focus_button);
+	        
+	        shutterButton.setOnClickListener(this);
+	        focusButton.setOnClickListener(this);
+	
+	        SurfaceHolder surfaceHolder = cameraFrame.getHolder();
+	        surfaceHolder.addCallback(this);
+	        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+	
+	        cameraFrame.setOnClickListener(this);
+        }
     }
 
 	@Override
@@ -131,9 +140,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
             return;
         }
     	
-        Bitmap bitmap = createPreviewBitmap(data);
+        bitmap = createPreviewBitmap(data);
         
-        setPreview(bitmap);
+        setPreview();
     }
     
     public Bitmap createPreviewBitmap(byte[] data) {
@@ -150,8 +159,10 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         return bitmap;
     }
     
-    public void setPreview(final Bitmap bitmap) {
+    public void setPreview() {
     	setContentView(R.layout.image_preview);
+    	
+    	_preview = true;
     	
     	PreviewImage = (ImageView) findViewById(R.id.previewImage);
         OCRtext = (TextView) findViewById(R.id.OCRtext);
@@ -164,6 +175,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 			public void onClick(View v) {
 				Log.i("saveButton", "clicked");
 				try {
+					//_preview = false;
 					saveBitmap (bitmap);					
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -174,8 +186,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         retakeButton.setOnClickListener(new View.OnClickListener() {		
 			@Override
 			public void onClick(View v) {
-				Log.i("retakeButton", "clicked");				
-				restartCamera();
+				Log.i("retakeButton", "clicked");
+				_preview = false;
+				restartCamera();	
 			}
 		});
         
@@ -296,5 +309,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     public void onShutter() {
 
     }
+
 }
 
