@@ -54,6 +54,8 @@ public class Main extends FragmentActivity implements OnItemClickListener
 		FragmentOverview fragmentOverall = new FragmentOverview();
 		fTransaction.add(R.id.mainContent,fragmentOverall);
 		fTransaction.commit();
+		
+		Filesystem.init(this);
 	}
 	
 	@Override

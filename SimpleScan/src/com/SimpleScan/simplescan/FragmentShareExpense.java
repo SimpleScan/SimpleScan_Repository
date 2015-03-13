@@ -1,6 +1,8 @@
 package com.SimpleScan.simplescan;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +12,11 @@ import android.widget.ImageView;
 
 public class FragmentShareExpense extends Fragment
 {
+	protected String imgPath;
+	protected String billAmt;
+	
+	ImageView ExpenseImg;
+	
 	public FragmentShareExpense() 
 	{
 		// Required empty public constructor
@@ -20,16 +27,20 @@ public class FragmentShareExpense extends Fragment
 			Bundle savedInstanceState) 
 	{	
 		View v = inflater.inflate(R.layout.fragment_share_expense, container, false);
-		ImageView ExpenseImg = (ImageView)v.findViewById(R.id.SE_im);
+		ExpenseImg = (ImageView)v.findViewById(R.id.SE_im);
 		ExpenseImg.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				// To Tai: u can just change the class name here to navigate to your scan bill class 
 				startActivity(new Intent(getActivity(), CameraActivity.class));
 			}
 		});
 		return v;
+	}
+	
+	public void setImage() {
+		Bitmap imageBitmap = BitmapFactory.decodeFile(imgPath);
+		ExpenseImg.setImageBitmap(imageBitmap);
 	}
 	
 }

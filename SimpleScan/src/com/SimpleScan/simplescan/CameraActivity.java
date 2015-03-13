@@ -8,6 +8,7 @@ import java.util.Date;
 
 import com.SimpleScan.simplescan.Camera.CameraEngine;
 import com.SimpleScan.simplescan.Camera.DragRectView;
+import com.googlecode.tesseract.android.TessBaseAPI;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -35,6 +36,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 	static final String TAG = "DBG_" + "CameraActivity";
 
 	public static final int MEDIA_TYPE_IMAGE = 1;
+	
+	public static final int DETECT_ALL = 1;
+	public static final int DETECT_NUMBERS = 0;
 	
     Button shutterButton;
     Button focusButton;
@@ -160,7 +164,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 			public void onClick(View v) {
 				Log.i("saveButton", "clicked");
 				try {
-					saveBitmap (bitmap);
+					saveBitmap (bitmap);					
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -181,13 +185,13 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                 @Override
                 public void onRectFinished(final Rect rect) {
                     Toast.makeText(getApplicationContext(), 
-                    		"Rect is ("+rect.left+", "+rect.top+", "+rect.right+", "+rect.bottom+")",
-                    		Toast.LENGTH_LONG).show();
-                    Bitmap bitmap1 = Bitmap.createScaledBitmap(((BitmapDrawable) PreviewImage.getDrawable()).getBitmap(), PreviewImage.getWidth(), PreviewImage.getHeight(), false);
-                    System.out.println(rect.height()+"    "+bitmap1.getHeight()+"      "+rect.width()+"    "+bitmap1.getWidth());
-                    if (rect.height() <= bitmap1.getHeight() && rect.width() <= bitmap1.getWidth()) {
-                        Bitmap croppedBitmap = Bitmap.createBitmap(bitmap1, Rectview.getLeft(), Rectview.getTop(), Rectview.getWidth(), Rectview.getHeight());  
-                    }
+                    		"Rect is ("+rect.left+", "+rect.top+", "+rect.right+", "+rect.bottom+")", Toast.LENGTH_LONG).show();
+                    Bitmap previewBitmap = Bitmap.createScaledBitmap(((BitmapDrawable) PreviewImage.getDrawable()).getBitmap(), PreviewImage.getWidth(), PreviewImage.getHeight(), false);
+                    //System.out.println(rect.height()+"    "+previewBitmap.getHeight()+"      "+rect.width()+"    "+previewBitmap.getWidth());
+                    if (rect.height() <= previewBitmap.getHeight() && rect.width() <= previewBitmap.getWidth()) {                    
+                    	Bitmap croppedBitmap = Bitmap.createBitmap(previewBitmap, rect.left, rect.top, rect.width(), rect.height());  
+                    	OCRtext.setText(detect_text(croppedBitmap, DETECT_ALL));
+                    }          
                 }
             });
         }
@@ -253,6 +257,31 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         }
 
         return mediaFile;
+    }
+    
+    protected String detect_text(Bitmap targetBitmap, int detectOption){
+    	TessBaseAPI baseApi = new TessBaseAPI();
+    	Log.i("tessrect", "new tess object created");   	
+    	baseApi.init(Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract/", "eng");
+    	Log.i("tessrect", "initialized");
+    	// Eg. baseApi.init("/mnt/sdcard/tesseract/tessdata/eng.traineddata", "eng");
+    	
+    	switch(detectOption) {
+    	case (0):
+	    	//only detect numbers
+	    	baseApi.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "1234567890");
+	    	baseApi.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "!@#$%^&*()_+=-qwertyuiop[]}{POIU" + "YTREWQasdASDfghFGHjklJKLl;L:'\"\\|~`xcvXCVbnmBNM,./<>?");
+	    	break;
+    	}
+    	
+    	baseApi.setImage(targetBitmap);
+    	Log.i("tessrect", "bitmap/image set");
+    	
+    	String recognizedText = baseApi.getUTF8Text();
+    	
+    	baseApi.end();
+    	
+    	return recognizedText;
     }
     
     @Override
