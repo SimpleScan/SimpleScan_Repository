@@ -236,7 +236,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "SimpleScan");
+        File mediaStorageDir = new File(Filesystem._ImgDirPath);
 
         // Create the storage directory if it does not exist
         if (! mediaStorageDir.exists()){

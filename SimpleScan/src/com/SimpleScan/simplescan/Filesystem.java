@@ -19,43 +19,55 @@ public class Filesystem {
 	public static String _ImgDirPath = Environment.getExternalStorageDirectory() + "/SimpleScan/images";
 	
 	public static void init(Context context) {
-
 		File app_dir = new File(_appPath);
         if(!app_dir.exists()) {
         	if(app_dir.mkdir()) {
-        		Log.i( "app_dir", "app_dir made" );
-        		
-        		File im_direct = new File( Environment.getExternalStorageDirectory() + "/SimpleScan/images" );
-                if(!im_direct.exists()) {
-                	if(im_direct.mkdir()) {
-                		
-                	}
-                }
-        		
-                File tess_dir = new File(_tessPath);
-                if(!tess_dir.exists()) {
-                	if(tess_dir.mkdir()) {
-                		Log.i( "tess_dir", "tess_dir made" );
-                		
-                		File traindata_direct = new File(_traindataPath);
-                        if(!traindata_direct.exists()) {
-                        	if(traindata_direct.mkdir()) {
-                        		Log.i( "traindata", "directory made" );
-                        		CopyAssets(context);
-                        	}
-                        	else Log.i( "traindata", "traindata_direct could not be made" );
-                        }
-                        else Log.i( "traindata", "traindata_direct exists" );
-                		
-                	}
-                	else Log.i( "tess_dir", "tess_dir could not be made" );
-                }
-                else Log.i( "tess_dir", "tess_dir exists" );
-        		
+        		makeAppSubdirs(context);
         	}
         	else Log.i( "app_dir", "app_dir could not be made" );
         }
-        else Log.i( "app_dir", "app_dir exists" );        
+        else {
+        	Log.i( "app_dir", "app_dir exists" );
+        	makeAppSubdirs(context);
+        }
+	}
+	
+	
+	private static void makeAppSubdirs(Context context) {
+		File im_direct = new File( Environment.getExternalStorageDirectory() + "/SimpleScan/images" );
+        if(!im_direct.exists()) {
+        	if(im_direct.mkdir()) {
+        		
+        	}
+        }
+		
+        File tess_dir = new File(_tessPath);
+        if(!tess_dir.exists()) {
+        	if(tess_dir.mkdir()) {
+        		Log.i( "tess_dir", "tess_dir made" );
+        		makeTessSubdir(context);
+        	}
+        	else Log.i( "tess_dir", "tess_dir could not be made" );
+        }
+        else {
+        	Log.i( "tess_dir", "tess_dir exists" );
+        	makeTessSubdir(context);
+        }
+	}
+	
+	private static void makeTessSubdir(Context context) {
+		File traindata_direct = new File(_traindataPath);
+        if(!traindata_direct.exists()) {
+        	if(traindata_direct.mkdir()) {
+        		Log.i( "traindata", "directory made" );
+        		CopyAssets(context);
+        	}
+        	else Log.i( "traindata", "traindata_direct could not be made" );
+        }
+        else {
+        	Log.i( "traindata", "traindata_direct exists" );
+        	CopyAssets(context);
+        }
 	}
 	
 	private static void CopyAssets(Context context) {
