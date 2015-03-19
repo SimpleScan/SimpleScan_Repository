@@ -3,6 +3,7 @@ package com.SimpleScan.simplescan.Camera;
 import java.io.IOException;
 
 import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
@@ -34,6 +35,17 @@ public class CameraEngine {
         if (isOn()) camera.autoFocus(autoFocusCallback);
 
     }
+    /*
+    public void toggleFlash() {
+    	if(camera == null) return;
+    	if(isOn()){
+    		Parameters camParameters = camera.getParameters();
+    		if(camParameters.getFlashMode() == Parameters.FLASH_MODE_OFF)
+    			camParameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
+    		camera.setParameters(camParameters);
+    	}
+    }
+    */
     
     public void start() {
 

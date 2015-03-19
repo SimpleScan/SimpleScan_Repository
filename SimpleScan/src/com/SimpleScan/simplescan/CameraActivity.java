@@ -8,6 +8,7 @@ import java.util.Date;
 
 import com.SimpleScan.simplescan.Camera.CameraEngine;
 import com.SimpleScan.simplescan.Camera.DragRectView;
+import com.SimpleScan.simplescan.Camera.OCR;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
 import android.app.Activity;
@@ -37,25 +38,22 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	
-	public static final int DETECT_ALL = 1;
-	public static final int DETECT_NUMBERS = 0;
+	private DragRectView Rectview;
+	
+	protected boolean _preview;
 	
     Button shutterButton;
     Button focusButton;
     SurfaceView cameraFrame;
     CameraEngine cameraEngine;
     
-    Bitmap bitmap;
-    
     Button saveButton;
     Button retakeButton;
+    Button flashButton;
     TextView OCRtext;
 	ImageView PreviewImage;
 	
-	private DragRectView Rectview;
-	
-	protected boolean _preview;
-	protected static final String PREVIEWING	= "previewing";
+	Bitmap bitmap;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,9 +91,11 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         	cameraFrame = (SurfaceView) findViewById(R.id.camera_frame);
 	        shutterButton = (Button) findViewById(R.id.shutter_button);
 	        focusButton = (Button) findViewById(R.id.focus_button);
-	        
+	        //flashButton = (Button) findViewById(R.id.flash_button);
+
 	        shutterButton.setOnClickListener(this);
 	        focusButton.setOnClickListener(this);
+	        //flashButton.setOnClickListener(this);
 	
 	        SurfaceHolder surfaceHolder = cameraFrame.getHolder();
 	        surfaceHolder.addCallback(this);
@@ -130,6 +130,13 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                 cameraEngine.requestFocus();
             }
         }
+        /*
+        if(v == flashButton) {
+        	if(cameraEngine!=null && cameraEngine.isOn()){
+                cameraEngine.toggleFlash();
+            }
+        }
+        */
     }
     
 
@@ -203,7 +210,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                     //System.out.println(rect.height()+"    "+previewBitmap.getHeight()+"      "+rect.width()+"    "+previewBitmap.getWidth());
                     if (rect.height() <= previewBitmap.getHeight() && rect.width() <= previewBitmap.getWidth()) {                    
                     	Bitmap croppedBitmap = Bitmap.createBitmap(previewBitmap, rect.left, rect.top, rect.width(), rect.height());  
-                    	OCRtext.setText(detect_text(croppedBitmap, DETECT_ALL));
+                    	OCRtext.setText(OCR.detect_text(croppedBitmap, "detect_numbers"));
                     }          
                 }
             });
@@ -246,11 +253,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
     /** Create a File for saving an image or video */
     private static File getOutputMediaFile(int type){
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
 
         File mediaStorageDir = new File(Filesystem._ImgDirPath);
-
         // Create the storage directory if it does not exist
         if (! mediaStorageDir.exists()){
             if (! mediaStorageDir.mkdirs()){
@@ -272,30 +276,42 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         return mediaFile;
     }
     
-    protected String detect_text(Bitmap targetBitmap, int detectOption){
+    /*
+    protected String detect_text(Bitmap targetBitmap, String detectOption){
     	TessBaseAPI baseApi = new TessBaseAPI();
     	Log.i("tessrect", "new tess object created");   	
     	baseApi.init(Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract/", "eng");
     	Log.i("tessrect", "initialized");
-    	// Eg. baseApi.init("/mnt/sdcard/tesseract/tessdata/eng.traineddata", "eng");
-    	
-    	switch(detectOption) {
-    	case (0):
-	    	//only detect numbers
-	    	baseApi.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "1234567890");
-	    	baseApi.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "!@#$%^&*()_+=-qwertyuiop[]}{POIU" + "YTREWQasdASDfghFGHjklJKLl;L:'\"\\|~`xcvXCVbnmBNM,./<>?");
-	    	break;
-    	}
     	
     	baseApi.setImage(targetBitmap);
     	Log.i("tessrect", "bitmap/image set");
     	
     	String recognizedText = baseApi.getUTF8Text();
     	
+    	if (detectOption == DETECT_NUMBERS) recognizedText = extractNumbers(recognizedText);
+    	
     	baseApi.end();
     	
     	return recognizedText;
     }
+    
+    private String extractNumbers(String inputString) {
+    	String outputString="";
+    	
+    	for(int i=0; i<inputString.length(); i++) {
+    		if(isNumber(inputString.charAt(i))) outputString += inputString.charAt(i);
+    	}
+    	
+    	return outputString;
+    }
+    
+    private boolean isNumber(char input) {
+    	if(input == '0' || input == '1' || input == '2' || input == '3' || input == '4'
+    	|| input == '5' || input == '6' || input == '7' || input == '8' || input == '9'
+    	|| input == '.' ) return true;
+    	else return false;
+    }
+    */
     
     @Override
 	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {	
