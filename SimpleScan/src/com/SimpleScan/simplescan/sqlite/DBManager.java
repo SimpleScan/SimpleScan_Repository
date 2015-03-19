@@ -114,6 +114,7 @@ public class DBManager {
 
 		while (!c.isAfterLast()) {
 			Expense e = new Expense();
+			e.setId(c.getInt(c.getColumnIndexOrThrow(ExpenseTable._ID)));
 			e.setTitle(c.getString(c
 					.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_TITLE)));
 			e.setAmount(c.getDouble(c
@@ -155,6 +156,33 @@ public class DBManager {
 		insert(ExpenseTable.TABLE_NAME, null, values);
 
 		updateBudget(amount);
+	}
+	
+	public void editExpense(int id, double amount, String date, String title,
+			String imageTitle, String imagePath){
+	
+		db = dbHelper.getWritableDatabase();
+		
+		ContentValues values = new ContentValues();
+		if(amount >= 0.0){
+			values.put(ExpenseTable.COLUMN_NAME_AMOUNT, amount);
+		}
+		if(date != null){
+			values.put(ExpenseTable.COLUMN_NAME_DATE, date);
+		}
+		if(title != null){
+			values.put(ExpenseTable.COLUMN_NAME_TITLE, title);
+		}
+		if(imageTitle != null){
+			values.put(ExpenseTable.COLUMN_NAME_IMAGE_TITLE , imageTitle);
+		}
+		if(imagePath != null){
+			values.put(ExpenseTable.COLUMN_NAME_IMAGE_PATH, imagePath);
+		}
+		
+		String[] whereArgs = {Integer.toString(id), };
+		
+		db.update(ExpenseTable.TABLE_NAME, values, "_id=?", whereArgs);
 	}
 	
 	/**
