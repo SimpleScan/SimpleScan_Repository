@@ -3,7 +3,6 @@ package com.SimpleScan.simplescan;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,17 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Spinner;
-import android.widget.TabHost;
 import android.widget.Toast;
-import android.widget.TabHost.TabSpec;
 
 import com.SimpleScan.simplescan.sqlite.DBManager;
 import com.SimpleScan.simplescan.Entities.Expense;
 
 public class FragmentExpenses extends Fragment 
 {
+	private ExpandableListAdapter expandableListAdapter;
 
 	public FragmentExpenses() 
 	{
@@ -74,7 +73,8 @@ public class FragmentExpenses extends Fragment
 	private void buildExpensesList(View view) {
 		DBManager dbManager = new DBManager(getActivity());
 		List<Expense> expensesList = dbManager.getExpenses();
-		ListView listView = (ListView) view.findViewById(R.id.E_fullExpensesListView);
+		ExpandableListView listView = (ExpandableListView) 
+				view.findViewById(R.id.E_fullExpensesListView);
 		
 		// If the list is empty, give a simple message stating so.
 		// Otherwise, populate the ListView.
@@ -85,9 +85,22 @@ public class FragmentExpenses extends Fragment
 					android.R.layout.simple_list_item_1, emptyMsg);
 			listView.setAdapter(adapter);
 		} else {
-			ArrayAdapter<Expense> adapter = new ArrayAdapter<Expense>(getActivity(),
-					android.R.layout.simple_list_item_1, expensesList);
-			listView.setAdapter(adapter);
+			expandableListAdapter = new ExpandableListAdapter(getActivity(), 
+					expensesList);
+			listView.setAdapter(expandableListAdapter);
+			
+			listView.setOnChildClickListener(new OnChildClickListener() {
+
+				@Override
+				public boolean onChildClick(ExpandableListView parent, View v,
+						int groupPosition, int childPosition, long id) {
+					Expense expense = expandableListAdapter.getExpense(groupPosition, childPosition);
+					getActivity().setTitle("Edit Expense");
+					Fragment fragment = FragmentShareExpense.createNewInstance(expense);
+					((Main) getActivity()).changeFragment(fragment, "Edit Expense", true);
+					return false;
+				}
+			});
 		}
 	}
 	

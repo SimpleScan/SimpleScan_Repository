@@ -2,6 +2,7 @@ package com.SimpleScan.simplescan;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import com.SimpleScan.simplescan.Entities.Expense;
 import com.SimpleScan.simplescan.sqlite.DBManager;
@@ -20,7 +21,7 @@ import android.widget.ImageView;
 public class FragmentShareExpense extends Fragment implements View.OnClickListener
 {
 	private static final String EXPENSE_KEY = "expense_key";
-	private Expense mExpense;
+	private Expense expense;
 	
 	public FragmentShareExpense() 
 	{
@@ -36,7 +37,7 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	public static FragmentShareExpense createNewExpense(Context context) {
 		// Get today's date to set as default
 		Date date = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
 		
 		// Create the expense and save it
 		Expense newExpense = new Expense();
@@ -77,7 +78,7 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 			Bundle savedInstanceState) 
 	{	
 		View v = inflater.inflate(R.layout.fragment_share_expense, container, false);
-		
+		expense = (Expense) getArguments().getSerializable(EXPENSE_KEY);
 		setUpEditExpense(v);
 		
 		return v;
@@ -86,11 +87,11 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	private void setUpEditExpense(View v) {
 		// Set the default values for text fields
 		EditText edit = (EditText) v.findViewById(R.id.SE_editName);
-		edit.setText(mExpense.getTitle());
+		edit.setText(expense.getTitle());
 		edit = (EditText) v.findViewById(R.id.SE_editDate);
-		edit.setText(mExpense.getDate());
+		edit.setText(expense.getDate());
 		edit = (EditText) v.findViewById(R.id.SE_editAmount);
-		edit.setText("$" + mExpense.getAmount());
+		edit.setText("" + expense.getAmount());
 		
 		// Set button listeners
 	    Button saveButton = (Button) v.findViewById(R.id.SE_btnSave);

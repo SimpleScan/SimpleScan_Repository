@@ -15,7 +15,7 @@
             android:layout_marginTop="16dp"
             android:layout_toRightOf="@+id/E_text1" />
 
-        <ListView
+        <ExpandableListView
             android:id="@+id/E_fullExpensesListView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/E_categoriesSpinner"
             android:layout_marginTop="16dp" >
-        </ListView>
+        </ExpandableListView>
 
         <Button
             android:id="@+id/E_addExpenseButton"

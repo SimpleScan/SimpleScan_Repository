@@ -85,7 +85,7 @@ public class Expense implements Serializable {
 	}
 	
 	public String toString() {
-		return date + amount + title;
+		return date + ": $" + amount + " - " + title;
 	}
 
 }
