@@ -1,12 +1,14 @@
 package com.SimpleScan.simplescan;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import com.SimpleScan.simplescan.Entities.Expense;
 import com.SimpleScan.simplescan.sqlite.DBManager;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -22,6 +25,9 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 {
 	private static final String EXPENSE_KEY = "expense_key";
 	private Expense expense;
+	private Calendar calendar;
+	private DatePickerDialog.OnDateSetListener datePicker;
+	private EditText editDate;
 	
 	public FragmentShareExpense() 
 	{
@@ -37,7 +43,7 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	public static FragmentShareExpense createNewExpense(Context context) {
 		// Get today's date to set as default
 		Date date = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 		
 		// Create the expense and save it
 		Expense newExpense = new Expense();
@@ -79,7 +85,9 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	{	
 		View v = inflater.inflate(R.layout.fragment_share_expense, container, false);
 		expense = (Expense) getArguments().getSerializable(EXPENSE_KEY);
+		
 		setUpEditExpense(v);
+		setUpDatePicker(v);
 		
 		return v;
 	}
@@ -88,8 +96,8 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		// Set the default values for text fields
 		EditText edit = (EditText) v.findViewById(R.id.SE_editName);
 		edit.setText(expense.getTitle());
-		edit = (EditText) v.findViewById(R.id.SE_editDate);
-		edit.setText(expense.getDate());
+		editDate = (EditText) v.findViewById(R.id.SE_editDate);
+		editDate.setText(expense.getDate());
 		edit = (EditText) v.findViewById(R.id.SE_editAmount);
 		edit.setText("" + expense.getAmount());
 		
@@ -101,6 +109,30 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		ImageView ExpenseImg = (ImageView)v.findViewById(R.id.SE_im);
 		ExpenseImg.setOnClickListener(this);
 	}
+	
+	private void setUpDatePicker(View v) {
+		calendar = Calendar.getInstance();
+		EditText edit = (EditText) v.findViewById(R.id.SE_editDate);
+		
+		datePicker = new DatePickerDialog.OnDateSetListener() {
+			
+			@Override
+			public void onDateSet(DatePicker view, int year, int monthOfYear,
+					int dayOfMonth) {
+				calendar.set(Calendar.YEAR,  year);
+				calendar.set(Calendar.MONTH, monthOfYear);
+				calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+				updateLabel();
+			}
+		};
+		
+		edit.setOnClickListener(this);
+	}
+	
+	private void updateLabel() {
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+		editDate.setText(sdf.format(calendar.getTime()));
+	}
 
 	@Override
 	public void onClick(View view) {
@@ -110,6 +142,9 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 			break;
 		case (R.id.SE_btnDel):
 			deleteExpense();
+			break;
+		case (R.id.SE_editDate):
+			createDatePickerDialog();
 			break;
 		case (R.id.SE_im):
 			// To Tai: u can just change the class name here to navigate to your scan bill class 
@@ -136,6 +171,15 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	
 	private void deleteExpense() {
 		// Does nothing
+	}
+	
+	private void createDatePickerDialog() {
+		new DatePickerDialog(getActivity(), 
+				datePicker, 
+				calendar.get(Calendar.YEAR), 
+				calendar.get(Calendar.MONTH), 
+				calendar.get(Calendar.DAY_OF_MONTH)
+				).show();
 	}
 	
 }

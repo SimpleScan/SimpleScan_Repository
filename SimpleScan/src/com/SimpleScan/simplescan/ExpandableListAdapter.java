@@ -33,9 +33,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     }
     
     private void extractInfo(List<Expense> expenses) {
-    	SimpleDateFormat inFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
-    	SimpleDateFormat outFormat = new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
-    	SimpleDateFormat shortFormat = new SimpleDateFormat("MMMM dd", Locale.ENGLISH);
+    	SimpleDateFormat inFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+    	SimpleDateFormat outFormat = new SimpleDateFormat("MMMM yyyy", Locale.US);
+    	SimpleDateFormat shortFormat = new SimpleDateFormat("MMMM dd", Locale.US);
     	for (Expense expense : expenses) {
     		try {
         		String dateString = expense.getDate();
