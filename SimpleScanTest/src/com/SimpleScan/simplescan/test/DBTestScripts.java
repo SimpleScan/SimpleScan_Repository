@@ -24,15 +24,20 @@ public class DBTestScripts {
 	public static abstract class BudgetScripts {
 		public static final double ORIGINAL_AMOUNT1 = 500.00;
 		public static final double CURRENT_AMOUNT1 = 218.01;
-		public static final String START_DATE = "2015-02-14 12:00:00";
-		public static final String END_DATE = "2015-03-14 12:00:00";
+		public static final String START_DATE1 = "2015-02-14 12:00:00";
+		public static final String END_DATE1 = "2015-03-14 12:00:00";
+		
+		public static final double ORIGINAL_AMOUNT2 = 400.00;
+		public static final double CURRENT_AMOUNT2 = 400.00;
+		public static final String START_DATE2 = "2015-03-12 12:56:14";
+		public static final String END_DATE2 = "2015-04-10 07:45:31";
 		
 		public static final String INSERT_BUDGET1 = "INSERT INTO " + 
 				BudgetTable.TABLE_NAME + "('" + BudgetTable.COLUMN_NAME_ORIGINAL_AMOUNT + "', '" + 
 				BudgetTable.COLUMN_NAME_CURRENT_AMOUNT + "', '" + BudgetTable.COLUMN_NAME_START_DATE + "', '" +
 				BudgetTable.COLUMN_NAME_END_DATE + "') VALUES" + 
 				"('" + ORIGINAL_AMOUNT1 + "', '" + CURRENT_AMOUNT1 + "', '" + 
-				START_DATE + "', '" + END_DATE + "');";
+				START_DATE1 + "', '" + END_DATE1 + "');";
 	}
 	
 	public static abstract class ExpenseScripts {

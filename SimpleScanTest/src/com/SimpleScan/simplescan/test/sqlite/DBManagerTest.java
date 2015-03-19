@@ -70,8 +70,46 @@ public class DBManagerTest extends AndroidTestCase {
     	Budget b = db.getBudget();
     	assertNotNull(b);
     	
-    	assertEquals(BudgetScripts.CURRENT_AMOUNT1 - ExpenseScripts.AMOUNT6, b.getAmount());    	
+    	assertEquals(BudgetScripts.CURRENT_AMOUNT1 - ExpenseScripts.AMOUNT6, b.getCurrAmount());    	
     }    
+    
+    public void testGetBudget(){
+    	setUp();
+    	dbTest.createBudgetData1();
+    	
+    	Budget b = db.getBudget();
+    	assertNotNull(b);
+    	assertEquals(BudgetScripts.CURRENT_AMOUNT1, b.getCurrAmount());
+    }
+    
+    public void testCreateBudget(){
+    	setUp();
+    	dbTest.createBudgetData1();
+    	
+    	db.createBudget(BudgetScripts.ORIGINAL_AMOUNT2, BudgetScripts.START_DATE2, BudgetScripts.END_DATE2);
+    	Budget b = db.getBudget();
+    	assertNotNull(b);
+    	assertEquals(BudgetScripts.CURRENT_AMOUNT2, b.getCurrAmount());
+    	assertEquals(BudgetScripts.START_DATE2, b.getStartDate());
+    	assertEquals(BudgetScripts.END_DATE2, b.getEndDate());
+    }
+    
+    /**
+     * Tests that after creating a new budget, the last budget is ended (end date is set to start date of new budget)
+     */
+    public void testCreateBudgetUpdateOld(){
+    	setUp();
+    	dbTest.createBudgetData1();
+    	
+    	db.createBudget(BudgetScripts.ORIGINAL_AMOUNT2, BudgetScripts.START_DATE2, BudgetScripts.END_DATE2);
+    	List<Budget> budgets = db.getBudgets();
+    	assertNotNull(budgets);
+    	assertEquals(2, budgets.size());
+    	Budget b1 = budgets.get(0); // new budget
+    	Budget b2 = budgets.get(1); // old budget
+    	
+    	assertEquals(b1.getStartDate(), b2.getEndDate());    	
+    }
 
     public void tearDown() throws Exception{
         db.close(); 
