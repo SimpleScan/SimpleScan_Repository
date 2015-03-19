@@ -50,15 +50,24 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     Button saveButton;
     Button retakeButton;
     Button flashButton;
-    TextView OCRtext;
+    Button recordNameButton;
+    Button recordDateButton;
+    Button recordAmtButton;
+    //TextView OCRtext;
+    TextView OCR_name;
+    TextView OCR_date;
+    TextView OCR_amt;
 	ImageView PreviewImage;
+	
+	boolean recordNameOn, recordDateOn, recordAmtOn;
+	String nameText, dateText, amtText;
 	
 	Bitmap bitmap;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
+        setContentView(R.layout.activity_camera);         
     }
     
     @Override
@@ -149,7 +158,17 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     	
         bitmap = createPreviewBitmap(data);
         
+        initPreview();
         setPreview();
+    }
+    
+    private void initPreview(){
+    	recordNameOn = false;
+        recordDateOn = false;
+        recordAmtOn = false;
+        nameText = "";
+        dateText = ""; 
+        amtText  = "";
     }
     
     public Bitmap createPreviewBitmap(byte[] data) {
@@ -172,9 +191,16 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     	_preview = true;
     	
     	PreviewImage = (ImageView) findViewById(R.id.previewImage);
-        OCRtext = (TextView) findViewById(R.id.OCRtext);
+        //OCRtext = (TextView) findViewById(R.id.OCRtext);
+    	OCR_name = (TextView) findViewById(R.id.OCR_name);
+    	OCR_date = (TextView) findViewById(R.id.OCR_date);
+    	OCR_amt = (TextView) findViewById(R.id.OCR_amt);
         saveButton = (Button) findViewById(R.id.saveButton);
         retakeButton = (Button) findViewById(R.id.retakeButton);
+        recordNameButton = (Button) findViewById(R.id.recordNameButton);
+        recordDateButton = (Button) findViewById(R.id.recordDateButton);
+        recordAmtButton = (Button) findViewById(R.id.recordAmtButton);
+        
         
         PreviewImage.setImageBitmap(bitmap); //Assign the bitmap to ImageView
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -182,7 +208,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 			public void onClick(View v) {
 				Log.i("saveButton", "clicked");
 				try {
-					//_preview = false;
 					saveBitmap (bitmap);					
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -199,6 +224,96 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 			}
 		});
         
+        recordNameButton.setOnClickListener(new View.OnClickListener() {		
+			@Override
+			public void onClick(View v) {
+				Log.i("recordNameButton", "clicked");
+				if(recordNameOn){
+					recordNameOn = false;
+					
+					if(nameText=="") OCR_name.setText("Name");
+					else OCR_name.setText(nameText);
+				}
+				else {
+					recordNameOn = true;	
+					if(recordDateOn) {
+						recordDateOn = false;
+						
+						if(dateText=="") OCR_date.setText("Date");
+						else OCR_date.setText(dateText);
+					}
+					else if(recordAmtOn) {
+						recordAmtOn = false;
+						
+						if(amtText=="") OCR_amt.setText("Amount");
+						else OCR_amt.setText("$"+amtText);
+					}
+					
+					OCR_name.setText("Crop the name");
+				}
+			}
+		});
+        
+        recordDateButton.setOnClickListener(new View.OnClickListener() {		
+			@Override
+			public void onClick(View v) {
+				Log.i("recordDateButton", "clicked");
+				if(recordDateOn) {
+					recordDateOn = false;
+					
+					if(dateText=="") OCR_date.setText("Date");
+					else OCR_date.setText(dateText);
+				}
+				else {
+					recordDateOn = true;	
+					if(recordNameOn) {
+						recordNameOn = false;
+						
+						if(nameText=="") OCR_name.setText("Name");
+						else OCR_name.setText(nameText);
+					}
+					else if(recordAmtOn) {
+						recordAmtOn = false;
+						
+						if(amtText=="") OCR_amt.setText("Amount");
+						else OCR_amt.setText("$"+amtText);
+					}
+					
+					OCR_date.setText("Crop the date");
+				}
+			}
+		});
+        
+        recordAmtButton.setOnClickListener(new View.OnClickListener() {		
+			@Override
+			public void onClick(View v) {
+				Log.i("recordAmtButton", "clicked");
+				if(recordAmtOn) {
+					recordAmtOn = false;
+					
+					if(amtText=="") OCR_amt.setText("Amount");
+					else OCR_amt.setText("$"+amtText);
+				}
+				else {
+					recordAmtOn = true;	
+					if(recordNameOn) {
+						recordNameOn = false;
+						
+						if(nameText=="") OCR_name.setText("Name");
+						else OCR_name.setText(nameText);
+					}
+					else if(recordDateOn) {
+						recordDateOn = false;
+						
+						if(dateText=="") OCR_date.setText("Date");
+						else OCR_date.setText(dateText);
+					}
+					
+					OCR_amt.setText("Crop the amount");
+				}
+			}
+		});   
+        
         Rectview = (DragRectView) findViewById(R.id.dragRect);
         if (null != Rectview) {
         	Rectview.setOnUpCallback(new DragRectView.OnUpCallback() {
@@ -210,7 +325,21 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                     //System.out.println(rect.height()+"    "+previewBitmap.getHeight()+"      "+rect.width()+"    "+previewBitmap.getWidth());
                     if (rect.height() <= previewBitmap.getHeight() && rect.width() <= previewBitmap.getWidth()) {                    
                     	Bitmap croppedBitmap = Bitmap.createBitmap(previewBitmap, rect.left, rect.top, rect.width(), rect.height());  
-                    	OCRtext.setText(OCR.detect_text(croppedBitmap, "detect_numbers"));
+                    	if(recordNameOn) {
+                    		nameText = OCR.detect_text(croppedBitmap, "detect_all");
+                    		//OCRtext.setText(nameText + "    " + dateText + "    $" + amtText);
+                    		OCR_name.setText(nameText);
+                    	}
+                    	if(recordDateOn) {
+                    		dateText = OCR.detect_text(croppedBitmap, "detect_date");
+                    		//OCRtext.setText(nameText + "    " + dateText + "    $" + amtText);       		
+                    		OCR_date.setText(dateText);
+                    	}
+                    	if(recordAmtOn) {
+                    		amtText = OCR.detect_text(croppedBitmap, "detect_numbers");
+                    		//OCRtext.setText(nameText + "    " + dateText + "    $" + amtText);
+                    		OCR_amt.setText("$"+amtText);
+                    	}     	
                     }          
                 }
             });
@@ -275,43 +404,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
         return mediaFile;
     }
-    
-    /*
-    protected String detect_text(Bitmap targetBitmap, String detectOption){
-    	TessBaseAPI baseApi = new TessBaseAPI();
-    	Log.i("tessrect", "new tess object created");   	
-    	baseApi.init(Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract/", "eng");
-    	Log.i("tessrect", "initialized");
-    	
-    	baseApi.setImage(targetBitmap);
-    	Log.i("tessrect", "bitmap/image set");
-    	
-    	String recognizedText = baseApi.getUTF8Text();
-    	
-    	if (detectOption == DETECT_NUMBERS) recognizedText = extractNumbers(recognizedText);
-    	
-    	baseApi.end();
-    	
-    	return recognizedText;
-    }
-    
-    private String extractNumbers(String inputString) {
-    	String outputString="";
-    	
-    	for(int i=0; i<inputString.length(); i++) {
-    		if(isNumber(inputString.charAt(i))) outputString += inputString.charAt(i);
-    	}
-    	
-    	return outputString;
-    }
-    
-    private boolean isNumber(char input) {
-    	if(input == '0' || input == '1' || input == '2' || input == '3' || input == '4'
-    	|| input == '5' || input == '6' || input == '7' || input == '8' || input == '9'
-    	|| input == '.' ) return true;
-    	else return false;
-    }
-    */
     
     @Override
 	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {	

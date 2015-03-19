@@ -1651,11 +1651,16 @@ containing a value of this type.
         public static final int abc_textfield_search_activated_mtrl_alpha=0x7f020030;
         public static final int abc_textfield_search_default_mtrl_alpha=0x7f020031;
         public static final int abc_textfield_search_material=0x7f020032;
-        public static final int flash_layout=0x7f020033;
-        public static final int focus_layout=0x7f020034;
-        public static final int ic_launcher=0x7f020035;
-        public static final int scan_anime=0x7f020036;
-        public static final int shutter_layout=0x7f020037;
+        public static final int check_layout=0x7f020033;
+        public static final int flash_layout=0x7f020034;
+        public static final int focus_layout=0x7f020035;
+        public static final int ic_launcher=0x7f020036;
+        public static final int record_amt_layout=0x7f020037;
+        public static final int record_date_layout=0x7f020038;
+        public static final int record_name_layout=0x7f020039;
+        public static final int retake_layout=0x7f02003a;
+        public static final int scan_anime=0x7f02003b;
+        public static final int shutter_layout=0x7f02003c;
     }
     public static final class id {
         public static final int EE_deleteButton=0x7f090047;
@@ -1673,7 +1678,9 @@ containing a value of this type.
         public static final int E_fullExpensesListView=0x7f090053;
         public static final int E_sharedCheckbox=0x7f090055;
         public static final int E_text1=0x7f090052;
-        public static final int OCRtext=0x7f090066;
+        public static final int OCR_amt=0x7f090069;
+        public static final int OCR_date=0x7f090068;
+        public static final int OCR_name=0x7f090066;
         public static final int O_addExpenseButton=0x7f090057;
         public static final int O_partialExpensesListView=0x7f090056;
         public static final int O_remainingBudget=0x7f09005a;
@@ -1703,7 +1710,7 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f09002e;
         public static final int action_mode_bar_stub=0x7f09002d;
         public static final int action_mode_close_button=0x7f090020;
-        public static final int action_settings=0x7f09006b;
+        public static final int action_settings=0x7f090070;
         public static final int activity_chooser_view_content=0x7f090021;
         public static final int always=0x7f090014;
         public static final int beginning=0x7f09001b;
@@ -1714,7 +1721,7 @@ containing a value of this type.
         public static final int default_activity_button=0x7f090024;
         public static final int dialog=0x7f090019;
         public static final int disableHome=0x7f09000d;
-        public static final int dragRect=0x7f090069;
+        public static final int dragRect=0x7f09006d;
         public static final int drawerLayout=0x7f090042;
         public static final int drawerList=0x7f090044;
         public static final int dropdown=0x7f09001a;
@@ -1735,12 +1742,15 @@ containing a value of this type.
         public static final int never=0x7f090017;
         public static final int none=0x7f09000f;
         public static final int normal=0x7f09000b;
-        public static final int previewImage=0x7f090068;
+        public static final int previewImage=0x7f09006b;
         public static final int progress_circular=0x7f090007;
         public static final int progress_horizontal=0x7f090008;
         public static final int radio=0x7f09002b;
-        public static final int retakeButton=0x7f09006a;
-        public static final int saveButton=0x7f090067;
+        public static final int recordAmtButton=0x7f09006a;
+        public static final int recordDateButton=0x7f09006c;
+        public static final int recordNameButton=0x7f090067;
+        public static final int retakeButton=0x7f09006f;
+        public static final int saveButton=0x7f09006e;
         public static final int search_badge=0x7f090035;
         public static final int search_bar=0x7f090034;
         public static final int search_button=0x7f090036;
