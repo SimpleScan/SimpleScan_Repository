@@ -73,6 +73,17 @@ public class DBManagerTest extends AndroidTestCase {
     	assertEquals(BudgetScripts.CURRENT_AMOUNT1 - ExpenseScripts.AMOUNT6, b.getCurrAmount());    	
     }    
     
+    public void testEditExpense(){
+    	setUp();
+    	dbTest.createExpenseData1();
+    	
+    	db.editExpense(1, 30.00, null, "Electric Bill", null, null);
+    	List<Expense> expenses = db.getExpenses();
+    	assertNotNull(expenses);
+    	assertEquals(expenses.get(0).getAmount(), 30.00);
+    	assertEquals(expenses.get(0).getTitle(), "Electric Bill");
+    }
+    
     public void testGetBudget(){
     	setUp();
     	dbTest.createBudgetData1();
