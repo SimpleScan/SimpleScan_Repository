@@ -53,20 +53,33 @@ public class OCR {
     	inputString = inputString.toLowerCase(Locale.ENGLISH);
     	Log.i("inputString", inputString);
     	
+    	double [] accuracy = {0,0,0,0,0,0,0,0,0,0,0,0};
+    	double curMaxVal=0;
+    	int curMaxIdx=0;
     	for(int cur=0; cur<12; cur++) {
     		String curMonth = MONTHS[cur];
-    		int detected = 0;
+    		//int detected = 0;
     		for(int j=0; j<curMonth.length()-1; j++) {
     			String month_substr = curMonth.substring(j, j+2);
-    			if(inputString.contains(month_substr)) detected ++;
+    			//if(inputString.contains(month_substr)) detected ++;
+    			if(inputString.contains(month_substr)) accuracy[cur] ++;
     		}
+    		/*
     		if(detected >= 2) {
     			if(String.valueOf(cur+1).length() == 1) m = "0"+String.valueOf(cur+1)+"/";
     			else m = String.valueOf(cur+1)+"/";
     			Log.i("month", m);
     			break;
-    		}		
+    		}
+    		*/
+    		if((accuracy[cur]/curMonth.length())>curMaxVal) {
+    			curMaxIdx = cur;
+    			curMaxVal = accuracy[cur]/curMonth.length();
+    		}
     	}
+    	if(String.valueOf(curMaxIdx+1).length() == 1) m = "0"+String.valueOf(curMaxIdx+1)+"/";
+		else m = String.valueOf(curMaxIdx+1)+"/";
+		Log.i("month", m);
     	
     	for(int i=0; i<inputString.length(); i++) {
     		
