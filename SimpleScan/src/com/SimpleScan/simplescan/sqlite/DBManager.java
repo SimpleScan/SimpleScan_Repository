@@ -14,6 +14,7 @@ import com.SimpleScan.simplescan.Entities.Category;
 import com.SimpleScan.simplescan.Entities.Expense;
 import com.SimpleScan.simplescan.Entities.User;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract.BudgetTable;
+import com.SimpleScan.simplescan.sqlite.SimpleScanContract.CategoryTable;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract.ExpenseTable;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract.UserTable;
 
@@ -306,8 +307,8 @@ public class DBManager {
 
 		while (!c.isAfterLast()) {
 			Budget b = new Budget();
-			b.setOrigAmount(c.getDouble(c.getColumnIndexOrThrow(BudgetTable.COLUMN_NAME_ORIGINAL_AMOUNT)));
-			b.setCurrAmount(c.getDouble(c.getColumnIndexOrThrow(BudgetTable.COLUMN_NAME_CURRENT_AMOUNT)));
+			//b.setOrigAmount(c.getDouble(c.getColumnIndexOrThrow(BudgetTable.COLUMN_NAME_ORIGINAL_AMOUNT)));
+			//b.setCurrAmount(c.getDouble(c.getColumnIndexOrThrow(BudgetTable.COLUMN_NAME_CURRENT_AMOUNT)));
 			b.setStartDate(c.getString(c.getColumnIndexOrThrow(BudgetTable.COLUMN_NAME_START_DATE)));
 			b.setEndDate(c.getString(c.getColumnIndexOrThrow(BudgetTable.COLUMN_NAME_END_DATE)));
 			
@@ -318,6 +319,49 @@ public class DBManager {
 		return budgets;
 	}
 
+	/**
+	 * added by Kevin Chen (may need code reivew with Tyler)
+	 * get a list of categories from the database
+	 */
+	public List<Category>getCategories()
+	{
+		db = dbHelper.getReadableDatabase();		
+		List<Category> cateList = new ArrayList<Category>();
+				
+		// Define a projection that specifies which columns from the database
+        String[] columns = {
+        		CategoryTable.COLUMN_NAME_TITLE,
+        		CategoryTable.COLUMN_NAME_COLOR,
+        };
+        Cursor c = queryDatabase(CategoryTable.TABLE_NAME, columns, null, null, null, null, null);      
+        c.moveToFirst();
+        while(!c.isAfterLast())
+        {
+        	Category cate = new Category();
+        	cate.setName(c.getString(c.getColumnIndexOrThrow(CategoryTable.COLUMN_NAME_TITLE)));
+        	cate.setColor(c.getString(c.getColumnIndexOrThrow(CategoryTable.COLUMN_NAME_COLOR)));
+        	cateList.add(cate);
+        	c.moveToNext();
+        }
+		return cateList;	
+	}
+	
+	/**
+	 * added by Kevin Chen (may need code reivew with Tyler)
+	 * Adds a category to the database
+	 * @param name the category name
+	 * @param color the category color
+	 */
+	public void addCategory(String name, String color)
+	{
+		db = dbHelper.getWritableDatabase();
+		
+		ContentValues values = new ContentValues();
+        values.put(CategoryTable.COLUMN_NAME_TITLE, name);
+        values.put(CategoryTable.COLUMN_NAME_COLOR, color);
+
+        db.insert(CategoryTable.TABLE_NAME, null, values);
+	}
 	/**
 	 * Closes any remaining open connections.
 	 */

@@ -14,7 +14,8 @@
             android:layout_above="@+id/O_addExpenseButton"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/O_text2"
-            android:layout_marginTop="16dp" >
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" >
         </ListView>
 
         <Button
@@ -41,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/O_text1"
             android:layout_centerHorizontal="true"
+            android:clickable="true"
             android:text="error"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="46dip" />

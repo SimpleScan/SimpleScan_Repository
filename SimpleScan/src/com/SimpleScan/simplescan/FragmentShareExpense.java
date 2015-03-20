@@ -1,8 +1,8 @@
 package com.SimpleScan.simplescan;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import com.SimpleScan.simplescan.Entities.Expense;
@@ -25,9 +25,9 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 {
 	private static final String EXPENSE_KEY = "expense_key";
 	private Expense expense;
-	private Calendar calendar;
-	private DatePickerDialog.OnDateSetListener datePicker;
+	private EditText editName;
 	private EditText editDate;
+	private EditText editAmount;
 	
 	public FragmentShareExpense() 
 	{
@@ -42,13 +42,13 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	 */
 	public static FragmentShareExpense createNewExpense(Context context) {
 		// Get today's date to set as default
-		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+		Calendar calendar = Calendar.getInstance();
 		
 		// Create the expense and save it
 		Expense newExpense = new Expense();
 		newExpense.setAmount(0.);
-		newExpense.setDate(sdf.format(date));
+		newExpense.setDate(sdf.format(calendar.getTime()));
 		newExpense.setTitle("expense");
 		DBManager dbManager = new DBManager(context);
 		dbManager.addExpense(
@@ -94,12 +94,12 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 
 	private void setUpEditExpense(View v) {
 		// Set the default values for text fields
-		EditText edit = (EditText) v.findViewById(R.id.SE_editName);
-		edit.setText(expense.getTitle());
+		editName = (EditText) v.findViewById(R.id.SE_editName);
+		editName.setText(expense.getTitle());
 		editDate = (EditText) v.findViewById(R.id.SE_editDate);
 		editDate.setText(expense.getDate());
-		edit = (EditText) v.findViewById(R.id.SE_editAmount);
-		edit.setText("" + expense.getAmount());
+		editAmount = (EditText) v.findViewById(R.id.SE_editAmount);
+		editAmount.setText("" + expense.getAmount());
 		
 		// Set button listeners
 	    Button saveButton = (Button) v.findViewById(R.id.SE_btnSave);
@@ -111,40 +111,41 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	}
 	
 	private void setUpDatePicker(View v) {
-		calendar = Calendar.getInstance();
-		EditText edit = (EditText) v.findViewById(R.id.SE_editDate);
+		final Calendar calendar = Calendar.getInstance();
 		
-		datePicker = new DatePickerDialog.OnDateSetListener() {
-			
+		final DatePickerDialog.OnDateSetListener datePicker =
+				new DatePickerDialog.OnDateSetListener() {
 			@Override
 			public void onDateSet(DatePicker view, int year, int monthOfYear,
 					int dayOfMonth) {
 				calendar.set(Calendar.YEAR,  year);
 				calendar.set(Calendar.MONTH, monthOfYear);
 				calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-				updateLabel();
+				SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+				editDate.setText(sdf.format(calendar.getTime()));
 			}
 		};
-		
-		edit.setOnClickListener(this);
-	}
-	
-	private void updateLabel() {
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-		editDate.setText(sdf.format(calendar.getTime()));
+		editDate.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				new DatePickerDialog(getActivity(), 
+						datePicker, 
+						calendar.get(Calendar.YEAR), 
+						calendar.get(Calendar.MONTH), 
+						calendar.get(Calendar.DAY_OF_MONTH)
+						).show();
+			}
+		});
 	}
 
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
 		case (R.id.SE_btnSave):
-			saveExpense(view);
+			saveExpense();
 			break;
 		case (R.id.SE_btnDel):
 			deleteExpense();
-			break;
-		case (R.id.SE_editDate):
-			createDatePickerDialog();
 			break;
 		case (R.id.SE_im):
 			// To Tai: u can just change the class name here to navigate to your scan bill class 
@@ -154,32 +155,30 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		}
 	}
 	
-	private void saveExpense(View view) {
-		Expense newExpense = new Expense();
-		EditText edit = (EditText) view.findViewById(R.id.SE_editName);
-		newExpense.setTitle(edit.getText().toString());
-		edit = (EditText) view.findViewById(R.id.SE_editDate);
-		newExpense.setAmount(Double.parseDouble(edit.getText().toString()));
-		edit = (EditText) view.findViewById(R.id.SE_editAmount);
-		newExpense.setDate(edit.getText().toString());
+	private void saveExpense() {
+		int id = expense.getId();
+		Main context = (Main) getActivity();
 		
-		DBManager dbManager = new DBManager(getActivity());
+		String newTitle = editName.getText().toString();
 		
-		// Does nothing until updateExpense is implemented in DBManager
+		String newDate = editDate.getText().toString();
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+		try {
+			sdf.parse(newDate);
+		} catch (ParseException e) {
+			context.makeToast(newDate + " is not a valid date! (Format: MM/dd/yyyy)");
+			return;
+		}
+		double newAmount = Double.parseDouble(editAmount.getText().toString());
 		
+		DBManager dbManager = new DBManager(context);
+		dbManager.editExpense(id, newAmount, newDate, newTitle, null, null);
+		
+		context.makeToast("Changes saved");
 	}
 	
 	private void deleteExpense() {
 		// Does nothing
-	}
-	
-	private void createDatePickerDialog() {
-		new DatePickerDialog(getActivity(), 
-				datePicker, 
-				calendar.get(Calendar.YEAR), 
-				calendar.get(Calendar.MONTH), 
-				calendar.get(Calendar.DAY_OF_MONTH)
-				).show();
 	}
 	
 }

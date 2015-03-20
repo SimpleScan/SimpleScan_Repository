@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.SimpleScan.simplescan.sqlite.DBManager;
 import com.SimpleScan.simplescan.Entities.Expense;
@@ -79,11 +78,11 @@ public class FragmentExpenses extends Fragment
 		// If the list is empty, give a simple message stating so.
 		// Otherwise, populate the ListView.
 		if (expensesList.isEmpty()) {
-			List<String> emptyMsg = new ArrayList<String>();
-			emptyMsg.add("You have no expenses to list!");
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-					android.R.layout.simple_list_item_1, emptyMsg);
-			listView.setAdapter(adapter);
+			//List<String> emptyMsg = new ArrayList<String>();
+			//emptyMsg.add("You have no expenses to list!");
+			//ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+			//		android.R.layout.simple_list_item_1, emptyMsg);
+			//listView.setAdapter(adapter);
 		} else {
 			expandableListAdapter = new ExpandableListAdapter(getActivity(), 
 					expensesList);
@@ -108,7 +107,8 @@ public class FragmentExpenses extends Fragment
 		getActivity().setTitle("Edit Expense");
 		Fragment fragment = FragmentShareExpense.createNewExpense(getActivity());
 		
-		Toast.makeText(getActivity().getBaseContext(), "Expense Created",Toast.LENGTH_SHORT).show();
-		((Main) getActivity()).changeFragment(fragment, "Edit Expense", true);
+		Main context = (Main) getActivity();
+		context.makeToast("Expense Created");
+		context.changeFragment(fragment, "Edit Expense", true);
 	}
 }
