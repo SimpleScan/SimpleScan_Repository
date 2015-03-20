@@ -18,17 +18,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class FragmentOverview extends Fragment 
-{
+public class FragmentOverview extends Fragment {
+	
+	private static final String FRAGMENT_NAME = "Overview";
 
-	public FragmentOverview() 
-	{
+	public FragmentOverview() {
 		// Required empty public constructor
 	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) 
-	{	
+			Bundle savedInstanceState) {	
 		View v = inflater.inflate(R.layout.fragment_overview, container, false);
 		
 		// Display the remaining budget.
@@ -58,14 +58,15 @@ public class FragmentOverview extends Fragment
 		String display = "$0.00";
 		
 		TextView textView = (TextView) view.findViewById(R.id.O_remainingBudget);
+		Main context = (Main) getActivity();
 
-		DBManager dbManager = new DBManager(getActivity());
+		DBManager dbManager = new DBManager(context);
 		try {
 			Budget budget = dbManager.getBudget();
-			display = "" + budget;
+			display = "$" + budget.getAmount();
 		} catch (Exception e) {
-			// An exception probably means there is no budget set.
-			// So just display the default value.
+			FragmentEditBudget newFragment = FragmentEditBudget.createNewBudget(context);
+			context.changeFragment(newFragment, "Add Budget", false);
 		}
 		textView.setText(display);
 	}
