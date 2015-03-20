@@ -15,12 +15,14 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Spinner;
 
 import com.SimpleScan.simplescan.sqlite.DBManager;
+import com.SimpleScan.simplescan.Entities.Category;
 import com.SimpleScan.simplescan.Entities.Expense;
 
 public class FragmentExpenses extends Fragment 
 {
 	private ExpandableListAdapter expandableListAdapter;
-
+	private DBManager dbManager;
+	
 	public FragmentExpenses() 
 	{
 		// Required empty public constructor
@@ -54,11 +56,19 @@ public class FragmentExpenses extends Fragment
 		
 		// For now, there's only one category and the spinner does nothing.
 		
-		List<String> categoriesList = new ArrayList<String>();
-		categoriesList.add("All");
+		List<String> cateNameList = new ArrayList<String>();
+		// set the default value for the drop-down
+		cateNameList.add("All");
+		List<Category> categoriesList = new ArrayList<Category>();
+		dbManager = new DBManager(getActivity());
+		categoriesList = dbManager.getCategories();
+		for(Category c : categoriesList)
+		{
+			cateNameList.add(c.getTitle());
+		}
 		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), 
-				android.R.layout.simple_spinner_item, categoriesList);
+				android.R.layout.simple_spinner_item, cateNameList);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
 	}

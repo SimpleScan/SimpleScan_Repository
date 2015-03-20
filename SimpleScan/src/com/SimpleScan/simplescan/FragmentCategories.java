@@ -1,4 +1,3 @@
-
 package com.SimpleScan.simplescan;
 
 import java.util.List;
@@ -25,7 +24,6 @@ public class FragmentCategories extends Fragment
 	EditText txtCateNmae;
 	Spinner spinner ;
 	Button btnSave;
-	TextView txtDBInfo;
 	TextView txtSaveCate;
 	TextView txtSaveMessage;
 	DBManager dbManager;
@@ -50,21 +48,12 @@ public class FragmentCategories extends Fragment
 		spinner = (Spinner)view.findViewById(R.id.cate_spinner);
 		txtCateNmae = (EditText)view.findViewById(R.id.cate_editName);
 		btnSave = (Button)view.findViewById(R.id.cate_btnsave);
-		txtDBInfo = (TextView)view.findViewById(R.id.cate_txtDBInfo);
+		//txtDBInfo = (TextView)view.findViewById(R.id.cate_txtDBInfo);
 		dbManager = new DBManager(getActivity());
 		txtSaveCate =(TextView)view.findViewById(R.id.cate_txtSaveCate);
 		txtSaveMessage =(TextView)view.findViewById(R.id.cate_txtSaveMessage);
-		/* *********************************************************
-		 * TODO: check the database input, need to remove it later*/
+
 		cateList = dbManager.getCategories();
-		StringBuilder tempString = new StringBuilder();
-		for(Category c :cateList)
-		{
-			String temp = c.getTitle()+" - "+c.getColor()+" | ";
-			tempString.append(temp);
-		}
-		txtDBInfo.setText(tempString.toString());
-		/**********************************************************/
 		
 		btnSave.setOnClickListener(new OnClickListener()
 		{
@@ -97,7 +86,6 @@ public class FragmentCategories extends Fragment
 		}
 		else
 		{		
-			// should be able to do something like cateList.getkey() == ....
 			for( Category c :cateList)
 			{
 				//Log.d("DB category name -->", c.getName().trim());

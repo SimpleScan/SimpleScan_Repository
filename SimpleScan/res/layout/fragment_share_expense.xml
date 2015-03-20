@@ -87,14 +87,6 @@
             android:inputType="number"
             android:ems="8" />
 
-        <EditText
-            android:id="@+id/SE_editCate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/SE_txtCate"
-            android:layout_toRightOf="@+id/SE_txtName"
-            android:ems="8" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -123,6 +115,13 @@
                 android:text="Share " />
 
         </LinearLayout>
+
+        <Spinner
+            android:id="@+id/SE_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/SE_editAmount"
+            android:layout_alignTop="@+id/SE_txtCate" />
 
     </RelativeLayout>
 
