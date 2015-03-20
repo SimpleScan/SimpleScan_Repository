@@ -15,7 +15,7 @@ public class OCR {
 	public static final String DETECT_NUMBERS = "detect_numbers";
 	public static final String DETECT_DATE = "detect_date";
 	
-	private final static String MARCH = "march";
+	private final static String [] MONTHS = {"january", "febuary", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"};
 	
 	public static String detect_text(Bitmap targetBitmap, String detectOption){
     	TessBaseAPI baseApi = new TessBaseAPI();
@@ -51,45 +51,47 @@ public class OCR {
     	String outputString="Couldn't detect date";
 
     	inputString = inputString.toLowerCase(Locale.ENGLISH);
-
-    	for(int i=0; i<inputString.length(); i++) {
-    		
-    		if(m!="" && d!="" && y=="") {
-    			if(i+3 < inputString.length()) {  				
-    				if(Integer.parseInt(inputString.substring(i, i+3)) >= 2000 && Integer.parseInt(inputString.substring(i, i+3)) <= 2115) y = inputString.substring(i, i+3);
-    			}
-    		} else if(m!="") {
-    			if(i+1 < inputString.length()){
-    				if(Integer.parseInt(inputString.substring(i, i+1)) >= 1 && Integer.parseInt(inputString.substring(i, i+1)) <= 31) d = inputString.substring(i, i+1)+"/";
-    			}
-			} else {		
-				/*
-				if(inputString.charAt(i) == 'm') {
-					Log.i("recognizedText", inputString);
-					if(inputString.contains("3/") || inputString.contains("03/")) m="03/";
-					else {
-					}	
-				}
-				*/
-				
-	    		if(     inputString.contains("jan") || inputString.contains("january")   || inputString.contains("1/") || inputString.contains("01/")) m="01/";
-	    		else if(inputString.contains("feb") || inputString.contains("febuary")   || inputString.contains("2/") || inputString.contains("02/")) m="02/";
-	    		else if(inputString.contains("mar") || inputString.contains("march")     || inputString.contains("3/") || inputString.contains("03/")) m="03/";
-	    		else if(inputString.contains("apr") || inputString.contains("april")     || inputString.contains("4/") || inputString.contains("04/")) m="04/";
-	    		else if(inputString.contains("may") || inputString.contains("5/")        || inputString.contains("05/")) 							   m="05/";
-	    		else if(inputString.contains("jun") || inputString.contains("june")      || inputString.contains("6/") || inputString.contains("06/")) m="06/";
-	    		else if(inputString.contains("jul") || inputString.contains("july")      || inputString.contains("7/") || inputString.contains("07/")) m="07/";
-	    		else if(inputString.contains("aug") || inputString.contains("august")    || inputString.contains("8/") || inputString.contains("08/")) m="08/";
-	    		else if(inputString.contains("sep") || inputString.contains("september") || inputString.contains("9/") || inputString.contains("09/")) m="09/";
-	    		else if(inputString.contains("oct") || inputString.contains("october")   || inputString.contains("10/"))							   m="10/";
-	    		else if(inputString.contains("nov") || inputString.contains("november")  || inputString.contains("11/"))						       m="11/";
-	    		else if(inputString.contains("dec") || inputString.contains("december")  || inputString.contains("12/"))							   m="12/";
-	    		
-    		}	
+    	Log.i("inputString", inputString);
+    	
+    	for(int cur=0; cur<12; cur++) {
+    		String curMonth = MONTHS[cur];
+    		int detected = 0;
+    		for(int j=0; j<curMonth.length()-1; j++) {
+    			String month_substr = curMonth.substring(j, j+2);
+    			if(inputString.contains(month_substr)) detected ++;
+    		}
+    		if(detected >= 2) {
+    			if(String.valueOf(cur+1).length() == 1) m = "0"+String.valueOf(cur+1)+"/";
+    			else m = String.valueOf(cur+1)+"/";
+    			Log.i("month", m);
+    			break;
+    		}		
     	}
     	
-    	//if(m!="" && d!="" && y!="") outputString = m + d + y;
-    	outputString = m + d + y;
+    	for(int i=0; i<inputString.length(); i++) {
+    		
+    		if(m!="" && d!="") {
+    			if(i+3 < inputString.length()) {
+    				if(isNumber(inputString.charAt(i)) && isNumber(inputString.charAt(i+1)) && isNumber(inputString.charAt(i+2)) && isNumber(inputString.charAt(i+3))) {
+    					if(Integer.parseInt(inputString.substring(i, i+4)) >= 2000 && Integer.parseInt(inputString.substring(i, i+4)) <= 2115) y = inputString.substring(i, i+4);
+    					Log.i("year", y);
+    				}
+    			}
+    		} else if(m!="") {
+    			if(i+1 < inputString.length()) {
+    				if(isNumber(inputString.charAt(i)) && isNumber(inputString.charAt(i+1))) {
+    					if(Integer.parseInt(inputString.substring(i, i+2)) >= 1 && Integer.parseInt(inputString.substring(i, i+2)) <= 31) 
+    						d = inputString.substring(i, i+2)+"/";
+    				} 
+    			} else if(isNumber(inputString.charAt(i))) {
+    				if(Integer.parseInt(inputString.substring(i, i+1)) >= 1 && Integer.parseInt(inputString.substring(i, i+1)) <= 9) 
+    					d = "0"+inputString.substring(i, i+1)+"/";
+    			}
+    			Log.i("date", d);   					
+			} 
+		}	
+    	
+    	if(m!="" && d!="" && y!="") outputString = m + d + y;
     	
     	return outputString;
     }
@@ -99,11 +101,6 @@ public class OCR {
     	|| input == '5' || input == '6' || input == '7' || input == '8' || input == '9'
     	|| input == '.') return true;
     	else return false;
-    }
-    
-    private static double min(int i1, int i2) {
-    	if(i2 < i1) return (double)i2;
-    	else return (double)i1;
     }
    
 }
