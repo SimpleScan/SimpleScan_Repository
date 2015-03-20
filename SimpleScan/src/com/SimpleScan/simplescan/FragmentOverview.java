@@ -63,7 +63,7 @@ public class FragmentOverview extends Fragment {
 		DBManager dbManager = new DBManager(context);
 		try {
 			Budget budget = dbManager.getBudget();
-			display = "$" + budget.getAmount();
+			display = "$" + budget.getCurrAmount();
 		} catch (Exception e) {
 			FragmentEditBudget newFragment = FragmentEditBudget.createNewBudget(context);
 			context.changeFragment(newFragment, "Add Budget", false);

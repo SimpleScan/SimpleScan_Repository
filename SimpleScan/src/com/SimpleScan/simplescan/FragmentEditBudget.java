@@ -47,7 +47,8 @@ public class FragmentEditBudget extends Fragment implements OnClickListener {
 		
 		// Create the expense and save it
 		Budget newBudget = new Budget();
-		newBudget.setAmount(0.);
+		newBudget.setCurrAmount(0.0);
+		newBudget.setOrigAmount(0.0);
 		newBudget.setStartDate(sdf.format(calendar.getTime()));
 		calendar.add(Calendar.MONTH, 1);
 		newBudget.setEndDate(sdf.format(calendar.getTime()));
@@ -80,7 +81,7 @@ public class FragmentEditBudget extends Fragment implements OnClickListener {
 	
 	private void setUpBudget(View v) {
 		editBudget = (EditText) v.findViewById(R.id.EB_editBudget);
-		editBudget.setText(""+budget.getAmount());
+		editBudget.setText(""+budget.getCurrAmount());
 		editStartDate = (EditText) v.findViewById(R.id.EB_editStartDate);
 		editStartDate.setText(budget.getStartDate());
 		editEndDate = (EditText) v.findViewById(R.id.EB_editEndDate);

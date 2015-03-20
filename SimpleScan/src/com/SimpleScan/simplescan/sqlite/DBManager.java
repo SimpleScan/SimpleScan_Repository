@@ -307,8 +307,8 @@ public class DBManager {
 
 		while (!c.isAfterLast()) {
 			Budget b = new Budget();
-			//b.setOrigAmount(c.getDouble(c.getColumnIndexOrThrow(BudgetTable.COLUMN_NAME_ORIGINAL_AMOUNT)));
-			//b.setCurrAmount(c.getDouble(c.getColumnIndexOrThrow(BudgetTable.COLUMN_NAME_CURRENT_AMOUNT)));
+			b.setOrigAmount(c.getDouble(c.getColumnIndexOrThrow(BudgetTable.COLUMN_NAME_ORIGINAL_AMOUNT)));
+			b.setCurrAmount(c.getDouble(c.getColumnIndexOrThrow(BudgetTable.COLUMN_NAME_CURRENT_AMOUNT)));
 			b.setStartDate(c.getString(c.getColumnIndexOrThrow(BudgetTable.COLUMN_NAME_START_DATE)));
 			b.setEndDate(c.getString(c.getColumnIndexOrThrow(BudgetTable.COLUMN_NAME_END_DATE)));
 			
