@@ -1,3 +1,4 @@
+
 package com.SimpleScan.simplescan;
 
 import android.content.res.Configuration;
@@ -147,6 +148,9 @@ public class Main extends FragmentActivity implements OnItemClickListener
 			case 3:
 				fTransaction.replace(R.id.mainContent, new FragmentShareExpense());
 				fTransaction.commit();	
+			case 4:
+				fTransaction.replace(R.id.mainContent, new FragmentCategories());
+				fTransaction.commit();
 			default:
 				break;
 			
