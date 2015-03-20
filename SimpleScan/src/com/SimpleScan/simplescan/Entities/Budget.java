@@ -14,7 +14,8 @@ public class Budget implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private double amount;
+	private double origAmount;
+	private double currAmount;
 	private String startDate;
 	private String endDate;
 	
@@ -25,12 +26,20 @@ public class Budget implements Serializable {
 		
 	}
 
-	public double getAmount() {
-		return amount;
+	public double getCurrAmount() {
+		return currAmount;
 	}
 
-	public void setAmount(double amount) {
-		this.amount = amount;
+	public void setCurrAmount(double amount) {
+		this.currAmount = amount;
+	}
+
+	public double getOrigAmount() {
+		return origAmount;
+	}
+
+	public void setOrigAmount(double origAmount) {
+		this.origAmount = origAmount;
 	}
 
 	public String getStartDate() {
