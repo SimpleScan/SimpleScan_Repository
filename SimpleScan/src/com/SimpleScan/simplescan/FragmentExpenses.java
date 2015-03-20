@@ -78,11 +78,11 @@ public class FragmentExpenses extends Fragment
 		// If the list is empty, give a simple message stating so.
 		// Otherwise, populate the ListView.
 		if (expensesList.isEmpty()) {
-			List<String> emptyMsg = new ArrayList<String>();
-			emptyMsg.add("You have no expenses to list!");
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-					android.R.layout.simple_list_item_1, emptyMsg);
-			listView.setAdapter(adapter);
+			//List<String> emptyMsg = new ArrayList<String>();
+			//emptyMsg.add("You have no expenses to list!");
+			//ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+			//		android.R.layout.simple_list_item_1, emptyMsg);
+			//listView.setAdapter(adapter);
 		} else {
 			expandableListAdapter = new ExpandableListAdapter(getActivity(), 
 					expensesList);

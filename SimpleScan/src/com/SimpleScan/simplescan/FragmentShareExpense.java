@@ -167,6 +167,7 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 			sdf.parse(newDate);
 		} catch (ParseException e) {
 			context.makeToast(newDate + " is not a valid date! (Format: MM/dd/yyyy)");
+			return;
 		}
 		double newAmount = Double.parseDouble(editAmount.getText().toString());
 		
