@@ -1,12 +1,12 @@
 package com.SimpleScan.simplescan.sqlite;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.SimpleScan.simplescan.Entities.Budget;
@@ -222,10 +222,14 @@ public class DBManager {
 	private void endBudget(String endDate) {
 		db = dbHelper.getWritableDatabase();
 		
-		db.execSQL("UPDATE " + BudgetTable.TABLE_NAME + 
+		try{
+			db.execSQL("UPDATE " + BudgetTable.TABLE_NAME + 
 				   " SET " + BudgetTable.COLUMN_NAME_END_DATE + " = '" + endDate +
 				   "' WHERE " + BudgetTable._ID + 
 				   " = (SELECT max(" + BudgetTable._ID + ") FROM " + BudgetTable.TABLE_NAME + ");");
+		} catch (SQLException e){
+			// log something here but for now do nothing.
+		}
 	}
 
 	/**
