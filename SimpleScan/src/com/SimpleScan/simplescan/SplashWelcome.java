@@ -18,7 +18,7 @@ public class SplashWelcome extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         
-        startActivity(new Intent(SplashWelcome.this, Main.class));
+       startActivity(new Intent(SplashWelcome.this, Main.class));
         /* comment out the anime temporarily 
         gPlayer = (GifPlayer)findViewById(R.id.gifScan);       
         TimerTask task = new TimerTask()

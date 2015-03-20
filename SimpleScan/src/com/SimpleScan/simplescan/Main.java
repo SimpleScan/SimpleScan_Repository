@@ -1,6 +1,10 @@
 package com.SimpleScan.simplescan;
 
+import com.parse.Parse;
+import com.parse.ParseObject;
+import android.annotation.TargetApi;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -21,15 +25,15 @@ public class Main extends FragmentActivity implements OnItemClickListener
 	private DrawerLayout drawerLayout;
 	private ListView listView;
 	private String[] menu;
+	
 	private ActionBarDrawerToggle drawerListener;
 	private FragmentManager fManager;
 
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	protected void onCreate(Bundle saveInstatnceState)
 	{
 		super.onCreate(saveInstatnceState);
 		setContentView(R.layout.activity_main);
-		
-		//enable the action bar
 		getActionBar().setHomeButtonEnabled(true);
 		getActionBar().setDisplayHomeAsUpEnabled(true);		
 		menu = getResources().getStringArray(R.array.menu);
@@ -41,7 +45,7 @@ public class Main extends FragmentActivity implements OnItemClickListener
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 		drawerListener = new ActionBarDrawerToggle(this,drawerLayout,R.string.drawer_open,R.string.drawer_close);
 		drawerLayout.setDrawerListener(drawerListener);
-		// fragment manager
+		// fragment manager	
 		fManager = getSupportFragmentManager();
 		FragmentTransaction fTransaction  = fManager.beginTransaction();
 		FragmentOverall fragmentOverall = new FragmentOverall();
@@ -102,6 +106,10 @@ public class Main extends FragmentActivity implements OnItemClickListener
 				break;
 			case 2:
 				fTransaction.replace(R.id.mainContent, new FragmentContact());
+				fTransaction.commit();	
+				break;
+			case 3:
+				fTransaction.replace(R.id.mainContent, new FragmentConnect());
 				fTransaction.commit();	
 				break;
 			default:
