@@ -338,7 +338,7 @@ public class DBManager {
         while(!c.isAfterLast())
         {
         	Category cate = new Category();
-        	cate.setName(c.getString(c.getColumnIndexOrThrow(CategoryTable.COLUMN_NAME_TITLE)));
+        	cate.setTitle(c.getString(c.getColumnIndexOrThrow(CategoryTable.COLUMN_NAME_TITLE)));
         	cate.setColor(c.getString(c.getColumnIndexOrThrow(CategoryTable.COLUMN_NAME_COLOR)));
         	cateList.add(cate);
         	c.moveToNext();

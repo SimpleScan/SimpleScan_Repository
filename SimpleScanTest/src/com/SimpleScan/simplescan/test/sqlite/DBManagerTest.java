@@ -1,18 +1,19 @@
 package com.SimpleScan.simplescan.test.sqlite;
 
-import java.util.Date;
 import java.util.List;
 
 import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
 
 import com.SimpleScan.simplescan.Entities.Budget;
+import com.SimpleScan.simplescan.Entities.Category;
 import com.SimpleScan.simplescan.Entities.Expense;
 import com.SimpleScan.simplescan.Entities.User;
 import com.SimpleScan.simplescan.sqlite.DBManager;
 import com.SimpleScan.simplescan.test.DBManagerDummy;
 import com.SimpleScan.simplescan.test.DBTestScripts;
 import com.SimpleScan.simplescan.test.DBTestScripts.BudgetScripts;
+import com.SimpleScan.simplescan.test.DBTestScripts.CategoryScripts;
 import com.SimpleScan.simplescan.test.DBTestScripts.ExpenseScripts;
 
 public class DBManagerTest extends AndroidTestCase {
@@ -122,6 +123,29 @@ public class DBManagerTest extends AndroidTestCase {
     	assertEquals(b1.getStartDate(), b2.getEndDate());    	
     }
 
+    public void testGetCategories(){
+    	setUp();
+    	dbTest.createCategoryData1();
+    	
+    	List<Category> categories = db.getCategories();
+    	assertNotNull(categories);
+    	assertEquals(categories.size(), 3);
+    	assertEquals(categories.get(0).getTitle(), "Electric");
+    	assertEquals(categories.get(2).getColor(), "BROWN");
+    }
+    
+    public void testAddCategories(){
+    	setUp();
+    	dbTest.createCategoryData1();
+    	
+    	db.addCategory(CategoryScripts.TITLE4, CategoryScripts.COLOR4);
+    	List<Category> categories = db.getCategories();
+    	assertNotNull(categories);
+    	assertEquals(categories.size(), 4);
+    	assertEquals(categories.get(3).getTitle(), CategoryScripts.TITLE4);
+    	assertEquals(categories.get(3).getColor(), CategoryScripts.COLOR4);
+    }
+    
     public void tearDown() throws Exception{
         db.close(); 
         dbTest.close();

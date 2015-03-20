@@ -60,7 +60,7 @@ public class FragmentCategories extends Fragment
 		StringBuilder tempString = new StringBuilder();
 		for(Category c :cateList)
 		{
-			String temp = c.getName()+" - "+c.getColor()+" | ";
+			String temp = c.getTitle()+" - "+c.getColor()+" | ";
 			tempString.append(temp);
 		}
 		txtDBInfo.setText(tempString.toString());
@@ -102,7 +102,7 @@ public class FragmentCategories extends Fragment
 			{
 				//Log.d("DB category name -->", c.getName().trim());
 				//Log.d("UserInput Name   -->", txtCateNmae.getText().toString().trim());
-				if (c.getName().trim().equals(txtCateNmae.getText().toString().trim()))
+				if (c.getTitle().trim().equals(txtCateNmae.getText().toString().trim()))
 				{
 					Toast.makeText(getActivity(),"Category name exists already", Toast.LENGTH_SHORT).show();
 					return false;

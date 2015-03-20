@@ -14,7 +14,7 @@ public class Category implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String name;
+	private String title;
 	private String color;
 	
 	/**
@@ -24,12 +24,12 @@ public class Category implements Serializable {
 		
 	}
 
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String name) {
+		this.title = name;
 	}
 
 	public String getColor() {

@@ -89,5 +89,26 @@ public class DBTestScripts {
 				"('" + AMOUNT4 + "', '" + DATE4 + "', '" + TITLE4 + "')," + 
 				"('" + AMOUNT5 + "', '" + DATE5 + "', '" + TITLE5 + "');"; 		
 	}
+	
+	public static abstract class CategoryScripts {
+		public static final String TITLE1 = "Electric";
+		public static final String COLOR1 = "YELLOW";
+		
+		public static final String TITLE2 = "Water";
+		public static final String COLOR2 = "BLUE";
+		
+		public static final String TITLE3 = "Shoes";
+		public static final String COLOR3 = "BROWN";
+		
+		public static final String TITLE4 = "Testing";
+		public static final String COLOR4 = "PURPLE";
+		
+		public static final String INSERT_CATEGORY1_3 = "INSERT INTO " + 
+				CategoryTable.TABLE_NAME + " ('" + CategoryTable.COLUMN_NAME_TITLE + "', '" + 
+				CategoryTable.COLUMN_NAME_COLOR + "') VALUES " + 
+				"('" + TITLE1 + "', '" + COLOR1 + "')," + 
+				"('" + TITLE2 + "', '" + COLOR2 + "')," + 
+				"('" + TITLE3 + "', '" + COLOR3 + "');";
+	}
 
 }
