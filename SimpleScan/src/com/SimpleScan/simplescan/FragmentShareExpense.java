@@ -1,5 +1,6 @@
 package com.SimpleScan.simplescan;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,9 +26,11 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 {
 	private static final String EXPENSE_KEY = "expense_key";
 	private Expense expense;
+	private EditText editName;
+	private EditText editDate;
+	private EditText editAmount;
 	private Calendar calendar;
 	private DatePickerDialog.OnDateSetListener datePicker;
-	private EditText editDate;
 	
 	public FragmentShareExpense() 
 	{
@@ -94,12 +97,12 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 
 	private void setUpEditExpense(View v) {
 		// Set the default values for text fields
-		EditText edit = (EditText) v.findViewById(R.id.SE_editName);
-		edit.setText(expense.getTitle());
+		editName = (EditText) v.findViewById(R.id.SE_editName);
+		editName.setText(expense.getTitle());
 		editDate = (EditText) v.findViewById(R.id.SE_editDate);
 		editDate.setText(expense.getDate());
-		edit = (EditText) v.findViewById(R.id.SE_editAmount);
-		edit.setText("" + expense.getAmount());
+		editAmount = (EditText) v.findViewById(R.id.SE_editAmount);
+		editAmount.setText("" + expense.getAmount());
 		
 		// Set button listeners
 	    Button saveButton = (Button) v.findViewById(R.id.SE_btnSave);
@@ -155,18 +158,24 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	}
 	
 	private void saveExpense(View view) {
-		Expense newExpense = new Expense();
-		EditText edit = (EditText) view.findViewById(R.id.SE_editName);
-		newExpense.setTitle(edit.getText().toString());
-		edit = (EditText) view.findViewById(R.id.SE_editDate);
-		newExpense.setAmount(Double.parseDouble(edit.getText().toString()));
-		edit = (EditText) view.findViewById(R.id.SE_editAmount);
-		newExpense.setDate(edit.getText().toString());
+		int id = expense.getId();
+		Main context = (Main) getActivity();
 		
-		DBManager dbManager = new DBManager(getActivity());
+		String newTitle = editName.getText().toString();
 		
-		// Does nothing until updateExpense is implemented in DBManager
+		String newDate = editDate.getText().toString();
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+		try {
+			sdf.parse(newDate);
+		} catch (ParseException e) {
+			context.makeToast(newDate + " is not a valid date! (Format: MM/dd/yyyy)");
+		}
+		double newAmount = Double.parseDouble(editAmount.getText().toString());
 		
+		DBManager dbManager = new DBManager(context);
+		dbManager.editExpense(id, newAmount, newDate, newTitle, null, null);
+		
+		context.makeToast("Changes saved");
 	}
 	
 	private void deleteExpense() {

@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.SimpleScan.simplescan.sqlite.DBManager;
 import com.SimpleScan.simplescan.Entities.Expense;
@@ -108,7 +107,8 @@ public class FragmentExpenses extends Fragment
 		getActivity().setTitle("Edit Expense");
 		Fragment fragment = FragmentShareExpense.createNewExpense(getActivity());
 		
-		Toast.makeText(getActivity().getBaseContext(), "Expense Created",Toast.LENGTH_SHORT).show();
-		((Main) getActivity()).changeFragment(fragment, "Edit Expense", true);
+		Main context = (Main) getActivity();
+		context.makeToast("Expense Created");
+		context.changeFragment(fragment, "Edit Expense", true);
 	}
 }
