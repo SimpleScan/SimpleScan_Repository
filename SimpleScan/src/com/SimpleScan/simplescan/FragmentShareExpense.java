@@ -3,7 +3,6 @@ package com.SimpleScan.simplescan;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import com.SimpleScan.simplescan.Entities.Expense;
@@ -29,8 +28,6 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	private EditText editName;
 	private EditText editDate;
 	private EditText editAmount;
-	private Calendar calendar;
-	private DatePickerDialog.OnDateSetListener datePicker;
 	
 	public FragmentShareExpense() 
 	{
@@ -45,13 +42,13 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	 */
 	public static FragmentShareExpense createNewExpense(Context context) {
 		// Get today's date to set as default
-		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+		Calendar calendar = Calendar.getInstance();
 		
 		// Create the expense and save it
 		Expense newExpense = new Expense();
 		newExpense.setAmount(0.);
-		newExpense.setDate(sdf.format(date));
+		newExpense.setDate(sdf.format(calendar.getTime()));
 		newExpense.setTitle("expense");
 		DBManager dbManager = new DBManager(context);
 		dbManager.addExpense(
@@ -114,40 +111,41 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	}
 	
 	private void setUpDatePicker(View v) {
-		calendar = Calendar.getInstance();
-		EditText edit = (EditText) v.findViewById(R.id.SE_editDate);
+		final Calendar calendar = Calendar.getInstance();
 		
-		datePicker = new DatePickerDialog.OnDateSetListener() {
-			
+		final DatePickerDialog.OnDateSetListener datePicker =
+				new DatePickerDialog.OnDateSetListener() {
 			@Override
 			public void onDateSet(DatePicker view, int year, int monthOfYear,
 					int dayOfMonth) {
 				calendar.set(Calendar.YEAR,  year);
 				calendar.set(Calendar.MONTH, monthOfYear);
 				calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-				updateLabel();
+				SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+				editDate.setText(sdf.format(calendar.getTime()));
 			}
 		};
-		
-		edit.setOnClickListener(this);
-	}
-	
-	private void updateLabel() {
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-		editDate.setText(sdf.format(calendar.getTime()));
+		editDate.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				new DatePickerDialog(getActivity(), 
+						datePicker, 
+						calendar.get(Calendar.YEAR), 
+						calendar.get(Calendar.MONTH), 
+						calendar.get(Calendar.DAY_OF_MONTH)
+						).show();
+			}
+		});
 	}
 
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
 		case (R.id.SE_btnSave):
-			saveExpense(view);
+			saveExpense();
 			break;
 		case (R.id.SE_btnDel):
 			deleteExpense();
-			break;
-		case (R.id.SE_editDate):
-			createDatePickerDialog();
 			break;
 		case (R.id.SE_im):
 			// To Tai: u can just change the class name here to navigate to your scan bill class 
@@ -157,7 +155,7 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		}
 	}
 	
-	private void saveExpense(View view) {
+	private void saveExpense() {
 		int id = expense.getId();
 		Main context = (Main) getActivity();
 		
@@ -180,15 +178,6 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	
 	private void deleteExpense() {
 		// Does nothing
-	}
-	
-	private void createDatePickerDialog() {
-		new DatePickerDialog(getActivity(), 
-				datePicker, 
-				calendar.get(Calendar.YEAR), 
-				calendar.get(Calendar.MONTH), 
-				calendar.get(Calendar.DAY_OF_MONTH)
-				).show();
 	}
 	
 }
