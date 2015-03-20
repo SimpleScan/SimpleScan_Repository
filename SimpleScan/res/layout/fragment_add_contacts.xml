@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:text="Add a Contact"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" 
+        android:layout_marginTop="172dp">
+
+        <EditText
+            android:id="@+id/editContactText"
+            android:layout_weight="1"
+    		android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="number"
+            android:hint="Enter ID Here" 
+            android:textSize="30sp" >
+			
+            <requestFocus />
+        </EditText>
+
+        <Button
+        android:id="@+id/insertContactButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="258dp"
+        android:text="Enter the ID of your contact" />
+
+</RelativeLayout>
