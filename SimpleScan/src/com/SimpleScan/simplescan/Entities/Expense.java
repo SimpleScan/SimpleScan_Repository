@@ -12,6 +12,8 @@ public class Expense implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	private int id;
+	
 	private double amount;
 	private String title;
 	private String date;
@@ -26,6 +28,14 @@ public class Expense implements Serializable {
 	 */
 	public Expense(){
 		
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public double getAmount() {
@@ -85,7 +95,7 @@ public class Expense implements Serializable {
 	}
 	
 	public String toString() {
-		return date + amount + title;
+		return date + ": $" + amount + " - " + title;
 	}
 
 }

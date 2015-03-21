@@ -6,7 +6,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-
+ 
         <TextView
             android:id="@+id/SE_txtName"
             android:layout_width="wrap_content"
@@ -65,7 +65,8 @@
             android:layout_toRightOf="@+id/SE_txtName"
             android:ems="8" >
 
-            <requestFocus />
+            <requestFocus android:layout_width="match_parent" />
+
         </EditText>
 
         <EditText
@@ -74,6 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/SE_txtAmount"
             android:layout_toRightOf="@+id/SE_txtName"
+            android:inputType="date" 
             android:ems="8" />
 
         <EditText
@@ -82,35 +84,44 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/SE_txtCate"
             android:layout_toRightOf="@+id/SE_txtName"
+            android:inputType="number"
             android:ems="8" />
 
-        <EditText
-            android:id="@+id/SE_editCate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/SE_txtCate"
-            android:layout_toRightOf="@+id/SE_txtName"
-            android:ems="8" />
-
-        <Button
-            android:id="@+id/SE_btnShare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/SE_btnDel"
-            android:layout_alignBottom="@+id/SE_btnDel"
-            android:layout_marginLeft="38dp"
-            android:layout_toRightOf="@+id/SE_btnDel"
-            android:text="Share " />
-
-        <Button
-            android:id="@+id/SE_btnDel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/SE_txtDate"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="40dp"
-            android:layout_marginLeft="14dp"
-            android:text="Delete" />
+            android:layout_alignParentLeft="true" >
+
+            <Button
+                android:id="@+id/SE_btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.33"
+                android:text="Save" />
+
+            <Button
+                android:id="@+id/SE_btnDel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.33"
+                android:text="Delete" />
+
+            <Button
+                android:id="@+id/SE_btnShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.33"
+                android:text="Share " />
+
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/SE_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/SE_editAmount"
+            android:layout_alignTop="@+id/SE_txtCate" />
 
     </RelativeLayout>
 

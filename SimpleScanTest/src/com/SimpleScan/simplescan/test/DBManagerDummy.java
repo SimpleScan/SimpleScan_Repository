@@ -40,8 +40,9 @@ public class DBManagerDummy {
 		
 	}
 	
-	public void categoryData1(){
-		
+	public void createCategoryData1(){
+		db = dbHelper.getWritableDatabase();
+		db.execSQL(DBTestScripts.CategoryScripts.INSERT_CATEGORY1_3);
 	}
 	
 	public void contactData1(){

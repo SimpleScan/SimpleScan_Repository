@@ -1,11 +1,5 @@
 package com.SimpleScan.simplescan;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import com.SimpleScan.simplescan.Entities.Expense;
-import com.SimpleScan.simplescan.sqlite.DBManager;
-
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,16 +17,21 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-public class Main extends FragmentActivity implements OnItemClickListener 
-{
+public class Main extends FragmentActivity implements OnItemClickListener {
+	
 	private DrawerLayout drawerLayout;
 	private ListView listView;
 	private String[] menu;
 	private ActionBarDrawerToggle drawerListener;
 	private FragmentManager fManager;
+	
+	//key pair for restore the instance state 
+	static final String STATE_SCORE = "mainScore";
+	static final String STATE_LEVEL = "mainLevel";
+	private int mCurrentScore;
+	private int mCurrentLevel;
 
-	protected void onCreate(Bundle saveInstatnceState)
-	{
+	protected void onCreate(Bundle saveInstatnceState) {
 		super.onCreate(saveInstatnceState);
 		setContentView(R.layout.activity_main);
 		
@@ -54,13 +53,36 @@ public class Main extends FragmentActivity implements OnItemClickListener
 		FragmentOverview fragmentOverall = new FragmentOverview();
 		fTransaction.add(R.id.mainContent,fragmentOverall);
 		fTransaction.commit();
-		
-		Filesystem.init(this);
+	}
+	
+	/*
+	 * Kevin
+	 * @see android.support.v4.app.FragmentActivity#onSaveInstanceState(android.os.Bundle)
+	 */
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	    // Save the user's current state
+	    savedInstanceState.putInt(STATE_SCORE, mCurrentScore);
+	    savedInstanceState.putInt(STATE_LEVEL, mCurrentLevel);
+	    
+	    // Always call the superclass so it can save the view hierarchy state
+	    super.onSaveInstanceState(savedInstanceState);
+	}
+	/*
+	 * Kevin
+	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
+	 */
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+	    // Always call the superclass so it can restore the view hierarchy
+	    super.onRestoreInstanceState(savedInstanceState);
+	   
+	    // Restore state members from saved instance
+	    mCurrentScore = savedInstanceState.getInt(STATE_SCORE);
+	    mCurrentLevel = savedInstanceState.getInt(STATE_LEVEL);
 	}
 	
 	@Override
-	public boolean onOptionsItemSelected(MenuItem menuItem)
-	{
+	public boolean onOptionsItemSelected(MenuItem menuItem)	{
 		if(drawerListener.onOptionsItemSelected(menuItem))
 		{
 			return true;
@@ -69,16 +91,14 @@ public class Main extends FragmentActivity implements OnItemClickListener
 	}
 	
 	@Override
-	public void onConfigurationChanged(Configuration config)
-	{
+	public void onConfigurationChanged(Configuration config)	{
 	
 		super.onConfigurationChanged(config);
 		drawerListener.onConfigurationChanged(config);
 	}
 
 	@Override
-	protected void onPostCreate(Bundle savedInstanceState)
-	{
+	protected void onPostCreate(Bundle savedInstanceState)	{
 		super.onPostCreate(savedInstanceState);
 		drawerListener.syncState();
 	}
@@ -86,89 +106,77 @@ public class Main extends FragmentActivity implements OnItemClickListener
 	
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) 
-	{
+			long id) {
 		selectItem(position);
 		
 	}
 	
-	public void selectItem(int position) 
-	{
+	public void selectItem(int position) {
 		listView.setItemChecked(position, true);
-		setTitle(menu[position]);
-		FragmentTransaction fTransaction  = fManager.beginTransaction();
-		Toast.makeText(getBaseContext(), "On fragment : "+menu[position],Toast.LENGTH_SHORT).show();
-		/*
-		 * need to research how to implement backstack here
-		 * 
-		 * --That would be fTransaction.addToBackStack(String optionalTransactionName), 
-		 * --but I don't think it's necessary for the menu. It could get really 
-		 * --cluttered for anyone who likes to navigate with the back button.
-		 * --Dan
-		 */
-		switch (position)
-		{
+		Fragment newFragment = null;
+		switch (position) {
 			case 0:
-				fTransaction.replace(R.id.mainContent, new FragmentOverview());
-				fTransaction.commit();	
+				newFragment = new FragmentOverview();
 				break;
 			case 1:
-				fTransaction.replace(R.id.mainContent, new FragmentExpenses());
-				fTransaction.commit();	
+				newFragment = new FragmentExpenses();
 				break;
 			case 2:
-				fTransaction.replace(R.id.mainContent, new FragmentContact());
-				fTransaction.commit();	
+				newFragment = new FragmentContact();
 				break;
 			case 3:
-				fTransaction.replace(R.id.mainContent, new FragmentShareExpense());
-				fTransaction.commit();	
+				newFragment = new FragmentCategories();
+				break;
 			default:
 				break;
-			
 		}
+		makeToast("On fragment : "+menu[position]);
+		changeFragment(newFragment, menu[position], false);
 		drawerLayout.closeDrawers();
-		
 	}
 	
-	public void setTitle(String title)
-	{
+	public void setTitle(String title) {
 		getActionBar().setTitle(title);
-		
 	}
 	
-	public void addExpenseFragment(View view) {
-		// Get today's date to set as default
-		Date date = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-		
-		// Create the expense and save it
-		Expense newExpense = new Expense();
-		newExpense.setAmount(0.);
-		newExpense.setDate(sdf.format(date));
-		newExpense.setTitle("expense");
-		DBManager dbManager = new DBManager(this);
-		dbManager.addExpense(
-				newExpense.getAmount(), 
-				newExpense.getDate(), 
-				newExpense.getTitle(), 
-				newExpense.getCategory(), 
-				newExpense.getImageTitle(), 
-				newExpense.getImagePath()
-				);
-		
-		Toast.makeText(getBaseContext(), "Expense Created",Toast.LENGTH_SHORT).show();
-		//openEditExpenseFragment(view, newExpense);
-	}
-	
-	/*
-	public void openEditExpenseFragment(View view, Expense expense) {
-		setTitle("Edit Expense");
+	/**
+	 * Replaces the current mainContent fragment with a new one.
+	 * 
+	 * @param newFragment The new Fragment to display
+	 * @param fragmentName The Fragment's name, to display as the title
+	 * @param addToBackStack true if it should be added to the backstack
+	 * 
+	 * TODO: Set current page name as backstack name
+	 */
+	public void changeFragment(Fragment newFragment, String fragmentName, boolean addToBackStack) {
+		setTitle(fragmentName);
 		FragmentTransaction fTransaction  = fManager.beginTransaction();
-		Fragment fragment = FragmentEditExpense.createNewInstance(expense);
-		fTransaction.replace(R.id.mainContent, fragment);
-		fTransaction.addToBackStack("Opening EditExpenseFragment");
+		fTransaction.replace(R.id.mainContent, newFragment);
+		if (addToBackStack) {
+			fTransaction.addToBackStack(null);
+		}
 		fTransaction.commit();	
 	}
-	*/
+	
+	/**
+	 * Goes back. Funcationally the same as pressing the back button.
+	 * 
+	 * TODO: Get page name from the backstack name.
+	 */
+	public void goBack() {
+		if (fManager.getBackStackEntryCount() > 0) {
+			fManager.popBackStack();
+		} else {
+			makeToast("Nothing to go back to");
+		}
+	}
+	
+	/**
+	 * Makes a short toast.
+	 * 
+	 * @param message
+	 */
+	public void makeToast(String message) {
+		Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT).show();
+	}
 }

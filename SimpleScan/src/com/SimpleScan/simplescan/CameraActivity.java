@@ -1,17 +1,9 @@
 package com.SimpleScan.simplescan;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import com.SimpleScan.simplescan.Camera.CameraEngine;
 import com.SimpleScan.simplescan.Camera.DragRectView;
 import com.SimpleScan.simplescan.Camera.OCR;
-import com.googlecode.tesseract.android.TessBaseAPI;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,8 +15,6 @@ import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;

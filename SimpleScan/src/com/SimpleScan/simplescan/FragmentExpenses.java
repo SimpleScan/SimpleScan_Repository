@@ -3,24 +3,26 @@ package com.SimpleScan.simplescan;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.Button;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Spinner;
-import android.widget.TabHost;
-import android.widget.TabHost.TabSpec;
 
 import com.SimpleScan.simplescan.sqlite.DBManager;
+import com.SimpleScan.simplescan.Entities.Category;
 import com.SimpleScan.simplescan.Entities.Expense;
 
 public class FragmentExpenses extends Fragment 
 {
-
+	private ExpandableListAdapter expandableListAdapter;
+	private DBManager dbManager;
+	
 	public FragmentExpenses() 
 	{
 		// Required empty public constructor
@@ -36,6 +38,15 @@ public class FragmentExpenses extends Fragment
 		
 		// Create the list of expenses
 		buildExpensesList(v);
+
+	    Button addButton = (Button) v.findViewById(R.id.E_addExpenseButton);
+		addButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				addExpenseFragment();
+			}
+		});
 		
 		return v;
 	}
@@ -45,11 +56,19 @@ public class FragmentExpenses extends Fragment
 		
 		// For now, there's only one category and the spinner does nothing.
 		
-		List<String> categoriesList = new ArrayList<String>();
-		categoriesList.add("All");
+		List<String> cateNameList = new ArrayList<String>();
+		// set the default value for the drop-down
+		cateNameList.add("All");
+		List<Category> categoriesList = new ArrayList<Category>();
+		dbManager = new DBManager(getActivity());
+		categoriesList = dbManager.getCategories();
+		for(Category c : categoriesList)
+		{
+			cateNameList.add(c.getTitle());
+		}
 		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), 
-				android.R.layout.simple_spinner_item, categoriesList);
+				android.R.layout.simple_spinner_item, cateNameList);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
 	}
@@ -63,20 +82,43 @@ public class FragmentExpenses extends Fragment
 	private void buildExpensesList(View view) {
 		DBManager dbManager = new DBManager(getActivity());
 		List<Expense> expensesList = dbManager.getExpenses();
-		ListView listView = (ListView) view.findViewById(R.id.E_fullExpensesListView);
+		ExpandableListView listView = (ExpandableListView) 
+				view.findViewById(R.id.E_fullExpensesListView);
 		
 		// If the list is empty, give a simple message stating so.
 		// Otherwise, populate the ListView.
 		if (expensesList.isEmpty()) {
-			List<String> emptyMsg = new ArrayList<String>();
-			emptyMsg.add("You have no expenses to list!");
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-					android.R.layout.simple_list_item_1, emptyMsg);
-			listView.setAdapter(adapter);
+			//List<String> emptyMsg = new ArrayList<String>();
+			//emptyMsg.add("You have no expenses to list!");
+			//ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+			//		android.R.layout.simple_list_item_1, emptyMsg);
+			//listView.setAdapter(adapter);
 		} else {
-			ArrayAdapter<Expense> adapter = new ArrayAdapter<Expense>(getActivity(),
-					android.R.layout.simple_list_item_1, expensesList);
-			listView.setAdapter(adapter);
+			expandableListAdapter = new ExpandableListAdapter(getActivity(), 
+					expensesList);
+			listView.setAdapter(expandableListAdapter);
+			
+			listView.setOnChildClickListener(new OnChildClickListener() {
+
+				@Override
+				public boolean onChildClick(ExpandableListView parent, View v,
+						int groupPosition, int childPosition, long id) {
+					Expense expense = expandableListAdapter.getExpense(groupPosition, childPosition);
+					getActivity().setTitle("Edit Expense");
+					Fragment fragment = FragmentShareExpense.createNewInstance(expense);
+					((Main) getActivity()).changeFragment(fragment, "Edit Expense", true);
+					return false;
+				}
+			});
 		}
+	}
+	
+	public void addExpenseFragment() {
+		getActivity().setTitle("Edit Expense");
+		Fragment fragment = FragmentShareExpense.createNewExpense(getActivity());
+		
+		Main context = (Main) getActivity();
+		context.makeToast("Expense Created");
+		context.changeFragment(fragment, "Edit Expense", true);
 	}
 }
