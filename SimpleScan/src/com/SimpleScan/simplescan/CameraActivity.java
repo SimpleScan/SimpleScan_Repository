@@ -3,6 +3,7 @@ package com.SimpleScan.simplescan;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -23,6 +24,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -36,7 +38,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
 	static final String TAG = "DBG_" + "CameraActivity";
 
-	public static final int MEDIA_TYPE_IMAGE = 1;
+	//public static final int MEDIA_TYPE_IMAGE = 1;
 	
 	private DragRectView Rectview;
 	
@@ -64,6 +66,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 	String nameText, dateText, amtText;
 	
 	Bitmap bitmap;
+	double amt;
+	
+	Uri fileUri;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,12 +102,12 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
         if(_preview) {
         	setPreview();
-        } else{
+        } else{      	
         	cameraFrame = (SurfaceView) findViewById(R.id.camera_frame);
 	        shutterButton = (Button) findViewById(R.id.shutter_button);
 	        focusButton = (Button) findViewById(R.id.focus_button);
 	        //flashButton = (Button) findViewById(R.id.flash_button);
-
+	        
 	        shutterButton.setOnClickListener(this);
 	        focusButton.setOnClickListener(this);
 	        //flashButton.setOnClickListener(this);
@@ -170,6 +175,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         nameText = "";
         dateText = ""; 
         amtText  = "";
+        
+        amt=0.;
+    	_preview = true;
     }
     
     public Bitmap createPreviewBitmap(byte[] data) {
@@ -187,9 +195,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     }
     
     public void setPreview() {
-    	setContentView(R.layout.image_preview);
-    	
-    	_preview = true;
+    	setContentView(R.layout.image_preview);	
     	
     	PreviewImage = (ImageView) findViewById(R.id.previewImage);
         //OCRtext = (TextView) findViewById(R.id.OCRtext);
@@ -209,7 +215,11 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 			public void onClick(View v) {
 				Log.i("saveButton", "clicked");
 				try {
-					saveBitmap (bitmap);					
+					Filesystem.saveBitmap (bitmap);
+					Toast.makeText(getApplicationContext(), "Image saved", Toast.LENGTH_LONG).show();
+					//storeData();
+					
+					finish();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -344,6 +354,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                     		//OCRtext.setText(nameText + "    " + dateText + "    $" + amtText);
                     		OCR_amt.setText(amtText);
                     		Toast.makeText(getApplicationContext(), amtText, Toast.LENGTH_LONG).show();
+                    		
+                    		amt=OCR.amtStr2double(amtText);
                     	}     	
                     }          
                 }
@@ -351,6 +363,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         }
     	//} else Rectview.setVisibility(View.GONE);
     }
+    
     
     public void restartCamera() {
     	//Restarting Activity
@@ -366,51 +379,11 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 		}   	
     }
     
-    public void saveBitmap (Bitmap bitmap) throws IOException {
-    	
-    	File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-    	
-    	if (pictureFile == null){
-            Log.d(TAG, "Error creating media file, check storage permissions: ");
-            return;
-        }
-    	
-    	FileOutputStream fos = new FileOutputStream(pictureFile);
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        fos.close();
-        
-        Toast.makeText(getApplicationContext(), "Image saved", Toast.LENGTH_LONG).show();
+    /*
+    private void storeData() throws Exception{
+    	FragmentShareExpense.imgData2Expense(this, nameText, dateText, amt);
     }
-
-	/** Create a file Uri for saving an image or video */
-    private static Uri getOutputMediaFileUri(int type){
-          return Uri.fromFile(getOutputMediaFile(type));
-    }
-
-    /** Create a File for saving an image or video */
-    private static File getOutputMediaFile(int type){
-
-        File mediaStorageDir = new File(Filesystem._ImgDirPath);
-        // Create the storage directory if it does not exist
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
-                Log.d("MyCameraApp", "failed to create directory");
-                return null;
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE){
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-            "IMG_"+ timeStamp + ".jpg");
-        } else {
-            return null;
-        }
-
-        return mediaFile;
-    }
+	*/
     
     @Override
 	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {	

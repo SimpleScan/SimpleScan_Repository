@@ -1,17 +1,25 @@
 package com.SimpleScan.simplescan;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 public class Filesystem {
+	
+	public static final int MEDIA_TYPE_IMAGE = 1;
 
 	protected static String _appPath = Environment.getExternalStorageDirectory() + "/SimpleScan";	
 	protected static String _tessPath = Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract";
@@ -32,6 +40,19 @@ public class Filesystem {
         }
 	}
 	
+	public static void saveBitmap (Bitmap bitmap) throws IOException {
+    	
+    	File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+    	
+    	if (pictureFile == null){
+            Log.d("saveBitmap", "Error creating media file, check storage permissions: ");
+            return;
+        }
+    	
+    	FileOutputStream fos = new FileOutputStream(pictureFile);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        fos.close();
+    }
 	
 	private static void makeAppSubdirs(Context context) {
 		File im_direct = new File( Environment.getExternalStorageDirectory() + "/SimpleScan/images" );
@@ -69,6 +90,36 @@ public class Filesystem {
         	CopyAssets(context);
         }
 	}
+	
+	/** Create a file Uri for saving an image or video */
+    public static Uri getOutputMediaFileUri(int type){
+          return Uri.fromFile(getOutputMediaFile(type));
+    }
+
+    /** Create a File for saving an image or video */
+    private static File getOutputMediaFile(int type){
+
+        File mediaStorageDir = new File(Filesystem._ImgDirPath);
+        // Create the storage directory if it does not exist
+        if (! mediaStorageDir.exists()){
+            if (! mediaStorageDir.mkdirs()){
+                Log.d("MyCameraApp", "failed to create directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE){
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+            "IMG_"+ timeStamp + ".jpg");
+        } else {
+            return null;
+        }
+
+        return mediaFile;
+    }
 	
 	private static void CopyAssets(Context context) {
         AssetManager assetManager = context.getAssets();

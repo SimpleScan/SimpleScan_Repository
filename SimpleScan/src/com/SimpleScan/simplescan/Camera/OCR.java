@@ -23,7 +23,7 @@ public class OCR {
     	String numStr="";
     	
     	for(int i=0; i<amtStr.length(); i++) {
-    		if(amtStr.charAt(i)!='.') numStr+=amtStr.charAt(i);  			
+    		if(amtStr.charAt(i)!='$') numStr+=amtStr.charAt(i);  			
     	}
     	amt=Double.parseDouble(numStr);
     	
@@ -58,7 +58,10 @@ public class OCR {
     		numberFound = true;
     	}
 
-    	if(numberFound) outputString = "$" + outputString;
+    	if(numberFound) {
+    		outputString = "$" + outputString;
+    		numberFound = false;
+    	}
     	else outputString = "Couldn't detect amount";
     	
     	return outputString;
@@ -76,20 +79,10 @@ public class OCR {
     	int curMaxIdx=0;
     	for(int cur=0; cur<12; cur++) {
     		String curMonth = MONTHS[cur];
-    		//int detected = 0;
     		for(int j=0; j<curMonth.length()-1; j++) {
     			String month_substr = curMonth.substring(j, j+2);
-    			//if(inputString.contains(month_substr)) detected ++;
     			if(inputString.contains(month_substr)) accuracy[cur] ++;
     		}
-    		/*
-    		if(detected >= 2) {
-    			if(String.valueOf(cur+1).length() == 1) m = "0"+String.valueOf(cur+1)+"/";
-    			else m = String.valueOf(cur+1)+"/";
-    			Log.i("month", m);
-    			break;
-    		}
-    		*/
     		if((accuracy[cur]/curMonth.length())>curMaxVal) {
     			curMaxIdx = cur;
     			curMaxVal = accuracy[cur]/curMonth.length();
