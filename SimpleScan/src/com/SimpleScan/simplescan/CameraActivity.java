@@ -53,6 +53,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     Button recordNameButton;
     Button recordDateButton;
     Button recordAmtButton;
+    
     //TextView OCRtext;
     TextView OCR_name;
     TextView OCR_date;
@@ -314,13 +315,14 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 			}
 		});   
         
-        Rectview = (DragRectView) findViewById(R.id.dragRect);
-        if (null != Rectview) {
+     	Rectview = (DragRectView) findViewById(R.id.dragRect);
+     	//if(recordNameOn || recordDateOn || recordAmtOn) {
+     	if (null != Rectview) {
         	Rectview.setOnUpCallback(new DragRectView.OnUpCallback() {
                 @Override
                 public void onRectFinished(final Rect rect) {
                     Toast.makeText(getApplicationContext(), 
-                    		"Rect is ("+rect.left+", "+rect.top+", "+rect.right+", "+rect.bottom+")", Toast.LENGTH_LONG).show();
+                    		       "Rect is ("+rect.left+", "+rect.top+", "+rect.right+", "+rect.bottom+")", Toast.LENGTH_LONG).show();
                     Bitmap previewBitmap = Bitmap.createScaledBitmap(((BitmapDrawable) PreviewImage.getDrawable()).getBitmap(), PreviewImage.getWidth(), PreviewImage.getHeight(), false);
                     //System.out.println(rect.height()+"    "+previewBitmap.getHeight()+"      "+rect.width()+"    "+previewBitmap.getWidth());
                     if (rect.height() <= previewBitmap.getHeight() && rect.width() <= previewBitmap.getWidth()) {                    
@@ -329,22 +331,25 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                     		nameText = OCR.detect_text(croppedBitmap, "detect_all");
                     		//OCRtext.setText(nameText + "    " + dateText + "    $" + amtText);
                     		OCR_name.setText(nameText);
+                    		Toast.makeText(getApplicationContext(), nameText, Toast.LENGTH_LONG).show();
                     	}
                     	if(recordDateOn) {
                     		dateText = OCR.detect_text(croppedBitmap, "detect_date");
                     		//OCRtext.setText(nameText + "    " + dateText + "    $" + amtText);       		
                     		OCR_date.setText(dateText);
+                    		Toast.makeText(getApplicationContext(), dateText, Toast.LENGTH_LONG).show();
                     	}
                     	if(recordAmtOn) {
                     		amtText = OCR.detect_text(croppedBitmap, "detect_numbers");
                     		//OCRtext.setText(nameText + "    " + dateText + "    $" + amtText);
-                    		OCR_amt.setText("$"+amtText);
+                    		OCR_amt.setText(amtText);
+                    		Toast.makeText(getApplicationContext(), amtText, Toast.LENGTH_LONG).show();
                     	}     	
                     }          
                 }
             });
         }
-        
+    	//} else Rectview.setVisibility(View.GONE);
     }
     
     public void restartCamera() {
@@ -372,7 +377,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     	
     	FileOutputStream fos = new FileOutputStream(pictureFile);
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        fos.close();  
+        fos.close();
+        
+        Toast.makeText(getApplicationContext(), "Image saved", Toast.LENGTH_LONG).show();
     }
 
 	/** Create a file Uri for saving an image or video */

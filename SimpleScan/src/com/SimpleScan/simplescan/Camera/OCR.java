@@ -17,6 +17,19 @@ public class OCR {
 	
 	private final static String [] MONTHS = {"january", "febuary", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"};
 	
+	//For EditExpense, convert amount from String to double, for budget subtracting 
+	public static double amtStr2double (String amtStr) {
+    	double amt=0;
+    	String numStr="";
+    	
+    	for(int i=0; i<amtStr.length(); i++) {
+    		if(amtStr.charAt(i)!='.') numStr+=amtStr.charAt(i);  			
+    	}
+    	amt=Double.parseDouble(numStr);
+    	
+    	return amt;
+    }
+	
 	public static String detect_text(Bitmap targetBitmap, String detectOption){
     	TessBaseAPI baseApi = new TessBaseAPI();
     	Log.i("tessrect", "new tess object created");   	
@@ -38,10 +51,15 @@ public class OCR {
     
     private static String extractNumbers(String inputString) {
     	String outputString="";
+    	boolean numberFound = false;
     	
     	for(int i=0; i<inputString.length(); i++) {
     		if(isNumber(inputString.charAt(i))) outputString += inputString.charAt(i);
+    		numberFound = true;
     	}
+
+    	if(numberFound) outputString = "$" + outputString;
+    	else outputString = "Couldn't detect amount";
     	
     	return outputString;
     }
@@ -77,9 +95,12 @@ public class OCR {
     			curMaxVal = accuracy[cur]/curMonth.length();
     		}
     	}
-    	if(String.valueOf(curMaxIdx+1).length() == 1) m = "0"+String.valueOf(curMaxIdx+1)+"/";
-		else m = String.valueOf(curMaxIdx+1)+"/";
-		Log.i("month", m);
+    	Log.i("curMaxVal", String.valueOf(curMaxVal));
+    	if(curMaxVal > 0) {
+	    	if(String.valueOf(curMaxIdx+1).length() == 1) m = "0"+String.valueOf(curMaxIdx+1)+"/";
+			else m = String.valueOf(curMaxIdx+1)+"/";
+			Log.i("month", m);
+    	}
     	
     	for(int i=0; i<inputString.length(); i++) {
     		
