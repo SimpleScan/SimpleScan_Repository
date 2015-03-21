@@ -21,7 +21,13 @@ public class DragRectView extends View {
 	private TextPaint mTextPaint = null;
 
 	private OnUpCallback mCallback = null;
-
+	
+	/*
+	public static void changeRectColor (int rectColor) {
+		mRectPaint.setColor(rectColor);
+	}
+	*/
+	
 	public interface OnUpCallback {
 	    void onRectFinished(Rect rect);
 	}

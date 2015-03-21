@@ -5,8 +5,6 @@ import java.util.Locale;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.googlecode.tesseract.android.TessBaseAPI;
 
 public class OCR {

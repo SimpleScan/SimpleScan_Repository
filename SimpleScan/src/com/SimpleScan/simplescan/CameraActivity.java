@@ -27,8 +27,6 @@ import android.widget.Toast;
 public class CameraActivity extends Activity implements SurfaceHolder.Callback, View.OnClickListener, Camera.PictureCallback, Camera.ShutterCallback {
 
 	static final String TAG = "DBG_" + "CameraActivity";
-
-	//public static final int MEDIA_TYPE_IMAGE = 1;
 	
 	private DragRectView Rectview;
 	
@@ -236,7 +234,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 					else OCR_name.setText(nameText);
 				}
 				else {
-					recordNameOn = true;	
+					recordNameOn = true;
+					
 					if(recordDateOn) {
 						recordDateOn = false;
 						
@@ -266,7 +265,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 					else OCR_date.setText(dateText);
 				}
 				else {
-					recordDateOn = true;	
+					recordDateOn = true;
+					
 					if(recordNameOn) {
 						recordNameOn = false;
 						
@@ -297,6 +297,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 				}
 				else {
 					recordAmtOn = true;	
+					
 					if(recordNameOn) {
 						recordNameOn = false;
 						
@@ -315,9 +316,16 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 			}
 		});   
         
+        
      	Rectview = (DragRectView) findViewById(R.id.dragRect);
      	//if(recordNameOn || recordDateOn || recordAmtOn) {
+     	
      	if (null != Rectview) {
+     		/*
+     		if(recordNameOn )		
+     		else if(recordDateOn) 
+     		else if(recordAmtOn) 
+     		*/
         	Rectview.setOnUpCallback(new DragRectView.OnUpCallback() {
                 @Override
                 public void onRectFinished(final Rect rect) {
