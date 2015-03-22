@@ -36,6 +36,10 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	private Spinner spinner ;
 	private DBManager dbManager;
 	
+	//For setDataFromCam
+	private static boolean cameFlag = false;
+	private static Expense camExpense = new Expense();
+	
 	public FragmentShareExpense() 
 	{
 		// Required empty public constructor
@@ -96,6 +100,24 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		setUpEditExpense(v);
 		setUpDatePicker(v);
 		setUpCategory(v);
+		
+		/*
+		// check if camera data has been passed
+		if(cameFlag)
+		{
+			// grab the UI Component 
+			editName = (EditText)v.findViewById(R.id.SE_editName);
+			editDate  = (EditText)v.findViewById(R.id.SE_editDate);
+			editAmount = (EditText)v.findViewById(R.id.SE_editAmount);
+			// set the values for UI
+			editName.setText(camExpense.getTitle());
+			editDate.setText(camExpense.getDate());
+			editAmount.setText(String.valueOf(camExpense.getAmount()));
+			//set the flag back to false
+			cameFlag = false;
+		}
+		*/
+		
 		return v;
 	}
 
@@ -204,6 +226,23 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	
 	private void deleteExpense() {
 		// Does nothing
+	}
+	
+	public static void setDataFromCam(String title, String date, double amount)
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+		Calendar calendar = Calendar.getInstance();
+		
+		if(title!="") camExpense.setTitle(title);
+		else camExpense.setTitle("expense");
+		
+		if(date!="") camExpense.setDate(date);
+		else camExpense.setDate(sdf.format(calendar.getTime()));
+		
+		camExpense.setAmount(amount);
+		
+		cameFlag = true;
+		
 	}
 	
 }

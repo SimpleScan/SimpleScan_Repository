@@ -1,61 +1,77 @@
 package com.SimpleScan.simplescan;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
+import com.SimpleScan.simplescan.Camera.BitmapUtils;
 import com.SimpleScan.simplescan.Camera.CameraEngine;
+import com.SimpleScan.simplescan.Camera.OCR;
+import com.SimpleScan.simplescan.Camera.Views.DragRectView;
+import com.SimpleScan.simplescan.Camera.Views.ZoomableImageView;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
-import android.hardware.Camera.PictureCallback;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
-import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class CameraActivity extends Activity implements SurfaceHolder.Callback, View.OnClickListener, Camera.PictureCallback, Camera.ShutterCallback {
 
 	static final String TAG = "DBG_" + "CameraActivity";
-
-	public static final int MEDIA_TYPE_IMAGE = 1;
 	
+	//For Camera
+	//Camera front-end
     Button shutterButton;
     Button focusButton;
+    Button flashButton;
+    //Camera back-end
     SurfaceView cameraFrame;
     CameraEngine cameraEngine;
     
+    
+    //For Preview
+    protected boolean _preview;
+    //Preview front-end
     Button saveButton;
     Button retakeButton;
+    Button recordNameButton;
+    Button recordDateButton;
+    Button recordAmtButton;
+    TextView OCR_name;
+    TextView OCR_date;
+    TextView OCR_amt;
+    
 	ImageView PreviewImage;
-	TextView OCRtext;
-	//Bitmap bitmap;
+	//ZoomableImageView PreviewImage;
+    
+    private DragRectView Rectview;
+    
+	//Preview back-end
+	boolean recordNameOn, recordDateOn, recordAmtOn;
+	String nameText, dateText, amtText;
+	double amt;
+	Bitmap bitmap;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
+        setContentView(R.layout.activity_camera);         
     }
     
     @Override
@@ -82,18 +98,24 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     protected void onResume() {
         super.onResume();
 
-        cameraFrame = (SurfaceView) findViewById(R.id.camera_frame);
-        shutterButton = (Button) findViewById(R.id.shutter_button);
-        focusButton = (Button) findViewById(R.id.focus_button);
-        
-        shutterButton.setOnClickListener(this);
-        focusButton.setOnClickListener(this);
-
-        SurfaceHolder surfaceHolder = cameraFrame.getHolder();
-        surfaceHolder.addCallback(this);
-        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-
-        cameraFrame.setOnClickListener(this);
+        if(_preview) {
+        	setPreview();
+        } else{      	
+        	cameraFrame = (SurfaceView) findViewById(R.id.camera_frame);
+	        shutterButton = (Button) findViewById(R.id.shutter_button);
+	        focusButton = (Button) findViewById(R.id.focus_button);
+	        flashButton = (Button) findViewById(R.id.flash_button);
+	        
+	        shutterButton.setOnClickListener(this);
+	        focusButton.setOnClickListener(this);
+	        flashButton.setOnClickListener(this);
+	
+	        SurfaceHolder surfaceHolder = cameraFrame.getHolder();
+	        surfaceHolder.addCallback(this);
+	        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+	
+	        cameraFrame.setOnClickListener(this);
+        }
     }
 
 	@Override
@@ -121,6 +143,25 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                 cameraEngine.requestFocus();
             }
         }
+
+        if(v == flashButton) {
+        	if(cameraEngine!=null && cameraEngine.isOn()){
+        		
+        		//cameraEngine.toggleFlash(this);
+        		cameraEngine.cycleFlashMode(this);
+        		
+        		switch(cameraEngine.checkFlashMode()) {
+        			case 1:
+        				flashButton.setBackgroundResource(R.drawable.flash_on_layout);
+        				break;
+        			case 2:
+        				flashButton.setBackgroundResource(R.drawable.flash_auto_layout);
+        				break;
+    				default:
+    					flashButton.setBackgroundResource(R.drawable.flash_off_layout);
+        		}
+            }
+        }
     }
     
 
@@ -131,11 +172,27 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
             return;
         }
     	
-        Bitmap bitmap = createPreviewBitmap(data);
+        bitmap = BitmapUtils.createPreviewBitmap(data);
         
-        setPreview(bitmap);
+        initPreview();
+        setPreview();
     }
     
+    private void initPreview(){
+    	recordNameOn = false;
+        recordDateOn = false;
+        recordAmtOn = false;
+        
+        nameText = "";
+        dateText = ""; 
+        amtText  = "";
+        
+        amt=0.;
+        
+    	_preview = true;
+    }
+    
+    /*
     public Bitmap createPreviewBitmap(byte[] data) {
     	
     	BitmapFactory.Options options = new BitmapFactory.Options();
@@ -143,45 +200,207 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);   
         
         //Rotating bitmap to the right orientation
-        Matrix matrix = new Matrix();
-        matrix.postRotate(90);
-        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        Matrix rotate_matrix = new Matrix();
+        rotate_matrix.postRotate(90);
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), rotate_matrix, true);
         
         return bitmap;
     }
+    */
     
-    public void setPreview(final Bitmap bitmap) {
-    	setContentView(R.layout.image_preview);
+    public void setPreview() {
+    	setContentView(R.layout.image_preview);	
     	
-    	PreviewImage = (ImageView) findViewById(R.id.previewImage);
-        OCRtext = (TextView) findViewById(R.id.OCRtext);
+    	OCR_name = (TextView) findViewById(R.id.OCR_name);
+    	OCR_date = (TextView) findViewById(R.id.OCR_date);
+    	OCR_amt = (TextView) findViewById(R.id.OCR_amt);
         saveButton = (Button) findViewById(R.id.saveButton);
         retakeButton = (Button) findViewById(R.id.retakeButton);
+        recordNameButton = (Button) findViewById(R.id.recordNameButton);
+        recordDateButton = (Button) findViewById(R.id.recordDateButton);
+        recordAmtButton = (Button) findViewById(R.id.recordAmtButton);
         
-        PreviewImage.setImageBitmap(bitmap); //Assign the bitmap to ImageView
+        //PreviewImage = (ZoomableImageView) findViewById(R.id.previewImage);
+        PreviewImage = (ImageView) findViewById(R.id.previewImage);
+    	Rectview = (DragRectView) findViewById(R.id.dragRect);
+    	Rectview.setVisibility(View.INVISIBLE);
+              
+        PreviewImage.setImageBitmap(bitmap); //Assign the bitmap to ImageView   
+        
         saveButton.setOnClickListener(new View.OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				Log.i("saveButton", "clicked");
 				try {
-					saveBitmap (bitmap);
+					Filesystem.saveBitmap (bitmap);
+					Toast.makeText(getApplicationContext(), "Image saved", Toast.LENGTH_LONG).show();
+					//Toast.makeText(getApplicationContext(), "Data saved", Toast.LENGTH_LONG).show();
+					
+					FragmentShareExpense.setDataFromCam(nameText, dateText, amt);
+					finish();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 		});
         
-        retakeButton.setOnClickListener(new View.OnClickListener() {
-			
+        retakeButton.setOnClickListener(new View.OnClickListener() {		
 			@Override
 			public void onClick(View v) {
-				Log.i("retakeButton", "clicked");				
-				restartCamera();
+				Log.i("retakeButton", "clicked");
+				_preview = false;
+				restartCamera();	
 			}
 		});
         
-    }
+        recordNameButton.setOnClickListener(new View.OnClickListener() {		
+			@Override
+			public void onClick(View v) {
+				Log.i("recordNameButton", "clicked");
+				if(recordNameOn){
+					recordNameOn = false;
+					//PreviewImage.setCroppingMode(false);
+					
+					if(nameText=="") OCR_name.setText("Name");
+					else OCR_name.setText(nameText);
+					
+					Rectview.setVisibility(View.INVISIBLE);					
+				}
+				else {
+					recordNameOn = true;
+					//PreviewImage.setCroppingMode(true);
+					
+					if(recordDateOn) {
+						recordDateOn = false;
+						
+						if(dateText=="") OCR_date.setText("Date");
+						else OCR_date.setText(dateText);
+					}
+					else if(recordAmtOn) {
+						recordAmtOn = false;
+						
+						if(amtText=="") OCR_amt.setText("Amount");
+						else OCR_amt.setText("$"+amtText);
+					}
+					
+					Rectview.setVisibility(View.VISIBLE);
+					Rectview.setBorderColor(Color.RED);
+					OCR_name.setText("Crop the name");					
+				}
+			}
+		});
+        
+        recordDateButton.setOnClickListener(new View.OnClickListener() {		
+			@Override
+			public void onClick(View v) {
+				Log.i("recordDateButton", "clicked");
+				if(recordDateOn) {
+					recordDateOn = false;
+					//PreviewImage.setCroppingMode(false);
+					
+					if(dateText=="") OCR_date.setText("Date");
+					else OCR_date.setText(dateText);
+					
+					Rectview.setVisibility(View.INVISIBLE);
+				}
+				else {
+					recordDateOn = true;
+					//PreviewImage.setCroppingMode(true);
+					
+					if(recordNameOn) {
+						recordNameOn = false;
+						
+						if(nameText=="") OCR_name.setText("Name");
+						else OCR_name.setText(nameText);
+					}
+					else if(recordAmtOn) {
+						recordAmtOn = false;
+						
+						if(amtText=="") OCR_amt.setText("Amount");
+						else OCR_amt.setText("$"+amtText);
+					}
+					
+					Rectview.setVisibility(View.VISIBLE);
+					Rectview.setBorderColor(Color.BLUE);
+					OCR_date.setText("Crop the date");	
+				}
+			}
+		});
+        
+        recordAmtButton.setOnClickListener(new View.OnClickListener() {		
+			@Override
+			public void onClick(View v) {
+				Log.i("recordAmtButton", "clicked");
+				if(recordAmtOn) {
+					recordAmtOn = false;
+					//PreviewImage.setCroppingMode(false);
+					
+					if(amtText=="") OCR_amt.setText("Amount");
+					else OCR_amt.setText("$"+amtText);
+					
+					Rectview.setVisibility(View.INVISIBLE);
+				}
+				else {
+					recordAmtOn = true;
+					//PreviewImage.setCroppingMode(true);
+					
+					if(recordNameOn) {
+						recordNameOn = false;
+						
+						if(nameText=="") OCR_name.setText("Name");
+						else OCR_name.setText(nameText);
+					}
+					else if(recordDateOn) {
+						recordDateOn = false;
+						
+						if(dateText=="") OCR_date.setText("Date");
+						else OCR_date.setText(dateText);
+					}
+					
+					Rectview.setVisibility(View.VISIBLE);
+					Rectview.setBorderColor(Color.GREEN);
+					OCR_amt.setText("Crop the amount");
+				}
+			}
+		});       	    
+        
+     	if (null != Rectview) {
+        	Rectview.setOnUpCallback(new DragRectView.OnUpCallback() {
+                @Override
+                public void onRectFinished(final Rect rect) {
+                    Toast.makeText(getApplicationContext(), 
+                    		       "Rect is ("+rect.left+", "+rect.top+", "+rect.right+", "+rect.bottom+")", Toast.LENGTH_LONG).show();
+                    Bitmap previewBitmap = Bitmap.createScaledBitmap(((BitmapDrawable) PreviewImage.getDrawable()).getBitmap(), PreviewImage.getWidth(), PreviewImage.getHeight(), false);
+                    //System.out.println(rect.height()+"    "+previewBitmap.getHeight()+"      "+rect.width()+"    "+previewBitmap.getWidth());
+                    if (rect.height() <= previewBitmap.getHeight() && rect.width() <= previewBitmap.getWidth() 
+                    &&  rect.height() > 0 && rect.width() > 0) {                    
+                    	Bitmap croppedBitmap = Bitmap.createBitmap(previewBitmap, rect.left, rect.top, rect.width(), rect.height());  
+                    	if(recordNameOn) {
+                    		nameText = OCR.detect_text(croppedBitmap, "detect_all");
+                    		OCR_name.setText(nameText);
+                    		Toast.makeText(getApplicationContext(), nameText, Toast.LENGTH_LONG).show();
+                    	}
+                    	if(recordDateOn) {
+                    		dateText = OCR.detect_text(croppedBitmap, "detect_date");       		
+                    		OCR_date.setText(dateText);
+                    		Toast.makeText(getApplicationContext(), dateText, Toast.LENGTH_LONG).show();
+                    	}
+                    	if(recordAmtOn) {
+                    		amtText = OCR.detect_text(croppedBitmap, "detect_numbers");
+                    		OCR_amt.setText(amtText);
+                    		Toast.makeText(getApplicationContext(), amtText, Toast.LENGTH_LONG).show();
+                    		
+                    		try {
+                    			amt=OCR.amtStr2double(amtText);
+                    		} catch (Exception e) {
+            					e.printStackTrace();
+            				}
+                    	}     	
+                    }          
+                }
+            });	
+    	} 
+    } 
     
     public void restartCamera() {
     	//Restarting Activity
@@ -196,54 +415,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 		    startActivity(intent);
 		}   	
     }
-    
-    public void saveBitmap (Bitmap bitmap) throws IOException {
-    	
-    	File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-    	
-    	if (pictureFile == null){
-            Log.d(TAG, "Error creating media file, check storage permissions: ");
-            return;
-        }
-    	
-    	FileOutputStream fos = new FileOutputStream(pictureFile);
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        fos.close();  
-    }
 
-	/** Create a file Uri for saving an image or video */
-    private static Uri getOutputMediaFileUri(int type){
-          return Uri.fromFile(getOutputMediaFile(type));
-    }
-
-    /** Create a File for saving an image or video */
-    private static File getOutputMediaFile(int type){
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
-
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "SimpleScan");
-
-        // Create the storage directory if it does not exist
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
-                Log.d("MyCameraApp", "failed to create directory");
-                return null;
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE){
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-            "IMG_"+ timeStamp + ".jpg");
-        } else {
-            return null;
-        }
-
-        return mediaFile;
-    }
-    
     @Override
 	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {	
 	}
@@ -254,7 +426,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 	
 	@Override
     public void onShutter() {
-
     }
+
 }
 
