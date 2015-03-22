@@ -100,14 +100,23 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		setUpDatePicker(v);
 		setUpCategory(v);
 		
+		return v;
+	}
+
+	@Override
+	public void onResume()
+	{
+		super.onResume();
 		/*
-		// check if camera data has been passed
+		 * detect whether resume on the camera activity finish call
+		 * if so, use the data to update the current view
+		 */
 		if(cameFlag)
 		{
 			// grab the UI Component 
-			editName = (EditText)v.findViewById(R.id.SE_editName);
-			editDate  = (EditText)v.findViewById(R.id.SE_editDate);
-			editAmount = (EditText)v.findViewById(R.id.SE_editAmount);
+			editName = (EditText)getActivity().findViewById(R.id.SE_editName);
+			editDate  = (EditText)getActivity().findViewById(R.id.SE_editDate);
+			editAmount = (EditText)getActivity().findViewById(R.id.SE_editAmount);
 			// set the values for UI
 			editName.setText(camExpense.getTitle());
 			editDate.setText(camExpense.getDate());
@@ -115,11 +124,9 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 			//set the flag back to false
 			cameFlag = false;
 		}
-		*/
 		
-		return v;
 	}
-
+	
 	private void setUpCategory(View v)
 	{
 		spinner = (Spinner)v.findViewById(R.id.SE_spinner);
