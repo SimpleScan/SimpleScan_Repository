@@ -16,6 +16,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -28,35 +30,39 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
 	static final String TAG = "DBG_" + "CameraActivity";
 	
-	private DragRectView Rectview;
-	
-	protected boolean _preview;
-	
+	//For Camera
+	//Camera front-end
     Button shutterButton;
     Button focusButton;
+    Button flashButton;
+    //Camera back-end
     SurfaceView cameraFrame;
     CameraEngine cameraEngine;
     
+    
+    //For Preview
+    protected boolean _preview;
+    //Preview front-end
     Button saveButton;
     Button retakeButton;
-    Button flashButton;
     Button recordNameButton;
     Button recordDateButton;
     Button recordAmtButton;
-    
-    //TextView OCRtext;
     TextView OCR_name;
     TextView OCR_date;
     TextView OCR_amt;
-	ImageView PreviewImage;
-	
+    
+	ImageView PreviewImage;	
+	ScaleGestureDetector SGD;
+	Matrix scale_matrix = new Matrix();
+    
+    private DragRectView Rectview;
+    
+	//Preview back-end
 	boolean recordNameOn, recordDateOn, recordAmtOn;
 	String nameText, dateText, amtText;
-	
-	Bitmap bitmap;
 	double amt;
-	
-	Uri fileUri;
+	Bitmap bitmap;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,11 +100,11 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         	cameraFrame = (SurfaceView) findViewById(R.id.camera_frame);
 	        shutterButton = (Button) findViewById(R.id.shutter_button);
 	        focusButton = (Button) findViewById(R.id.focus_button);
-	        //flashButton = (Button) findViewById(R.id.flash_button);
+	        flashButton = (Button) findViewById(R.id.flash_button);
 	        
 	        shutterButton.setOnClickListener(this);
 	        focusButton.setOnClickListener(this);
-	        //flashButton.setOnClickListener(this);
+	        flashButton.setOnClickListener(this);
 	
 	        SurfaceHolder surfaceHolder = cameraFrame.getHolder();
 	        surfaceHolder.addCallback(this);
@@ -133,13 +139,25 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                 cameraEngine.requestFocus();
             }
         }
-        /*
+
         if(v == flashButton) {
         	if(cameraEngine!=null && cameraEngine.isOn()){
-                cameraEngine.toggleFlash();
+        		
+        		//cameraEngine.toggleFlash(this);
+        		cameraEngine.cycleFlashMode(this);
+        		
+        		switch(cameraEngine.checkFlashMode()) {
+        			case 1:
+        				flashButton.setBackgroundResource(R.drawable.flash_on_layout);
+        				break;
+        			case 2:
+        				flashButton.setBackgroundResource(R.drawable.flash_auto_layout);
+        				break;
+    				default:
+    					flashButton.setBackgroundResource(R.drawable.flash_off_layout);
+        		}
             }
         }
-        */
     }
     
 
@@ -160,11 +178,13 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     	recordNameOn = false;
         recordDateOn = false;
         recordAmtOn = false;
+        
         nameText = "";
         dateText = ""; 
         amtText  = "";
         
         amt=0.;
+        
     	_preview = true;
     }
     
@@ -175,9 +195,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);   
         
         //Rotating bitmap to the right orientation
-        Matrix matrix = new Matrix();
-        matrix.postRotate(90);
-        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        Matrix rotate_matrix = new Matrix();
+        rotate_matrix.postRotate(90);
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), rotate_matrix, true);
         
         return bitmap;
     }
@@ -185,8 +205,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     public void setPreview() {
     	setContentView(R.layout.image_preview);	
     	
-    	PreviewImage = (ImageView) findViewById(R.id.previewImage);
-        //OCRtext = (TextView) findViewById(R.id.OCRtext);
     	OCR_name = (TextView) findViewById(R.id.OCR_name);
     	OCR_date = (TextView) findViewById(R.id.OCR_date);
     	OCR_amt = (TextView) findViewById(R.id.OCR_amt);
@@ -196,8 +214,11 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         recordDateButton = (Button) findViewById(R.id.recordDateButton);
         recordAmtButton = (Button) findViewById(R.id.recordAmtButton);
         
+        PreviewImage = (ImageView) findViewById(R.id.previewImage);
+    	Rectview = (DragRectView) findViewById(R.id.dragRect);
+              
+        PreviewImage.setImageBitmap(bitmap); //Assign the bitmap to ImageView   
         
-        PreviewImage.setImageBitmap(bitmap); //Assign the bitmap to ImageView
         saveButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -205,8 +226,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 				try {
 					Filesystem.saveBitmap (bitmap);
 					Toast.makeText(getApplicationContext(), "Image saved", Toast.LENGTH_LONG).show();
-					//storeData();
+					//Toast.makeText(getApplicationContext(), "Data saved", Toast.LENGTH_LONG).show();
 					
+					FragmentShareExpense.setDataFromCam(nameText, dateText, amt);
 					finish();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -314,18 +336,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 					OCR_amt.setText("Crop the amount");
 				}
 			}
-		});   
-        
-        
-     	Rectview = (DragRectView) findViewById(R.id.dragRect);
-     	//if(recordNameOn || recordDateOn || recordAmtOn) {
-     	
+		});       	
+     		
      	if (null != Rectview) {
-     		/*
-     		if(recordNameOn )		
-     		else if(recordDateOn) 
-     		else if(recordAmtOn) 
-     		*/
         	Rectview.setOnUpCallback(new DragRectView.OnUpCallback() {
                 @Override
                 public void onRectFinished(final Rect rect) {
@@ -333,23 +346,21 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                     		       "Rect is ("+rect.left+", "+rect.top+", "+rect.right+", "+rect.bottom+")", Toast.LENGTH_LONG).show();
                     Bitmap previewBitmap = Bitmap.createScaledBitmap(((BitmapDrawable) PreviewImage.getDrawable()).getBitmap(), PreviewImage.getWidth(), PreviewImage.getHeight(), false);
                     //System.out.println(rect.height()+"    "+previewBitmap.getHeight()+"      "+rect.width()+"    "+previewBitmap.getWidth());
-                    if (rect.height() <= previewBitmap.getHeight() && rect.width() <= previewBitmap.getWidth()) {                    
+                    if (rect.height() <= previewBitmap.getHeight() && rect.width() <= previewBitmap.getWidth() 
+                    &&  rect.height() > 0 && rect.width() > 0) {                    
                     	Bitmap croppedBitmap = Bitmap.createBitmap(previewBitmap, rect.left, rect.top, rect.width(), rect.height());  
                     	if(recordNameOn) {
                     		nameText = OCR.detect_text(croppedBitmap, "detect_all");
-                    		//OCRtext.setText(nameText + "    " + dateText + "    $" + amtText);
                     		OCR_name.setText(nameText);
                     		Toast.makeText(getApplicationContext(), nameText, Toast.LENGTH_LONG).show();
                     	}
                     	if(recordDateOn) {
-                    		dateText = OCR.detect_text(croppedBitmap, "detect_date");
-                    		//OCRtext.setText(nameText + "    " + dateText + "    $" + amtText);       		
+                    		dateText = OCR.detect_text(croppedBitmap, "detect_date");       		
                     		OCR_date.setText(dateText);
                     		Toast.makeText(getApplicationContext(), dateText, Toast.LENGTH_LONG).show();
                     	}
                     	if(recordAmtOn) {
                     		amtText = OCR.detect_text(croppedBitmap, "detect_numbers");
-                    		//OCRtext.setText(nameText + "    " + dateText + "    $" + amtText);
                     		OCR_amt.setText(amtText);
                     		Toast.makeText(getApplicationContext(), amtText, Toast.LENGTH_LONG).show();
                     		
@@ -357,11 +368,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                     	}     	
                     }          
                 }
-            });
-        }
-    	//} else Rectview.setVisibility(View.GONE);
-    }
-    
+            });	
+    	} 
+    } 
     
     public void restartCamera() {
     	//Restarting Activity
@@ -376,13 +385,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 		    startActivity(intent);
 		}   	
     }
-    
-    /*
-    private void storeData() throws Exception{
-    	FragmentShareExpense.imgData2Expense(this, nameText, dateText, amt);
-    }
-	*/
-    
+
     @Override
 	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {	
 	}

@@ -6,21 +6,6 @@
     android:background="@color/Aqua"
     android:gravity="center_horizontal|center_vertical" >
     	
-    <!--  
-		<TextView
-		    android:id="@+id/OCRtext"
-		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-		    android:layout_alignParentLeft="true"
-		    android:layout_alignParentRight="true"
-		    android:layout_marginBottom="10dp"
-		    android:layout_marginTop="10dp"
-		    android:gravity="center_horizontal"
-		    android:textColor="@color/White"
-		    android:textSize="15sp" 
-		    android:text="Crop the amount" />
-    -->
-    	
     	<TextView
     	    android:id="@+id/OCR_name"
     	    android:layout_width="wrap_content"

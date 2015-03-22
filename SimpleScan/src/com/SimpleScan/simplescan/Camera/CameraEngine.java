@@ -2,6 +2,8 @@ package com.SimpleScan.simplescan.Camera;
 
 import java.io.IOException;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.util.Log;
@@ -15,6 +17,7 @@ public class CameraEngine {
 	boolean on;
     Camera camera;
     SurfaceHolder surfaceHolder;
+    int flashMode;
     
     Camera.AutoFocusCallback autoFocusCallback = new Camera.AutoFocusCallback() {
         @Override
@@ -35,17 +38,51 @@ public class CameraEngine {
         if (isOn()) camera.autoFocus(autoFocusCallback);
 
     }
-    /*
-    public void toggleFlash() {
+    
+    public void cycleFlashMode(Context context) {
     	if(camera == null) return;
     	if(isOn()){
-    		Parameters camParameters = camera.getParameters();
-    		if(camParameters.getFlashMode() == Parameters.FLASH_MODE_OFF)
-    			camParameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
-    		camera.setParameters(camParameters);
+    		PackageManager pm = context.getPackageManager();
+	    	if(isFlashSupported(pm)) {
+	    		if(flashMode == 0) {
+	    			flashMode = 1; //on
+	    		} else if(flashMode == 1) {
+	    			flashMode = 2; //auto
+	    		} else {
+	    			flashMode = 0; //off
+	    		}
+	    	} else 	flashMode = 0;
     	}
     }
-    */
+    
+    public int checkFlashMode() {
+    	return flashMode;
+    }
+    
+    private boolean isFlashSupported(PackageManager packageManager){ 
+    	return packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);   	  
+	}
+    
+    private void requestFlash() {
+    	Parameters cam_parameters = camera.getParameters();
+    	
+    	switch(flashMode) {
+    		case 1:
+    			Log.i("requestFlash", "flash is turn on!");
+    		    cam_parameters.setFlashMode(Parameters.FLASH_MODE_ON);
+    		    camera.setParameters(cam_parameters);
+    			break;
+    		case 2:
+    			Log.i("requestFlash", "flash is turn on!");
+    		    cam_parameters.setFlashMode(Parameters.FLASH_MODE_AUTO);
+    		    camera.setParameters(cam_parameters);
+    		    break;
+    		default:
+    			Log.i("requestFlash", "flash is turn off!");
+    		    cam_parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
+    		    camera.setParameters(cam_parameters);
+    	}
+    }
     
     public void start() {
 
@@ -63,6 +100,7 @@ public class CameraEngine {
             this.camera.startPreview();
 
             on = true;
+            flashMode = 0;
 
             Log.d(TAG, "CameraEngine preview started");
 
@@ -81,12 +119,16 @@ public class CameraEngine {
         }
 
         on = false;
+        flashMode = 0;
 
         Log.d(TAG, "CameraEngine Stopped");
     }
     
     public void takeShot(Camera.ShutterCallback shutterCallback, Camera.PictureCallback rawPictureCallback, Camera.PictureCallback jpegPictureCallback ){
-    	if(isOn()) camera.takePicture(shutterCallback, rawPictureCallback, jpegPictureCallback);
+    	if(isOn()) {
+    		requestFlash();
+    		camera.takePicture(shutterCallback, rawPictureCallback, jpegPictureCallback);
+    	}
     }
     
 }

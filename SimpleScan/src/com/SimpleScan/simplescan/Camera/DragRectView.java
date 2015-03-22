@@ -22,12 +22,6 @@ public class DragRectView extends View {
 
 	private OnUpCallback mCallback = null;
 	
-	/*
-	public static void changeRectColor (int rectColor) {
-		mRectPaint.setColor(rectColor);
-	}
-	*/
-	
 	public interface OnUpCallback {
 	    void onRectFinished(Rect rect);
 	}
@@ -46,6 +40,7 @@ public class DragRectView extends View {
 	    super(context, attrs, defStyle);
 	    init();
 	}
+	
 
 	/**
 	 * Sets callback for up
