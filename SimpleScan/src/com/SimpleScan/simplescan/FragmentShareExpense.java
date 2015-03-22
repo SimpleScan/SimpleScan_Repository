@@ -100,6 +100,7 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		setUpDatePicker(v);
 		setUpCategory(v);
 		
+		/*
 		// check if camera data has been passed
 		if(cameFlag)
 		{
@@ -114,6 +115,7 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 			//set the flag back to false
 			cameFlag = false;
 		}
+		*/
 		
 		return v;
 	}
