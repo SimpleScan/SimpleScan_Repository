@@ -14,6 +14,8 @@ import com.SimpleScan.simplescan.sqlite.DBManager;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 {
 	private static final String EXPENSE_KEY = "expense_key";
 	private Expense expense;
+	private ImageView receiptImageView;
 	private EditText editName;
 	private EditText editDate;
 	private EditText editAmount;
@@ -39,6 +42,7 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	//For setDataFromCam
 	private static boolean cameFlag = false;
 	private static Expense camExpense = new Expense();
+	private static Bitmap receiptImg;
 	
 	public FragmentShareExpense() 
 	{
@@ -112,13 +116,17 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		if(cameFlag)
 		{
 			// grab the UI Component 
+			receiptImageView = (ImageView)getActivity().findViewById(R.id.SE_im);			
 			editName = (EditText)getActivity().findViewById(R.id.SE_editName);
 			editDate  = (EditText)getActivity().findViewById(R.id.SE_editDate);
 			editAmount = (EditText)getActivity().findViewById(R.id.SE_editAmount);
-			// set the values for UI
+			
+			// set the values for UI		
+			receiptImageView.setImageBitmap(receiptImg);
 			editName.setText(camExpense.getTitle());
 			editDate.setText(camExpense.getDate());
 			editAmount.setText(String.valueOf(camExpense.getAmount()));
+			
 			//set the flag back to false
 			cameFlag = false;
 		}
@@ -143,6 +151,9 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	}
 	
 	private void setUpEditExpense(View v) {
+		// Set the default Image
+		receiptImageView = (ImageView) v.findViewById(R.id.SE_im);
+		
 		// Set the default values for text fields
 		editName = (EditText) v.findViewById(R.id.SE_editName);
 		editName.setText(expense.getTitle());
@@ -231,7 +242,7 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		// Does nothing
 	}
 	
-	public static void setDataFromCam(String title, String date, double amount)
+	public static void setDataFromCam(String title, String date, double amount, String imgPath)
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 		Calendar calendar = Calendar.getInstance();
@@ -243,6 +254,10 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		else camExpense.setDate(sdf.format(calendar.getTime()));
 		
 		camExpense.setAmount(amount);
+		
+		BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 6; //down-sampling the image
+		receiptImg = BitmapFactory.decodeFile(imgPath, options);
 		
 		cameFlag = true;		
 	}

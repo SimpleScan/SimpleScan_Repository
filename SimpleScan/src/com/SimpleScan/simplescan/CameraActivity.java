@@ -212,7 +212,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 			public void onClick(View v) {
 				Log.i("saveButton", "clicked");
 				try {
-					Filesystem.saveBitmap (bitmap);
+					String imgPath = Filesystem.saveBitmap (bitmap);
 					Toast.makeText(getApplicationContext(), "Image saved", Toast.LENGTH_LONG).show();
 					//Toast.makeText(getApplicationContext(), "Data saved", Toast.LENGTH_LONG).show();
 					
@@ -225,7 +225,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 					changeFragment(fragment, "Edit Expense", false);
 					finish();
 					*/
-					FragmentShareExpense.setDataFromCam(nameText, dateText, amt);
+
+					FragmentShareExpense.setDataFromCam(nameText, dateText, amt, imgPath);
 					finish();
 					
 				} catch (IOException e) {

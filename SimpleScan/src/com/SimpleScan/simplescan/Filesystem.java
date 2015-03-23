@@ -38,18 +38,20 @@ public class Filesystem {
         }
 	}
 	
-	public static void saveBitmap (Bitmap bitmap) throws IOException {
+	public static String saveBitmap (Bitmap bitmap) throws IOException {
     	
     	File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
     	
     	if (pictureFile == null){
             Log.d("saveBitmap", "Error creating media file, check storage permissions: ");
-            return;
+            return null;
         }
     	
     	FileOutputStream fos = new FileOutputStream(pictureFile);
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
         fos.close();
+        
+        return pictureFile.getPath();
     }
 	
 	private static void makeAppSubdirs(Context context) {
