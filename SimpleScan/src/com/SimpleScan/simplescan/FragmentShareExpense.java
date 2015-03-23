@@ -99,16 +99,22 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		
 		setUpEditExpense(v);
 		setUpDatePicker(v);
-		setUpCategory(v);
+		setUpCategory(v);		
 		
-		/*
+		return v;
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		
 		// check if camera data has been passed
 		if(cameFlag)
 		{
 			// grab the UI Component 
-			editName = (EditText)v.findViewById(R.id.SE_editName);
-			editDate  = (EditText)v.findViewById(R.id.SE_editDate);
-			editAmount = (EditText)v.findViewById(R.id.SE_editAmount);
+			editName = (EditText)getActivity().findViewById(R.id.SE_editName);
+			editDate  = (EditText)getActivity().findViewById(R.id.SE_editDate);
+			editAmount = (EditText)getActivity().findViewById(R.id.SE_editAmount);
 			// set the values for UI
 			editName.setText(camExpense.getTitle());
 			editDate.setText(camExpense.getDate());
@@ -116,9 +122,6 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 			//set the flag back to false
 			cameFlag = false;
 		}
-		*/
-		
-		return v;
 	}
 
 	private void setUpCategory(View v)
@@ -236,13 +239,11 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		if(title!="") camExpense.setTitle(title);
 		else camExpense.setTitle("expense");
 		
-		if(date!="") camExpense.setDate(date);
+		if(date!="" && date!="Couldn't detect amount") camExpense.setDate(date);
 		else camExpense.setDate(sdf.format(calendar.getTime()));
 		
 		camExpense.setAmount(amount);
 		
-		cameFlag = true;
-		
+		cameFlag = true;		
 	}
-	
 }

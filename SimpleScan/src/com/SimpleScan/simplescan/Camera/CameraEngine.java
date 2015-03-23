@@ -3,10 +3,6 @@ package com.SimpleScan.simplescan.Camera;
 import java.io.IOException;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.util.Log;

@@ -58,7 +58,8 @@ public class OCR {
     	}
 
     	if(numberFound) {
-    		outputString = "$" + outputString;
+    		//outputString = "$" + outputString;
+    		outputString = outputString;
     		numberFound = false;
     	}
     	else outputString = "Couldn't detect amount";

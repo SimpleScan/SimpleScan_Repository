@@ -1,5 +1,9 @@
 package com.SimpleScan.simplescan.Camera.Views;
 
+import java.io.IOException;
+
+import com.SimpleScan.simplescan.Filesystem;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -17,12 +21,13 @@ import android.view.View;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.widget.ImageView;
 
-public class ZoomableImageView extends View {
+public class ZoomableImageView extends ImageView {
 	private static final String TAG = "ZoomableImageView";       
 	
 	private boolean isCropping;
 	
     private Bitmap imgBitmap = null;
+    private Bitmap scaled_imgBitmap = null;
    
     private int containerWidth;
     private int containerHeight;
@@ -87,6 +92,9 @@ public class ZoomableImageView extends View {
     
     public void setCroppingMode (boolean newCroppingMode) {
     	isCropping = newCroppingMode;
+    	
+    	setFocusable(!isCropping);
+        setFocusableInTouchMode(!isCropping);
     }
     
     public int getDefaultScale() {
@@ -183,7 +191,13 @@ public class ZoomableImageView extends View {
                 currentScale = 1.0f;
                 minScale = 1.0f;               
             }
-                                   
+            
+            /*
+            int scaled_width = (int)(imgBitmap.getWidth() / currentScale);
+            int scaled_height =(int)(imgBitmap.getHeight() / currentScale);
+            scaled_imgBitmap = Bitmap.createBitmap(imgBitmap, (int) curX, (int) curY, scaled_width, scaled_height, matrix, true);
+            */
+            
             invalidate();           
         }
     }
@@ -225,8 +239,7 @@ public class ZoomableImageView extends View {
             if(curX > 0) {
                 targetX = 0;
                 toMoveX = true;
-            }
-            else if(curX < rangeLimitX) {
+            } else if(curX < rangeLimitX) {
                 targetX = rangeLimitX;
                 toMoveX = true;
             }
@@ -311,8 +324,10 @@ public class ZoomableImageView extends View {
 	                curX = mvals[2];
 	                curY = mvals[5];
 	                currentScale = mvals[0];
-	            }
-	            else if(mode == ZOOM && isAnimating == false) {
+	                 
+	                System.out.println("mode==DRAG: " + "diffX="+diffX + " diffY="+diffY + " curX="+curX + " curY="+curY + " currentScale="+currentScale);
+	                
+	            } else if(mode == ZOOM && isAnimating == false) {
 	                float newDist = spacing(event);               
 	                if(newDist > 10f) {
 	                    matrix.set(savedMatrix);
@@ -320,22 +335,32 @@ public class ZoomableImageView extends View {
 	                    matrix.getValues(mvals);
 	                    currentScale = mvals[0];
 	                                       
-	                    if(currentScale * scale <= minScale) matrix.postScale(minScale/currentScale, minScale/currentScale, mid.x, mid.y);
-	                    else if(currentScale * scale >= maxScale) matrix.postScale(maxScale/currentScale, maxScale/currentScale, mid.x, mid.y);	                    
-	                    else matrix.postScale(scale, scale, mid.x, mid.y);                                                               
+	                    if(currentScale * scale <= minScale){
+	                    	matrix.postScale(minScale/currentScale, minScale/currentScale, mid.x, mid.y);
+	                    	//setScaledImgBitmap(imgBitmap, curX, curY, minScale/currentScale, matrix);
+	                    }
+	                    else if(currentScale * scale >= maxScale){
+	                    	matrix.postScale(maxScale/currentScale, maxScale/currentScale, mid.x, mid.y);
+	                    	//setScaledImgBitmap(imgBitmap, curX, curY, maxScale/currentScale, matrix);
+	                    }
+	                    else{
+	                    	matrix.postScale(scale, scale, mid.x, mid.y);        
+	                    	//setScaledImgBitmap(imgBitmap, curX, curY, scale, matrix);
+	                    }
 	                   
 	                    matrix.getValues(mvals);
 	                    curX = mvals[2];
 	                    curY = mvals[5];
-	                    currentScale = mvals[0];                                       
-	                }
-	            }
-	               
+	                    currentScale = mvals[0];    
+	                }	                
+	                System.out.println("mode==ZOOM: " + "newDist="+newDist + " oldDist="+oldDist + " curX="+curX + " curY="+curY + " currentScale="+currentScale);
+	            }          
 	        break;                               
 	        }
-	       
+	        setScaledImgBitmap(imgBitmap, curX, curY, currentScale, matrix);
+	        
 	        //Calculate the transformations and then invalidate
-	        invalidate();
+	        invalidate();    
     	}
         return true;
     }
@@ -354,7 +379,8 @@ public class ZoomableImageView extends View {
    
     public void setImageBitmap(Bitmap b) {       
         if(b != null) {
-            imgBitmap = b;               
+            imgBitmap = b;
+            scaled_imgBitmap = imgBitmap;
            
             containerWidth = getWidth();
             containerHeight = getHeight();
@@ -376,8 +402,7 @@ public class ZoomableImageView extends View {
                    
                     matrix.setScale(scale, scale);
                     matrix.postTranslate(0, initY);
-                }
-                else {           
+                } else {           
                     scale = (float)containerHeight / imgHeight;
                     float newWidth = imgWidth * scale;
                     initX = (containerWidth - (int)newWidth)/2;
@@ -391,8 +416,7 @@ public class ZoomableImageView extends View {
                
                 currentScale = scale;
                 minScale = scale;
-            }
-            else {
+            } else {
                 if(imgWidth > containerWidth) {
                     initX = 0;
                     if(imgHeight > containerHeight) initY = 0;
@@ -412,16 +436,34 @@ public class ZoomableImageView extends View {
                
                 currentScale = 1.0f;
                 minScale = 1.0f;               
-            }
-           
+            }   
             invalidate();           
-        } else {
-            Log.d(TAG, "bitmap is null");
-        }
+        } else  Log.d(TAG, "bitmap is null");
+    }
+    
+    private void setScaledImgBitmap(Bitmap srcImgBitmap, float curX, float curY, float scale, Matrix matrix) {
+    	System.out.println("setScaledImgBitmap: " + " currentScale="+currentScale);
+    	System.out.println("From: " + " ImgBitmap.getWidth()="+srcImgBitmap.getWidth() + " ImgBitmap.getHeight()="+srcImgBitmap.getWidth());
+    	
+    	int scaled_curX = (int) ((-curX-46)/(scale));
+        int scaled_curY = (int) (-curY/(scale));	
+
+    	int scaled_width = (int)(srcImgBitmap.getWidth()/(scale));
+    	int scaled_height = (int)(srcImgBitmap.getHeight()/(scale));
+    	
+    	if(scaled_curX < 0) scaled_curX = 0;
+        else if(scaled_curX > srcImgBitmap.getWidth()) scaled_curX = srcImgBitmap.getWidth();
+        if(scaled_curY < 0) scaled_curY = 0;
+        else if(scaled_curY > srcImgBitmap.getHeight()) scaled_curY = srcImgBitmap.getHeight();
+    	
+    	System.out.println("To: " + " scaled_curX="+scaled_curX + " scaled_curY="+scaled_curY + " scaled_width="+scaled_width + " scaled_height="+scaled_height);
+    	
+    	scaled_imgBitmap = Bitmap.createBitmap(srcImgBitmap, scaled_curX, scaled_curY, scaled_width, scaled_height, matrix, true);
     }
    
     public Bitmap getPhotoBitmap() {       
-        return imgBitmap;
+        return scaled_imgBitmap;
+    	//return imgBitmap;
     }
    
    
@@ -445,8 +487,7 @@ public class ZoomableImageView extends View {
                 float diffY = (targetY - curY);
                                
                 matrix.postTranslate(diffX, diffY);
-            }
-            else {
+            } else {
                 isAnimating = true;
                 mvals = new float[9];
                 matrix.getValues(mvals);
@@ -461,8 +502,7 @@ public class ZoomableImageView extends View {
                                
                 matrix.postTranslate(diffX, diffY);               
                 mHandler.postDelayed(this, 25);               
-            }
-           
+            }     
             invalidate();           
         }
     };
@@ -492,8 +532,7 @@ public class ZoomableImageView extends View {
                         currentScale = currentScale / scaleChange;
                         scaleChange = 1;
                     }
-                }
-                                               
+                }                                       
                
                 if(scaleChange != 1) {
                     matrix.postScale(scaleChange, scaleChange, targetScaleX, targetScaleY);               
@@ -560,14 +599,15 @@ public class ZoomableImageView extends View {
 
 	            targetRatio = targetScale / currentScale;
 	            mHandler.removeCallbacks(mUpdateImageScale);
-	            mHandler.post(mUpdateImageScale);         
+	            mHandler.post(mUpdateImageScale);  
             }
             return true;
         }
        
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            return super.onFling(e1, e2, velocityX, velocityY);
+    		if(!isCropping) return super.onFling(e1, e2, velocityX, velocityY);
+    		else return true;
         }
        
         @Override

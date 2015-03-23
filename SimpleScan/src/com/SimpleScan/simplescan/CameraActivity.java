@@ -11,18 +11,14 @@ import com.SimpleScan.simplescan.Camera.Views.ZoomableImageView;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -57,8 +53,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     TextView OCR_date;
     TextView OCR_amt;
     
-	ImageView PreviewImage;
-	//ZoomableImageView PreviewImage;
+	//ImageView PreviewImage;
+	ZoomableImageView PreviewImage;
     
     private DragRectView Rectview;
     
@@ -192,22 +188,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     	_preview = true;
     }
     
-    /*
-    public Bitmap createPreviewBitmap(byte[] data) {
-    	
-    	BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 4; //down-sampling the image
-        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);   
-        
-        //Rotating bitmap to the right orientation
-        Matrix rotate_matrix = new Matrix();
-        rotate_matrix.postRotate(90);
-        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), rotate_matrix, true);
-        
-        return bitmap;
-    }
-    */
-    
     public void setPreview() {
     	setContentView(R.layout.image_preview);	
     	
@@ -220,8 +200,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         recordDateButton = (Button) findViewById(R.id.recordDateButton);
         recordAmtButton = (Button) findViewById(R.id.recordAmtButton);
         
-        //PreviewImage = (ZoomableImageView) findViewById(R.id.previewImage);
-        PreviewImage = (ImageView) findViewById(R.id.previewImage);
+        PreviewImage = (ZoomableImageView) findViewById(R.id.previewImage);
+        //PreviewImage = (ImageView) findViewById(R.id.previewImage);
     	Rectview = (DragRectView) findViewById(R.id.dragRect);
     	Rectview.setVisibility(View.INVISIBLE);
               
@@ -236,8 +216,18 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 					Toast.makeText(getApplicationContext(), "Image saved", Toast.LENGTH_LONG).show();
 					//Toast.makeText(getApplicationContext(), "Data saved", Toast.LENGTH_LONG).show();
 					
+					/*
+					getActivity().setTitle("Edit Expense");
+					
+					Fragment fragment = FragmentShareExpense.createNewExpense(getActivity());
+					FragmentShareExpense.setDataFromCam(nameText, dateText, amt);
+								
+					changeFragment(fragment, "Edit Expense", false);
+					finish();
+					*/
 					FragmentShareExpense.setDataFromCam(nameText, dateText, amt);
 					finish();
+					
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -259,7 +249,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 				Log.i("recordNameButton", "clicked");
 				if(recordNameOn){
 					recordNameOn = false;
-					//PreviewImage.setCroppingMode(false);
+					setCropping(false);
 					
 					if(nameText=="") OCR_name.setText("Name");
 					else OCR_name.setText(nameText);
@@ -268,7 +258,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 				}
 				else {
 					recordNameOn = true;
-					//PreviewImage.setCroppingMode(true);
+					setCropping(true);
 					
 					if(recordDateOn) {
 						recordDateOn = false;
@@ -296,7 +286,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 				Log.i("recordDateButton", "clicked");
 				if(recordDateOn) {
 					recordDateOn = false;
-					//PreviewImage.setCroppingMode(false);
+					setCropping(false);
 					
 					if(dateText=="") OCR_date.setText("Date");
 					else OCR_date.setText(dateText);
@@ -305,7 +295,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 				}
 				else {
 					recordDateOn = true;
-					//PreviewImage.setCroppingMode(true);
+					setCropping(true);
 					
 					if(recordNameOn) {
 						recordNameOn = false;
@@ -333,7 +323,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 				Log.i("recordAmtButton", "clicked");
 				if(recordAmtOn) {
 					recordAmtOn = false;
-					//PreviewImage.setCroppingMode(false);
+					setCropping(false);
 					
 					if(amtText=="") OCR_amt.setText("Amount");
 					else OCR_amt.setText("$"+amtText);
@@ -342,7 +332,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 				}
 				else {
 					recordAmtOn = true;
-					//PreviewImage.setCroppingMode(true);
+					setCropping(true);
 					
 					if(recordNameOn) {
 						recordNameOn = false;
@@ -369,12 +359,35 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                 @Override
                 public void onRectFinished(final Rect rect) {
                     Toast.makeText(getApplicationContext(), 
-                    		       "Rect is ("+rect.left+", "+rect.top+", "+rect.right+", "+rect.bottom+")", Toast.LENGTH_LONG).show();
-                    Bitmap previewBitmap = Bitmap.createScaledBitmap(((BitmapDrawable) PreviewImage.getDrawable()).getBitmap(), PreviewImage.getWidth(), PreviewImage.getHeight(), false);
+                    		       "Rect is ("+rect.left+", "+rect.top+", "+rect.right+", "+rect.bottom+")", Toast.LENGTH_LONG).show();                                       
+                    //Bitmap previewBitmap = Bitmap.createScaledBitmap(((BitmapDrawable) PreviewImage.getDrawable()).getBitmap(), PreviewImage.getWidth(), PreviewImage.getHeight(), false);
+                    Bitmap previewBitmap = Bitmap.createScaledBitmap(PreviewImage.getPhotoBitmap(), PreviewImage.getWidth(), PreviewImage.getHeight(), false);            	
+                	/*
+                    try {
+            			Filesystem.saveBitmap(PreviewImage.getPhotoBitmap());
+            		} catch (IOException e1) {
+            			// TODO Auto-generated catch block
+            			e1.printStackTrace();
+            		}
+                	try {
+            			Filesystem.saveBitmap(previewBitmap);
+            		} catch (IOException e1) {
+            			// TODO Auto-generated catch block
+            			e1.printStackTrace();
+            		}
+            		*/
                     //System.out.println(rect.height()+"    "+previewBitmap.getHeight()+"      "+rect.width()+"    "+previewBitmap.getWidth());
                     if (rect.height() <= previewBitmap.getHeight() && rect.width() <= previewBitmap.getWidth() 
                     &&  rect.height() > 0 && rect.width() > 0) {                    
-                    	Bitmap croppedBitmap = Bitmap.createBitmap(previewBitmap, rect.left, rect.top, rect.width(), rect.height());  
+                    	Bitmap croppedBitmap = Bitmap.createBitmap(previewBitmap, rect.left, rect.top, rect.width(), rect.height()); 
+                    	/*
+                    	try {
+							Filesystem.saveBitmap(croppedBitmap);
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						*/
                     	if(recordNameOn) {
                     		nameText = OCR.detect_text(croppedBitmap, "detect_all");
                     		OCR_name.setText(nameText);
@@ -387,7 +400,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                     	}
                     	if(recordAmtOn) {
                     		amtText = OCR.detect_text(croppedBitmap, "detect_numbers");
-                    		OCR_amt.setText(amtText);
+                    		if(amtText != "Couldn't detect amount") OCR_amt.setText("$"+amtText);
+                    		else OCR_amt.setText(amtText);
                     		Toast.makeText(getApplicationContext(), amtText, Toast.LENGTH_LONG).show();
                     		
                     		try {
@@ -414,6 +428,11 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 		    overridePendingTransition(0, 0);
 		    startActivity(intent);
 		}   	
+    }
+    
+    private void setCropping(boolean isCropping) {
+    	if(PreviewImage != null) PreviewImage.setCroppingMode(isCropping);;
+    	if(Rectview != null) Rectview.setCroppingMode(isCropping);
     }
 
     @Override
