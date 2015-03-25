@@ -255,9 +255,11 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		
 		camExpense.setAmount(amount);
 		
-		BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 6; //down-sampling the image
-		receiptImg = BitmapFactory.decodeFile(imgPath, options);
+		if(imgPath!=null) {
+			BitmapFactory.Options options = new BitmapFactory.Options();
+	        options.inSampleSize = 6; //down-sampling the image
+			receiptImg = BitmapFactory.decodeFile(imgPath, options);
+		}
 		
 		cameFlag = true;		
 	}

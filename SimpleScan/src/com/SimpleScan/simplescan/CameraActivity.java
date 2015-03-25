@@ -38,8 +38,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     Button flashButton;
     //Camera back-end
     SurfaceView cameraFrame;
-    CameraEngine cameraEngine;
-    
+    CameraEngine cameraEngine;    
     
     //For Preview
     protected boolean _preview;
@@ -51,13 +50,10 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     Button recordAmtButton;
     TextView OCR_name;
     TextView OCR_date;
-    TextView OCR_amt;
-    
+    TextView OCR_amt;    
 	//ImageView PreviewImage;
 	ZoomableImageView PreviewImage;
-    
-    private DragRectView Rectview;
-    
+    private DragRectView Rectview;    
 	//Preview back-end
 	boolean recordNameOn, recordDateOn, recordAmtOn;
 	String nameText, dateText, amtText;
@@ -214,17 +210,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 				try {
 					String imgPath = Filesystem.saveBitmap (bitmap);
 					Toast.makeText(getApplicationContext(), "Image saved", Toast.LENGTH_LONG).show();
-					//Toast.makeText(getApplicationContext(), "Data saved", Toast.LENGTH_LONG).show();
-					
-					/*
-					getActivity().setTitle("Edit Expense");
-					
-					Fragment fragment = FragmentShareExpense.createNewExpense(getActivity());
-					FragmentShareExpense.setDataFromCam(nameText, dateText, amt);
-								
-					changeFragment(fragment, "Edit Expense", false);
-					finish();
-					*/
 
 					FragmentShareExpense.setDataFromCam(nameText, dateText, amt, imgPath);
 					finish();
@@ -362,33 +347,13 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                     Toast.makeText(getApplicationContext(), 
                     		       "Rect is ("+rect.left+", "+rect.top+", "+rect.right+", "+rect.bottom+")", Toast.LENGTH_LONG).show();                                       
                     //Bitmap previewBitmap = Bitmap.createScaledBitmap(((BitmapDrawable) PreviewImage.getDrawable()).getBitmap(), PreviewImage.getWidth(), PreviewImage.getHeight(), false);
-                    Bitmap previewBitmap = Bitmap.createScaledBitmap(PreviewImage.getPhotoBitmap(), PreviewImage.getWidth(), PreviewImage.getHeight(), false);            	
-                	/*
-                    try {
-            			Filesystem.saveBitmap(PreviewImage.getPhotoBitmap());
-            		} catch (IOException e1) {
-            			// TODO Auto-generated catch block
-            			e1.printStackTrace();
-            		}
-                	try {
-            			Filesystem.saveBitmap(previewBitmap);
-            		} catch (IOException e1) {
-            			// TODO Auto-generated catch block
-            			e1.printStackTrace();
-            		}
-            		*/
+                    Bitmap previewBitmap = Bitmap.createScaledBitmap(PreviewImage.getPhotoBitmap(), PreviewImage.getWidth(), PreviewImage.getHeight(), false);            	            		
                     //System.out.println(rect.height()+"    "+previewBitmap.getHeight()+"      "+rect.width()+"    "+previewBitmap.getWidth());
                     if (rect.height() <= previewBitmap.getHeight() && rect.width() <= previewBitmap.getWidth() 
-                    &&  rect.height() > 0 && rect.width() > 0) {                    
+                    &&  rect.height() > 0 && rect.width() > 0) {
+                    	
                     	Bitmap croppedBitmap = Bitmap.createBitmap(previewBitmap, rect.left, rect.top, rect.width(), rect.height()); 
-                    	/*
-                    	try {
-							Filesystem.saveBitmap(croppedBitmap);
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-						*/
+
                     	if(recordNameOn) {
                     		nameText = OCR.detect_text(croppedBitmap, "detect_all");
                     		OCR_name.setText(nameText);

@@ -1,23 +1,17 @@
 package com.SimpleScan.simplescan.Camera.Views;
 
-import java.io.IOException;
-
-import com.SimpleScan.simplescan.Filesystem;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.FloatMath;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.widget.ImageView;
 
@@ -159,8 +153,7 @@ public class ZoomableImageView extends ImageView {
                    
                     matrix.setScale(scale, scale);
                     matrix.postTranslate(0, initY);
-                }
-                else {           
+                } else {           
                     scale = (float)containerHeight / imgHeight;
                     float newWidth = imgWidth * scale;
                     initX = (containerWidth - (int)newWidth)/2;
@@ -174,13 +167,11 @@ public class ZoomableImageView extends ImageView {
                
                 currentScale = scale;
                 minScale = scale;
-            }
-            else {
+            } else {
                 if(imgWidth > containerWidth) {                                   
                     initY = (containerHeight - (int)imgHeight)/2;                   
                     matrix.postTranslate(0, initY);
-                }
-                else {                               
+                } else {                               
                     initX = (containerWidth - (int)imgWidth)/2;                   
                     matrix.postTranslate(initX, 0);
                 }
@@ -191,12 +182,6 @@ public class ZoomableImageView extends ImageView {
                 currentScale = 1.0f;
                 minScale = 1.0f;               
             }
-            
-            /*
-            int scaled_width = (int)(imgBitmap.getWidth() / currentScale);
-            int scaled_height =(int)(imgBitmap.getHeight() / currentScale);
-            scaled_imgBitmap = Bitmap.createBitmap(imgBitmap, (int) curX, (int) curY, scaled_width, scaled_height, matrix, true);
-            */
             
             invalidate();           
         }
@@ -283,7 +268,7 @@ public class ZoomableImageView extends ImageView {
 	        //Handle touch events here       
 	        float[] mvals = new float[9];
 	        switch(event.getAction() & MotionEvent.ACTION_MASK) {
-	        case MotionEvent.ACTION_DOWN:
+	        case MotionEvent.ACTION_DOWN: // contains initial starting location
 	            if(isAnimating == false) {
 	                savedMatrix.set(matrix);
 	                start.set(event.getX(), event.getY());           
@@ -291,9 +276,9 @@ public class ZoomableImageView extends ImageView {
 	            }
 	        break;
 	       
-	        case MotionEvent.ACTION_POINTER_DOWN:
+	        case MotionEvent.ACTION_POINTER_DOWN: //contains index of the non-primary pointer that will change
 	            oldDist = spacing(event);           
-	            if(oldDist > 10f) {
+	            if(oldDist > 10f) { // if the initial locations of the two touches are at least 10f apart 
 	                savedMatrix.set(matrix);
 	                midPoint(mid, event);
 	                mode = ZOOM;
@@ -304,7 +289,7 @@ public class ZoomableImageView extends ImageView {
 	        case MotionEvent.ACTION_POINTER_UP:
 	            mode = NONE;
 	           
-	            matrix.getValues(mvals);
+	            matrix.getValues(mvals); //copy 9 values from matrix into mvals
 	            curX = mvals[2];
 	            curY = mvals[5];
 	            currentScale = mvals[0];
@@ -324,40 +309,34 @@ public class ZoomableImageView extends ImageView {
 	                curX = mvals[2];
 	                curY = mvals[5];
 	                currentScale = mvals[0];
-	                 
+	                
 	                System.out.println("mode==DRAG: " + "diffX="+diffX + " diffY="+diffY + " curX="+curX + " curY="+curY + " currentScale="+currentScale);
 	                
 	            } else if(mode == ZOOM && isAnimating == false) {
 	                float newDist = spacing(event);               
 	                if(newDist > 10f) {
 	                    matrix.set(savedMatrix);
-	                    float scale = newDist / oldDist;                   
+	                    float scale = newDist / oldDist; //scale = change in distance                  
 	                    matrix.getValues(mvals);
 	                    currentScale = mvals[0];
 	                                       
-	                    if(currentScale * scale <= minScale){
-	                    	matrix.postScale(minScale/currentScale, minScale/currentScale, mid.x, mid.y);
-	                    	//setScaledImgBitmap(imgBitmap, curX, curY, minScale/currentScale, matrix);
-	                    }
-	                    else if(currentScale * scale >= maxScale){
-	                    	matrix.postScale(maxScale/currentScale, maxScale/currentScale, mid.x, mid.y);
-	                    	//setScaledImgBitmap(imgBitmap, curX, curY, maxScale/currentScale, matrix);
-	                    }
-	                    else{
-	                    	matrix.postScale(scale, scale, mid.x, mid.y);        
-	                    	//setScaledImgBitmap(imgBitmap, curX, curY, scale, matrix);
-	                    }
-	                   
+	                    if(currentScale * scale <= minScale) scale = minScale/currentScale;
+	                    else if(currentScale * scale >= maxScale) scale = maxScale/currentScale;
+	                    matrix.postScale(scale, scale, mid.x, mid.y);                    
+	               	                    
+	                    System.out.println("mode==ZOOM:" + " oldDist="+oldDist + " curX="+curX + " curY="+curY + " currentScale="+currentScale);
+	                    
 	                    matrix.getValues(mvals);
 	                    curX = mvals[2];
 	                    curY = mvals[5];
-	                    currentScale = mvals[0];    
-	                }	                
-	                System.out.println("mode==ZOOM: " + "newDist="+newDist + " oldDist="+oldDist + " curX="+curX + " curY="+curY + " currentScale="+currentScale);
+	                    currentScale = mvals[0];
+	                    
+	                    System.out.println("scale="+scale + " newDist="+newDist + " new_curX="+curX + " new_curY="+curY + " new_cuurentScale="+currentScale);	                     
+	                }	                	                
 	            }          
 	        break;                               
 	        }
-	        setScaledImgBitmap(imgBitmap, curX, curY, currentScale, matrix);
+	        setScaledImgBitmap(imgBitmap, curX, curY, matrix);
 	        
 	        //Calculate the transformations and then invalidate
 	        invalidate();    
@@ -441,31 +420,67 @@ public class ZoomableImageView extends ImageView {
         } else  Log.d(TAG, "bitmap is null");
     }
     
-    private void setScaledImgBitmap(Bitmap srcImgBitmap, float curX, float curY, float scale, Matrix matrix) {
-    	System.out.println("setScaledImgBitmap: " + " currentScale="+currentScale);
+    private void setScaledImgBitmap(Bitmap srcImgBitmap, float curX, float curY, Matrix matrix) {
     	System.out.println("From: " + " ImgBitmap.getWidth()="+srcImgBitmap.getWidth() + " ImgBitmap.getHeight()="+srcImgBitmap.getWidth());
     	
-    	int scaled_curX = (int) ((-curX-46)/(scale));
-        int scaled_curY = (int) (-curY/(scale));	
-
-    	int scaled_width = (int)(srcImgBitmap.getWidth()/(scale));
-    	int scaled_height = (int)(srcImgBitmap.getHeight()/(scale));
-    	
-    	if(scaled_curX < 0) scaled_curX = 0;
-        else if(scaled_curX > srcImgBitmap.getWidth()) scaled_curX = srcImgBitmap.getWidth();
-        if(scaled_curY < 0) scaled_curY = 0;
-        else if(scaled_curY > srcImgBitmap.getHeight()) scaled_curY = srcImgBitmap.getHeight();
-    	
-    	System.out.println("To: " + " scaled_curX="+scaled_curX + " scaled_curY="+scaled_curY + " scaled_width="+scaled_width + " scaled_height="+scaled_height);
-    	
-    	scaled_imgBitmap = Bitmap.createBitmap(srcImgBitmap, scaled_curX, scaled_curY, scaled_width, scaled_height, matrix, true);
+    	if(srcImgBitmap!=null) {
+        	float imgWidth = srcImgBitmap.getWidth()*currentScale;
+        	float imgHeight = srcImgBitmap.getHeight()*currentScale;
+        	
+        	float cropX=0;
+        	float cropY=0;
+        	float cropWidth=srcImgBitmap.getWidth();
+        	float cropHeight=srcImgBitmap.getHeight();
+        	
+            if(curX >= 0) {
+            	cropX = 0;
+            	if(imgWidth+curX < containerWidth) {
+            		cropWidth = imgWidth;
+            	} else {
+            		cropWidth = imgWidth  - curX;
+            		//cropWidth = containerWidth - curX;
+            	}
+            } else {
+            	cropX = -curX;
+            	if(imgWidth+curX < containerWidth) {
+            		cropWidth = imgWidth + curX;
+            		//cropWidth = containerWidth + curX;
+            	} else {
+            		cropWidth = containerWidth;
+            	}
+            }
+            if(curY >= 0) {
+            	cropY = 0;
+            	if(imgHeight+curY < containerHeight) {
+            		cropHeight = imgHeight;
+            	} else {
+            		cropHeight = imgHeight - curY;
+            		//cropHeight = containerHeight - curY;
+            	}
+            } else {
+            	cropY = -curY;
+            	if(imgHeight+curY < containerHeight) {
+            		cropHeight = imgHeight + curY;
+            		//cropHeight = containerHeight + curY;
+            	} else {
+            		cropHeight = containerHeight;
+            	}
+            }        
+            
+        	if(cropX < 0) cropX = 0;
+            else if(cropX > imgWidth) cropX = imgWidth;
+            if(cropY < 0) cropY = 0;
+            else if(cropY > imgHeight) cropY = imgHeight;
+        	
+            Bitmap resized_imgBitmap = Bitmap.createScaledBitmap(srcImgBitmap, (int) imgWidth, (int) imgHeight, false);
+    		scaled_imgBitmap = Bitmap.createBitmap(resized_imgBitmap, (int) cropX, (int) cropY, (int) cropWidth, (int) cropHeight);
+        }
     }
    
     public Bitmap getPhotoBitmap() {       
         return scaled_imgBitmap;
     	//return imgBitmap;
     }
-   
    
     private Runnable mUpdateImagePositionTask = new Runnable() {
         public void run() {       
