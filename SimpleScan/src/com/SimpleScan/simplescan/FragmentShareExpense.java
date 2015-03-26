@@ -12,16 +12,24 @@ import com.SimpleScan.simplescan.Entities.Category;
 import com.SimpleScan.simplescan.Entities.Expense;
 import com.SimpleScan.simplescan.sqlite.DBManager;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -45,6 +53,12 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	private static boolean cameFlag = false;
 	private static Expense camExpense = new Expense();
 	private static Bitmap receiptImg;
+	private static String receiptImgPath;
+	
+	private Animator mCurAnimator;
+	private int mShortAnimDur;
+	private static boolean hasImg;
+	private static boolean viewExpanded;
 	
 	public FragmentShareExpense() 
 	{
@@ -64,7 +78,7 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		
 		// Create the expense and save it
 		Expense newExpense = new Expense();
-		newExpense.setAmount(0.);
+		newExpense.setAmount(0.00f);
 		newExpense.setDate(sdf.format(calendar.getTime()));
 		newExpense.setTitle("expense");
 		DBManager dbManager = new DBManager(context);
@@ -106,6 +120,9 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		setUpEditExpense(v);
 		setUpDatePicker(v);
 		setUpCategory(v);		
+		
+		hasImg = false;
+		viewExpanded = false;
 		
 		return v;
 	}
@@ -171,6 +188,18 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	    deleteButton.setOnClickListener(this);
 		ImageView ExpenseImg = (ImageView)v.findViewById(R.id.SE_im);
 		ExpenseImg.setOnClickListener(this);
+		ExpenseImg.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+		    public boolean onLongClick(View theView) {
+		        if(hasImg) {
+		        	zoomImgFromThumb(receiptImageView);
+		        } else {
+		        	if(CameraUtils.checkCameraHardware(getActivity())) startActivity(new Intent(getActivity(), CameraActivity.class));
+					else Toast.makeText(getActivity(), "Camera is not supported on your device", Toast.LENGTH_LONG).show();
+		        }		        
+		        return true;
+		    }
+		});
 	}
 	
 	private void setUpDatePicker(View v) {
@@ -214,6 +243,7 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 			// To Tai: u can just change the class name here to navigate to your scan bill class 
 			if(CameraUtils.checkCameraHardware(getActivity())) startActivity(new Intent(getActivity(), CameraActivity.class));
 			else Toast.makeText(getActivity(), "Camera is not supported on your device", Toast.LENGTH_LONG).show();
+			break;
 		default:
 			break;
 		}
@@ -259,11 +289,126 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		camExpense.setAmount(amount);
 		
 		if(imgPath!=null) {
+			receiptImgPath = imgPath;
 			BitmapFactory.Options options = new BitmapFactory.Options();
 	        options.inSampleSize = 6; //down-sampling the image
-			receiptImg = BitmapFactory.decodeFile(imgPath, options);
+			receiptImg = BitmapFactory.decodeFile(receiptImgPath, options);
+			
+			hasImg = true;
 		}
 		
-		cameFlag = true;		
+		cameFlag = true;
+		
+	}
+	
+	private void zoomImgFromThumb (final View thumbView) {
+		
+		if(receiptImgPath == null || !hasImg) return;
+		
+		BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 1;
+		Bitmap expanededReceiptImg = BitmapFactory.decodeFile(receiptImgPath, options);
+		
+		if(mCurAnimator != null) mCurAnimator.cancel();				
+	
+		final ImageView expandedImageView = (ImageView) getActivity().findViewById(R.id.expanded_image);
+		expandedImageView.setImageBitmap(expanededReceiptImg);
+		
+		final Rect startBounds = new Rect();
+	    final Rect finalBounds = new Rect();
+	    final Point globalOffset = new Point();
+	    
+	    thumbView.getGlobalVisibleRect(startBounds);
+	    getActivity().findViewById(R.id.fragmentShareExpense_container).getGlobalVisibleRect(finalBounds, globalOffset);
+	    startBounds.offset(-globalOffset.x, -globalOffset.y);
+	    finalBounds.offset(-globalOffset.x, -globalOffset.y);
+	    
+	    float startScale;
+	    if ((float) finalBounds.width() / finalBounds.height()
+	            > (float) startBounds.width() / startBounds.height()) {
+	        // Extend start bounds horizontally
+	        startScale = (float) startBounds.height() / finalBounds.height();
+	        float startWidth = startScale * finalBounds.width();
+	        float deltaWidth = (startWidth - startBounds.width()) / 2;
+	        startBounds.left -= deltaWidth;
+	        startBounds.right += deltaWidth;
+	    } else {
+	        // Extend start bounds vertically
+	        startScale = (float) startBounds.width() / finalBounds.width();
+	        float startHeight = startScale * finalBounds.height();
+	        float deltaHeight = (startHeight - startBounds.height()) / 2;
+	        startBounds.top -= deltaHeight;
+	        startBounds.bottom += deltaHeight;
+	    }
+	    
+	    thumbView.setAlpha(0f);
+	    expandedImageView.setVisibility(View.VISIBLE);
+	    
+	    expandedImageView.setPivotX(0f);
+	    expandedImageView.setPivotY(0f);
+	    
+	    AnimatorSet set = new AnimatorSet();
+	    set
+	            .play(ObjectAnimator.ofFloat(expandedImageView, View.X,
+	                    startBounds.left, finalBounds.left))
+	            .with(ObjectAnimator.ofFloat(expandedImageView, View.Y,
+	                    startBounds.top, finalBounds.top))
+	            .with(ObjectAnimator.ofFloat(expandedImageView, View.SCALE_X,
+	            startScale, 1f)).with(ObjectAnimator.ofFloat(expandedImageView,
+	                    View.SCALE_Y, startScale, 1f));
+	    set.setDuration(mShortAnimDur);
+	    set.setInterpolator(new DecelerateInterpolator());
+	    set.addListener(new AnimatorListenerAdapter() {
+	        @Override
+	        public void onAnimationEnd(Animator animation) {
+	            mCurAnimator = null;
+	        }
+	        @Override
+	        public void onAnimationCancel(Animator animation) {
+	        	mCurAnimator = null;
+	        }
+	    });
+	    set.start();
+	    mCurAnimator = set;
+	    
+	    final float startScaleFinal = startScale;
+	    expandedImageView.setOnClickListener(new View.OnClickListener() {
+	        @Override
+	        public void onClick(View view) {
+	            if (mCurAnimator != null) mCurAnimator.cancel();
+
+	            AnimatorSet set = new AnimatorSet();
+	            set.play(ObjectAnimator
+	                        .ofFloat(expandedImageView, View.X, startBounds.left))
+	                        .with(ObjectAnimator
+	                                .ofFloat(expandedImageView, 
+	                                        View.Y,startBounds.top))
+	                        .with(ObjectAnimator
+	                                .ofFloat(expandedImageView, 
+	                                        View.SCALE_X, startScaleFinal))
+	                        .with(ObjectAnimator
+	                                .ofFloat(expandedImageView, 
+	                                        View.SCALE_Y, startScaleFinal));
+	            set.setDuration(mShortAnimDur);
+	            set.setInterpolator(new DecelerateInterpolator());
+	            set.addListener(new AnimatorListenerAdapter() {
+	                @Override
+	                public void onAnimationEnd(Animator animation) {
+	                    thumbView.setAlpha(1f);
+	                    expandedImageView.setVisibility(View.GONE);
+	                    mCurAnimator = null;
+	                }
+
+	                @Override
+	                public void onAnimationCancel(Animator animation) {
+	                    thumbView.setAlpha(1f);
+	                    expandedImageView.setVisibility(View.GONE);
+	                    mCurAnimator = null;
+	                }
+	            });
+	            set.start();
+	            mCurAnimator = set;
+	        }
+	    });
 	}
 }
