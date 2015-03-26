@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import com.SimpleScan.simplescan.Camera.CameraUtils;
 import com.SimpleScan.simplescan.Entities.Category;
 import com.SimpleScan.simplescan.Entities.Expense;
 import com.SimpleScan.simplescan.sqlite.DBManager;
@@ -27,6 +28,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class FragmentShareExpense extends Fragment implements View.OnClickListener
 {
@@ -210,7 +212,8 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 			break;
 		case (R.id.SE_im):
 			// To Tai: u can just change the class name here to navigate to your scan bill class 
-			startActivity(new Intent(getActivity(), CameraActivity.class));
+			if(CameraUtils.checkCameraHardware(getActivity())) startActivity(new Intent(getActivity(), CameraActivity.class));
+			else Toast.makeText(getActivity(), "Camera is not supported on your device", Toast.LENGTH_LONG).show();
 		default:
 			break;
 		}

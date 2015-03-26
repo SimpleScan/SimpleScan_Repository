@@ -154,7 +154,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 	    				default:
 	    					flashButton.setBackgroundResource(R.drawable.flash_off_layout);
 	        		}
-        		}
+        		} else Toast.makeText(getApplicationContext(), "Flash is not supported on your device", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -211,7 +211,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 				Log.i("saveButton", "clicked");
 				try {
 					String imgPath = Filesystem.saveBitmap (bitmap);
-					Toast.makeText(getApplicationContext(), "Image saved", Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), "Image saved", Toast.LENGTH_SHORT).show();
 
 					FragmentShareExpense.setDataFromCam(nameText, dateText, amt, imgPath);
 					finish();
@@ -349,8 +349,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         	Rectview.setOnUpCallback(new DragRectView.OnUpCallback() {
                 @Override
                 public void onRectFinished(final Rect rect) {
-                    Toast.makeText(getApplicationContext(), 
-                    		       "Rect is ("+rect.left+", "+rect.top+", "+rect.right+", "+rect.bottom+")", Toast.LENGTH_LONG).show();                                       
+                    /*Toast.makeText(getApplicationContext(), 
+                    		       "Rect is ("+rect.left+", "+rect.top+", "+rect.right+", "+rect.bottom+")", Toast.LENGTH_SHORT).show();*/                                       
                     //Bitmap previewBitmap = Bitmap.createScaledBitmap(((BitmapDrawable) PreviewImage.getDrawable()).getBitmap(), PreviewImage.getWidth(), PreviewImage.getHeight(), false);
                     Bitmap previewBitmap = Bitmap.createScaledBitmap(PreviewImage.getPhotoBitmap(), PreviewImage.getWidth(), PreviewImage.getHeight(), false);            	            		
                     //System.out.println(rect.height()+"    "+previewBitmap.getHeight()+"      "+rect.width()+"    "+previewBitmap.getWidth());
@@ -362,18 +362,18 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                     	if(recordNameOn) {
                     		nameText = OCR.detect_text(croppedBitmap, "detect_all");
                     		OCR_name.setText(nameText);
-                    		Toast.makeText(getApplicationContext(), nameText, Toast.LENGTH_LONG).show();
+                    		Toast.makeText(getApplicationContext(), nameText, Toast.LENGTH_SHORT).show();
                     	}
                     	if(recordDateOn) {
                     		dateText = OCR.detect_text(croppedBitmap, "detect_date");       		
                     		OCR_date.setText(dateText);
-                    		Toast.makeText(getApplicationContext(), dateText, Toast.LENGTH_LONG).show();
+                    		Toast.makeText(getApplicationContext(), dateText, Toast.LENGTH_SHORT).show();
                     	}
                     	if(recordAmtOn) {
                     		amtText = OCR.detect_text(croppedBitmap, "detect_numbers");
                     		if(amtText != "Couldn't detect amount") OCR_amt.setText("$"+amtText);
                     		else OCR_amt.setText(amtText);
-                    		Toast.makeText(getApplicationContext(), amtText, Toast.LENGTH_LONG).show();
+                    		Toast.makeText(getApplicationContext(), amtText, Toast.LENGTH_SHORT).show();
                     		
                     		try {
                     			amt=OCR.amtStr2double(amtText);
