@@ -263,6 +263,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 					Rectview.setBorderColor(Color.RED);
 					OCR_name.setText("Crop the name");					
 				}
+				switchOCRIcons();
 			}
 		});
         
@@ -300,6 +301,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 					Rectview.setBorderColor(Color.BLUE);
 					OCR_date.setText("Crop the date");	
 				}
+				switchOCRIcons();
 			}
 		});
         
@@ -337,6 +339,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 					Rectview.setBorderColor(Color.GREEN);
 					OCR_amt.setText("Crop the amount");
 				}
+				switchOCRIcons();
 			}
 		});       	    
         
@@ -399,6 +402,33 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     private void setCropping(boolean isCropping) {
     	if(PreviewImage != null) PreviewImage.setCroppingMode(isCropping);;
     	if(Rectview != null) Rectview.setCroppingMode(isCropping);
+    }
+    
+    private void switchOCRIcons() {
+    	recordNameButton = (Button) findViewById(R.id.recordNameButton);
+        recordDateButton = (Button) findViewById(R.id.recordDateButton);
+        recordAmtButton = (Button) findViewById(R.id.recordAmtButton);
+        
+    	if(recordNameOn) {
+    		recordNameButton.setBackgroundResource(R.drawable.record_name_on_layout);
+    		recordDateButton.setBackgroundResource(R.drawable.record_date_layout);
+    		recordAmtButton.setBackgroundResource(R.drawable.record_amt_layout);
+    	}
+    	else if(recordDateOn) {
+    		recordNameButton.setBackgroundResource(R.drawable.record_name_layout);
+    		recordDateButton.setBackgroundResource(R.drawable.record_date_on_layout);
+    		recordAmtButton.setBackgroundResource(R.drawable.record_amt_layout);
+    	}
+    	else if(recordAmtOn) {
+    		recordNameButton.setBackgroundResource(R.drawable.record_name_layout);
+    		recordDateButton.setBackgroundResource(R.drawable.record_date_layout);
+    		recordAmtButton.setBackgroundResource(R.drawable.record_amt_on_layout);
+    	}
+    	else {
+    		recordNameButton.setBackgroundResource(R.drawable.record_name_layout);
+    		recordDateButton.setBackgroundResource(R.drawable.record_date_layout);
+    		recordAmtButton.setBackgroundResource(R.drawable.record_amt_layout);
+    	}
     }
 
     @Override
