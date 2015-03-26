@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.SimpleScan.simplescan.Camera.BitmapUtils;
 import com.SimpleScan.simplescan.Camera.CameraEngine;
+import com.SimpleScan.simplescan.Camera.CameraUtils;
 import com.SimpleScan.simplescan.Camera.OCR;
 import com.SimpleScan.simplescan.Camera.Views.DragRectView;
 import com.SimpleScan.simplescan.Camera.Views.ZoomableImageView;
@@ -67,23 +68,24 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     }
     
     @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-
-        Log.d(TAG, "Surface Created - starting camera");
-
-        if (cameraEngine != null && !cameraEngine.isOn()) {
-            cameraEngine.start();
-        }
-
-        if (cameraEngine != null && cameraEngine.isOn()) {
-            Log.d(TAG, "Camera engine already on");
-            return;
-        }
-
-        cameraEngine = new CameraEngine(holder);
-        cameraEngine.start();
-
-        Log.d(TAG, "Camera engine started");
+    public void surfaceCreated(SurfaceHolder holder) {   	
+    	if(CameraUtils.checkCameraHardware(this)) {
+	        Log.d(TAG, "Surface Created - starting camera");
+	
+	        if (cameraEngine != null && !cameraEngine.isOn()) {
+	        	cameraEngine.start();
+	        }
+	
+	        if (cameraEngine != null && cameraEngine.isOn()) {
+	            Log.d(TAG, "Camera engine already on");
+	            return;
+	        }
+	
+	        cameraEngine = new CameraEngine(holder);
+	        cameraEngine.start();
+	
+	        Log.d(TAG, "Camera engine started");
+    	} else finish();    	
     }
     
 	@Override
@@ -138,24 +140,24 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
         if(v == flashButton) {
         	if(cameraEngine!=null && cameraEngine.isOn()){
-        		
-        		//cameraEngine.toggleFlash(this);
-        		cameraEngine.cycleFlashMode(this);
-        		
-        		switch(cameraEngine.checkFlashMode()) {
-        			case 1:
-        				flashButton.setBackgroundResource(R.drawable.flash_on_layout);
-        				break;
-        			case 2:
-        				flashButton.setBackgroundResource(R.drawable.flash_auto_layout);
-        				break;
-    				default:
-    					flashButton.setBackgroundResource(R.drawable.flash_off_layout);
+        		if(CameraUtils.isFlashSupported(this)) {
+	        		//cameraEngine.toggleFlash(this);
+	        		cameraEngine.cycleFlashMode(this);
+	        		
+	        		switch(cameraEngine.checkFlashMode()) {
+	        			case 1:
+	        				flashButton.setBackgroundResource(R.drawable.flash_on_layout);
+	        				break;
+	        			case 2:
+	        				flashButton.setBackgroundResource(R.drawable.flash_auto_layout);
+	        				break;
+	    				default:
+	    					flashButton.setBackgroundResource(R.drawable.flash_off_layout);
+	        		}
         		}
             }
         }
     }
-    
 
     @Override
     public void onPictureTaken(byte[] data, Camera camera) { 	
