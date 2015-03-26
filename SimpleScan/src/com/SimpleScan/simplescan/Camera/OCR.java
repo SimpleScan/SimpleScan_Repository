@@ -9,11 +9,14 @@ import com.googlecode.tesseract.android.TessBaseAPI;
 
 public class OCR {
 	
+	public static final boolean wordLimit = true;
+	
 	public static final String DETECT_ALL = "detect_all";
 	public static final String DETECT_NUMBERS = "detect_numbers";
 	public static final String DETECT_DATE = "detect_date";
 	
 	private final static String [] MONTHS = {"january", "febuary", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"};
+	
 	
 	//For EditExpense, convert amount from String to double, for budget subtracting 
 	public static double amtStr2double (String amtStr) {
@@ -42,6 +45,7 @@ public class OCR {
     	
     	if (detectOption == DETECT_NUMBERS) recognizedText = extractNumbers(recognizedText);
     	else if(detectOption == DETECT_DATE) recognizedText = extractDate(recognizedText);
+    	else if(wordLimit && recognizedText.length() >= 15) recognizedText = recognizedText.substring(0, 15);
     	
     	baseApi.end();
     	
@@ -52,28 +56,42 @@ public class OCR {
     	String outputString="";
     	boolean numberFound = false;
     	
-    	for(int i=0; i<inputString.length(); i++) {
-    		if(isNumber(inputString.charAt(i))) outputString += inputString.charAt(i);
-    		numberFound = true;
+    	int numberTextLength = inputString.length();
+    	for(int i=0; i<numberTextLength; i++) {
+    		if(isNumber(inputString.charAt(i))){
+    			numberFound = true;
+    			
+    			outputString += inputString.charAt(i);
+    			
+    			if(inputString.charAt(i) == '.' //rounding to 2 decimal places
+    			&& i+2 < inputString.length()) numberTextLength = i+2+1;
+    		}
     	}
-
-    	if(numberFound) {
-    		//outputString = "$" + outputString;
-    		outputString = outputString;
-    		numberFound = false;
-    	}
+    	
+    	if(numberFound) numberFound = false;
     	else outputString = "Couldn't detect amount";
     	
     	return outputString;
     }
     
     private static String extractDate(String inputString){
-    	String m="", d="", y="";
     	String outputString="";
 
     	inputString = inputString.toLowerCase(Locale.ENGLISH);
     	Log.i("inputString", inputString);
+
+    	if(inputString.contains("/")) outputString = extractDateFromNumbers(inputString); //checking for numbers;
+    			
+    	if(outputString=="") outputString = extractDateFromLetters(inputString); //checking for alphabetically-spelling months
     	
+    	return outputString;
+    }
+    
+    private static String extractDateFromLetters(String inputString) {
+    	String m="", d="", y="";
+    	String extractedDate="";
+    	
+    	//Extracting month
     	double [] accuracy = {0,0,0,0,0,0,0,0,0,0,0,0};
     	double curMaxVal=0;
     	int curMaxIdx=0;
@@ -92,19 +110,21 @@ public class OCR {
     	if(curMaxVal > 0) {
 	    	if(String.valueOf(curMaxIdx+1).length() == 1) m = "0"+String.valueOf(curMaxIdx+1)+"/";
 			else m = String.valueOf(curMaxIdx+1)+"/";
-			Log.i("month", m);
     	}
+    	Log.i("month", m);
     	
-    	for(int i=0; i<inputString.length(); i++) {
-    		
-    		if(m!="" && d!="") {
+		for(int i=0; i<inputString.length(); i++) {	
+    		if(m!="" && d!="") { //extracting year   			
     			if(i+3 < inputString.length()) {
     				if(isNumber(inputString.charAt(i)) && isNumber(inputString.charAt(i+1)) && isNumber(inputString.charAt(i+2)) && isNumber(inputString.charAt(i+3))) {
-    					if(Integer.parseInt(inputString.substring(i, i+4)) >= 2000 && Integer.parseInt(inputString.substring(i, i+4)) <= 2115) y = inputString.substring(i, i+4);
-    					Log.i("year", y);
+    					if(Integer.parseInt(inputString.substring(i, i+4)) >= 2000 && Integer.parseInt(inputString.substring(i, i+4)) <= 2115) {
+    						y = inputString.substring(i, i+4);	
+    					}
     				}
     			}
-    		} else if(m!="") {
+    			Log.i("year", y);
+    			
+    		} else if(m!="") { //extracting date
     			if(i+1 < inputString.length()) {
     				if(isNumber(inputString.charAt(i)) && isNumber(inputString.charAt(i+1))) {
     					if(Integer.parseInt(inputString.substring(i, i+2)) >= 1 && Integer.parseInt(inputString.substring(i, i+2)) <= 31) 
@@ -113,14 +133,135 @@ public class OCR {
     			} else if(isNumber(inputString.charAt(i))) {
     				if(Integer.parseInt(inputString.substring(i, i+1)) >= 1 && Integer.parseInt(inputString.substring(i, i+1)) <= 9) 
     					d = "0"+inputString.substring(i, i+1)+"/";
-    			}
-    			Log.i("date", d);   					
+    			} 	
+    			Log.i("date", d);  
 			} 
-		}	
+		}
     	
-    	if(m!="" && d!="" && y!="") outputString = m + d + y;
+		if(m!="" && d!="" && y!="") extractedDate = m + d + y;
+		
+    	return extractedDate;
+    }
+    
+    private static String extractDateFromNumbers(String inputString) {
+    	String m="", d="", y="";
+    	String extractedDate="";    	
     	
-    	return outputString;
+		for(int i=0; i<inputString.length(); i++) {
+			if(m!="" && d!="" && y=="") { //extracting year
+				if(i+3 < inputString.length()) {
+    				if(isNumber(inputString.charAt(i)) && isNumber(inputString.charAt(i+1)) && isNumber(inputString.charAt(i+2)) && isNumber(inputString.charAt(i+3))) {
+    					if(Integer.parseInt(inputString.substring(i, i+4)) >= 2000 && Integer.parseInt(inputString.substring(i, i+4)) <= 2115) {
+    						y = inputString.substring(i, i+4);	
+    					}
+    				}
+    			} else if(i+1 < inputString.length()) {
+					if(isNumber(inputString.charAt(i)) && isNumber(inputString.charAt(i+1))) {
+						if(Integer.parseInt(inputString.substring(i, i+2)) >= 0 && Integer.parseInt(inputString.substring(i, i+2)) <= 99) {
+							y = "20" + inputString.substring(i, i+2);
+						}
+					}	
+				}
+			}
+			else if(m!="" && d=="" && y=="") { //extracting date
+				if(i+2 < inputString.length()) {
+					if(isNumber(inputString.charAt(i)) && isNumber(inputString.charAt(i+1)) && inputString.charAt(i+2) == '/') {
+						if(Integer.parseInt(inputString.substring(i, i+2)) >= 1 && Integer.parseInt(inputString.substring(i, i+2)) <= 31) { 
+							d = inputString.substring(i, i+2)+"/";
+						}
+					}
+				}
+			}
+			else if(m=="" && d=="" && y=="") { //extracting month
+    			if(i+3 <= inputString.length()) {
+    				if(isNumber(inputString.charAt(i)) && isNumber(inputString.charAt(i+1)) && inputString.charAt(i+2) == '/') {
+	    				
+		    			if (inputString.charAt(i) == '0') { 
+		    				switch(inputString.charAt(i+1)) {
+			    				case '1' :
+				    				m="01/";
+				    				break;
+			    				case '2' :
+				    				m="02/";
+				    				break;
+			    				case '3' :
+				    				m="03/";
+				    				break;
+			    				case '4' :
+				    				m="04/";
+				    				break;
+			    				case '5' :
+				    				m="05/";
+				    				break;
+			    				case '6' :
+				    				m="06/";
+				    				break;
+			    				case '7' :
+				    				m="07/";
+				    				break;
+			    				case '8' :
+				    				m="08/";
+				    				break;
+			    				case '9' :
+				    				m="09/";
+				    				//break;
+		    				} 
+		    			} else if(inputString.charAt(i) == '1') {
+		    				switch (inputString.charAt(i+1)) {
+		    					case '0' :
+		    						m="10/";
+		    						break;
+		    					case '1' :
+		    						m="11/";
+		    						break;
+		    					case '2' :
+		    						m="12/";
+		    						//break;	    						
+		    				}
+	    				}
+    				}
+    			}
+    			if (m=="" && i+2 <= inputString.length()) {
+    				if(isNumber(inputString.charAt(i)) && inputString.charAt(i+1) == '/') {
+	    				Log.i("month", inputString.substring(i, i+2));
+	    				
+	    				switch(inputString.charAt(i)) {
+		    				case '1' :
+			    				m="01/";
+			    				break;
+		    				case '2' :
+			    				m="02/";
+			    				break;
+		    				case '3' :
+			    				m="03/";
+			    				break;
+		    				case '4' :
+			    				m="04/";
+			    				break;
+		    				case '5' :
+			    				m="05/";
+			    				break;
+		    				case '6' :
+			    				m="06/";
+			    				break;
+		    				case '7' :
+			    				m="07/";
+			    				break;
+		    				case '8' :
+			    				m="08/";
+			    				break;
+		    				case '9' :
+			    				m="09/";
+			    				//break;
+	    				} 
+    				}
+    			}
+			}
+		}   	
+    	
+    	if(m!="" && d!="" && y!="") extractedDate = m + d + y;
+    	
+    	return extractedDate;
     }
     
     private static boolean isNumber(char input) {
