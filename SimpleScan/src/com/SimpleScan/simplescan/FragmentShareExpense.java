@@ -58,7 +58,6 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	private Animator mCurAnimator;
 	private int mShortAnimDur;
 	private static boolean hasImg;
-	private static boolean viewExpanded;
 	
 	public FragmentShareExpense() 
 	{
@@ -122,7 +121,6 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		setUpCategory(v);		
 		
 		hasImg = false;
-		viewExpanded = false;
 		
 		return v;
 	}
