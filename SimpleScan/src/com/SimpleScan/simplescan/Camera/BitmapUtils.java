@@ -6,6 +6,12 @@ import android.graphics.Matrix;
 
 public class BitmapUtils extends BitmapFactory {
 	
+	public static Bitmap createSampledBitmap(String imgPath, int sampleSize) {
+		BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = sampleSize; //down-sampling the image
+		return BitmapFactory.decodeFile(imgPath, options);
+	}
+	
 	public static Bitmap createPreviewBitmap(byte[] data) {
     	
     	BitmapFactory.Options options = new BitmapFactory.Options();
