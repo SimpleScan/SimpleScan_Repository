@@ -17,7 +17,7 @@
         android:layout_height="70dp"     
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginBottom="30dp"
-        android:background="@drawable/shutter_layout" />
+        android:background="@drawable/shutter_selector" />
  
     <Button
         android:id="@+id/focus_button"
@@ -28,7 +28,7 @@
         android:layout_marginBottom="40dp"
         android:layout_marginRight="30dp"  
         android:layout_marginEnd="50dp"
-        android:background="@drawable/focus_layout" />
+        android:background="@drawable/focus_selector" />
 
     <Button
         android:id="@+id/flash_button"

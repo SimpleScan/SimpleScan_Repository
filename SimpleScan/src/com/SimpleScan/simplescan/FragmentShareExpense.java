@@ -374,12 +374,19 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	    
 	    //Upon clicking the zoomed-in image, it should zoom back down to the original
 	    final float startScaleFinal = startScale;
+	    
+	    /*//For press and hold
+	     * expandedImageView.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+		    public boolean onLongClick(View theView) {
+		    */
 	    expandedImageView.setOnClickListener(new View.OnClickListener() {
 	        @Override
 	        public void onClick(View view) {
+
 	            if (mCurAnimator != null) mCurAnimator.cancel();
 
-	            //Animate the 4 positioning/scaling properties in parallel, back to the original
+	            //Animate the four positioning/scaling properties in parallel, back to the original
 	            AnimatorSet set = new AnimatorSet();
 	            set			.play(ObjectAnimator.ofFloat(expandedImageView, View.X, startBounds.left))
 	                        .with(ObjectAnimator.ofFloat(expandedImageView, View.Y,startBounds.top))
@@ -404,6 +411,8 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	            });
 	            set.start();
 	            mCurAnimator = set;
+	            
+	            //return true;
 	        }
 	    });
 	}
