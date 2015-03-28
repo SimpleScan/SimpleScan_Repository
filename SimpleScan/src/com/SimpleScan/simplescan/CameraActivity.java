@@ -14,17 +14,17 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +37,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     Button shutterButton;
     Button focusButton;
     Button flashButton;
+    Button zoominButton;
+    Button zoomoutButton;
     //Camera back-end
     SurfaceView cameraFrame;
     CameraEngine cameraEngine;    
@@ -52,7 +54,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     TextView OCR_name;
     TextView OCR_date;
     TextView OCR_amt;    
-	//ImageView PreviewImage;
 	ZoomableImageView PreviewImage;
     private DragRectView Rectview;    
 	//Preview back-end
@@ -94,21 +95,24 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
         if(_preview) {
         	setPreview();
-        } else{      	
-        	cameraFrame = (SurfaceView) findViewById(R.id.camera_frame);
+        } else{
 	        shutterButton = (Button) findViewById(R.id.shutter_button);
 	        focusButton = (Button) findViewById(R.id.focus_button);
 	        flashButton = (Button) findViewById(R.id.flash_button);
+	        zoominButton = (Button) findViewById(R.id.zoomin_button);
+	        zoomoutButton = (Button) findViewById(R.id.zoomout_button);
+	        cameraFrame = (SurfaceView) findViewById(R.id.camera_frame);
 	        
 	        shutterButton.setOnClickListener(this);
 	        focusButton.setOnClickListener(this);
 	        flashButton.setOnClickListener(this);
+	        zoominButton.setOnClickListener(this);
+	        zoomoutButton.setOnClickListener(this);
 	
 	        SurfaceHolder surfaceHolder = cameraFrame.getHolder();
 	        surfaceHolder.addCallback(this);
 	        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-	
-	        cameraFrame.setOnClickListener(this);
+	        //cameraFrame.setOnClickListener(this);
         }
     }
 
@@ -116,9 +120,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     protected void onPause() {
         super.onPause();
 
-        if (cameraEngine != null && cameraEngine.isOn()) {
-            cameraEngine.stop();
-        }
+        if (cameraEngine != null && cameraEngine.isOn()) cameraEngine.stop();
 
         SurfaceHolder surfaceHolder = cameraFrame.getHolder();
         surfaceHolder.removeCallback(this);
@@ -127,21 +129,16 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 	@Override
     public void onClick(View v) {
         if(v == shutterButton){
-            if(cameraEngine != null && cameraEngine.isOn()){
-                cameraEngine.takeShot(this, this, this);
-            }
+            if(cameraEngine != null && cameraEngine.isOn()) cameraEngine.takeShot(this, this, this);
         }
         
         if(v == focusButton){
-            if(cameraEngine!=null && cameraEngine.isOn()){
-                cameraEngine.requestFocus();
-            }
+            if(cameraEngine!=null && cameraEngine.isOn()) cameraEngine.requestFocus();
         }
 
         if(v == flashButton) {
         	if(cameraEngine!=null && cameraEngine.isOn()){
         		if(CameraUtils.isFlashSupported(this)) {
-	        		//cameraEngine.toggleFlash(this);
 	        		cameraEngine.cycleFlashMode(this);
 	        		
 	        		switch(cameraEngine.checkFlashMode()) {
@@ -157,6 +154,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         		} else Toast.makeText(getApplicationContext(), "Flash is not supported on your device", Toast.LENGTH_SHORT).show();
             }
         }
+        if(v == zoominButton) cameraEngine.requestZoom("in");
+		if(v == zoomoutButton) cameraEngine.requestZoom("out");
     }
 
     @Override
@@ -199,7 +198,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         recordAmtButton = (Button) findViewById(R.id.recordAmtButton);
         
         PreviewImage = (ZoomableImageView) findViewById(R.id.previewImage);
-        //PreviewImage = (ImageView) findViewById(R.id.previewImage);
     	Rectview = (DragRectView) findViewById(R.id.dragRect);
     	Rectview.setVisibility(View.INVISIBLE);
               

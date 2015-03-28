@@ -15,7 +15,7 @@
     	    android:layout_marginLeft="5dp"
     	    android:layout_marginTop="10dp"
     	    android:gravity="left"
-    	    android:text="Name"
+    	    android:text="@string/preview_name"
     	    android:textColor="@color/Foodpills"
     	    android:textSize="15sp" />
     	
@@ -28,7 +28,7 @@
     	    android:layout_toLeftOf="@+id/OCR_amt"
     	    android:layout_toRightOf="@+id/OCR_name"
     	    android:gravity="center_horizontal"
-    	    android:text="Date"
+    	    android:text="@string/preview_date"
     	    android:textColor="@color/Foodpills"
     	    android:textSize="15sp" />
     	
@@ -42,23 +42,10 @@
     	    android:layout_marginRight="5dp"
     	    android:layout_marginTop="10dp"
     	    android:gravity="right"
-    	    android:text="Amount"
+    	    android:text="@string/preview_amt"
     	    android:textColor="@color/Foodpills"
     	    android:textSize="15sp" />
-<!--  
-		<ImageView
-		    android:id="@+id/previewImage"
-		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-		    android:layout_above="@+id/recordDateButton"
-		    android:layout_below="@+id/OCR_date"
-		    android:layout_alignParentLeft="true"
-		    android:layout_alignParentRight="true"    
-		    android:layout_centerHorizontal="true"
-		    android:layout_marginTop="15dp"
-		    android:layout_marginBottom="10dp"
-		    android:contentDescription="preview image" />
--->	  
+
 		<com.SimpleScan.simplescan.Camera.Views.ZoomableImageView
 		    android:id="@+id/previewImage"
 		    android:layout_width="fill_parent"
@@ -70,7 +57,7 @@
 		    android:layout_centerHorizontal="true"
 		    android:layout_marginTop="15dp"
 		    android:layout_marginBottom="10dp"
-		    android:contentDescription="preview image" />
+		    android:contentDescription="@string/zoom_desc" />
 	
 		<com.SimpleScan.simplescan.Camera.Views.DragRectView
             android:id="@+id/dragRect"

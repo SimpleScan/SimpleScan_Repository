@@ -1,11 +1,13 @@
 package com.SimpleScan.simplescan.Camera;
 
 import java.io.IOException;
-
 import android.content.Context;
+import android.graphics.PointF;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
+import android.util.FloatMath;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 public class CameraEngine {
@@ -34,7 +36,6 @@ public class CameraEngine {
     public void requestFocus() {
         if (camera == null) return;
         if (isOn()) camera.autoFocus(autoFocusCallback);
-
     }
     
     public void cycleFlashMode(Context context) {
@@ -75,6 +76,30 @@ public class CameraEngine {
     		    cam_parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
     		    camera.setParameters(cam_parameters);
     	}
+    }
+    
+    public void requestZoom(String zoomMode) {
+    	Parameters cam_parameters = camera.getParameters();
+    	if(cam_parameters.isZoomSupported()) {
+	    	int maxZoom = cam_parameters.getMaxZoom();
+	    	int zoomFactor = maxZoom/5;
+	    	int zoom = cam_parameters.getZoom();
+			
+			switch(zoomMode) {
+			case "in" :
+				zoom += zoomFactor;
+				break;
+			case "out" :
+				zoom -= zoomFactor;
+				break;
+			}
+			
+			if(zoom < 0) zoom = 0;
+			if(zoom > maxZoom) zoom = maxZoom;
+
+			cam_parameters.setZoom(zoom);
+			camera.setParameters(cam_parameters);
+		}
     }
     
     public void start() {

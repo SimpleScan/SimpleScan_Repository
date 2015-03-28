@@ -22,4 +22,9 @@
         <item>Blue</item>
         <item>Purple</item>
     </string-array>
+    
+    <string name="preview_name">Name</string>
+    <string name="preview_date">Date</string>
+    <string name="preview_amt">Amount</string>
+    <string name="zoom_desc">Preview Image</string>
 </resources>
