@@ -1,0 +1,129 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+ 
+        <TextView
+            android:id="@+id/SE_txtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/SE_im"
+            android:layout_marginRight="21dp"
+            android:layout_marginTop="23dp"
+            android:layout_toLeftOf="@+id/SE_im"
+            android:text="Name"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/SE_im"
+            android:layout_width="100sp"
+            android:layout_height="100sp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/ic_launcher" />
+
+        <TextView
+            android:id="@+id/SE_txtDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/SE_txtName"
+            android:layout_below="@+id/SE_txtName"
+            android:layout_marginTop="30dp"
+            android:text="Date"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/SE_txtAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/SE_txtDate"
+            android:layout_below="@+id/SE_txtDate"
+            android:layout_marginTop="30dp"
+            android:text="Amount"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/SE_txtCate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/SE_txtAmount"
+            android:layout_below="@+id/SE_txtAmount"
+            android:layout_marginTop="30dp"
+            android:text="Category"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/SE_editName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/SE_txtName"
+            android:layout_toRightOf="@+id/SE_txtName"
+            android:ems="8" >
+
+            <requestFocus android:layout_width="match_parent" />
+
+        </EditText>
+
+        <EditText
+            android:id="@+id/SE_editDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/SE_txtAmount"
+            android:layout_toRightOf="@+id/SE_txtName"
+            android:inputType="date" 
+            android:ems="8" />
+
+        <EditText
+            android:id="@+id/SE_editAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/SE_txtCate"
+            android:layout_toRightOf="@+id/SE_txtName"
+            android:inputType="number"
+            android:ems="8" />
+
+        <EditText
+            android:id="@+id/SE_editCate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/SE_txtCate"
+            android:layout_toRightOf="@+id/SE_txtName"
+            android:ems="8" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true" >
+
+            <Button
+                android:id="@+id/SE_btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.33"
+                android:text="Save" />
+
+            <Button
+                android:id="@+id/SE_btnDel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.33"
+                android:text="Delete" />
+
+            <Button
+                android:id="@+id/SE_btnShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.33"
+                android:text="Share " />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

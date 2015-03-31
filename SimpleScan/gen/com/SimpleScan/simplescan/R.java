@@ -1694,12 +1694,24 @@ containing a value of this type.
         public static final int E_lblListItem=0x7f090047;
         public static final int E_sharedCheckbox=0x7f09006a;
         public static final int E_text1=0x7f090067;
-        public static final int OCRtext=0x7f090070;
+        public static final int OCRtext=0x7f09007c;
         public static final int O_addExpenseButton=0x7f09006c;
         public static final int O_partialExpensesListView=0x7f09006b;
         public static final int O_remainingBudget=0x7f09006f;
         public static final int O_text1=0x7f09006e;
         public static final int O_text2=0x7f09006d;
+        public static final int SE_btnDel=0x7f09007a;
+        public static final int SE_btnSave=0x7f090079;
+        public static final int SE_btnShare=0x7f09007b;
+        public static final int SE_editAmount=0x7f090077;
+        public static final int SE_editCate=0x7f090078;
+        public static final int SE_editDate=0x7f090076;
+        public static final int SE_editName=0x7f090075;
+        public static final int SE_im=0x7f090071;
+        public static final int SE_txtAmount=0x7f090073;
+        public static final int SE_txtCate=0x7f090074;
+        public static final int SE_txtDate=0x7f090072;
+        public static final int SE_txtName=0x7f090070;
         public static final int action_bar=0x7f090031;
         public static final int action_bar_activity_content=0x7f090003;
         public static final int action_bar_container=0x7f090030;
@@ -1713,7 +1725,7 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f09002e;
         public static final int action_mode_bar_stub=0x7f09002d;
         public static final int action_mode_close_button=0x7f090020;
-        public static final int action_settings=0x7f090074;
+        public static final int action_settings=0x7f090080;
         public static final int activity_chooser_view_content=0x7f090021;
         public static final int always=0x7f090014;
         public static final int beginning=0x7f09001b;
@@ -1752,12 +1764,12 @@ containing a value of this type.
         public static final int never=0x7f090017;
         public static final int none=0x7f09000f;
         public static final int normal=0x7f09000b;
-        public static final int previewImage=0x7f090073;
+        public static final int previewImage=0x7f09007f;
         public static final int progress_circular=0x7f090007;
         public static final int progress_horizontal=0x7f090008;
         public static final int radio=0x7f09002b;
-        public static final int retakeButton=0x7f090072;
-        public static final int saveButton=0x7f090071;
+        public static final int retakeButton=0x7f09007e;
+        public static final int saveButton=0x7f09007d;
         public static final int search_badge=0x7f090035;
         public static final int search_bar=0x7f090034;
         public static final int search_button=0x7f090036;
@@ -1845,8 +1857,9 @@ containing a value of this type.
         public static final int fragment_edit_expense_test=0x7f030020;
         public static final int fragment_expenses=0x7f030021;
         public static final int fragment_overview=0x7f030022;
-        public static final int image_preview=0x7f030023;
-        public static final int support_simple_spinner_dropdown_item=0x7f030024;
+        public static final int fragment_share_expense=0x7f030023;
+        public static final int image_preview=0x7f030024;
+        public static final int support_simple_spinner_dropdown_item=0x7f030025;
     }
     public static final class menu {
         public static final int main=0x7f0d0000;
