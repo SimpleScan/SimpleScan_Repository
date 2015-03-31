@@ -1,51 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center_horizontal|center_vertical">
-    
-    <RelativeLayout android:layout_width="fill_parent"
-    				android:layout_height="wrap_content"
-    				android:layout_weight="6"
-    				android:gravity="center_horizontal|center_vertical">
+    android:background="@color/Beachstorm"
+    android:gravity="center_horizontal|center_vertical" >
+    	
+    	<TextView
+    	    android:id="@+id/OCR_name"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_alignParentLeft="true"
+    	    android:layout_alignRight="@+id/recordNameButton"
+    	    android:layout_marginBottom="10dp"
+    	    android:layout_marginLeft="5dp"
+    	    android:layout_marginTop="10dp"
+    	    android:gravity="left"
+    	    android:text="@string/preview_name"
+    	    android:textColor="@color/Foodpills"
+    	    android:textSize="15sp" />
+    	
+    	<TextView
+    	    android:id="@+id/OCR_date"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_marginBottom="10dp"
+    	    android:layout_marginTop="10dp"
+    	    android:layout_toLeftOf="@+id/OCR_amt"
+    	    android:layout_toRightOf="@+id/OCR_name"
+    	    android:gravity="center_horizontal"
+    	    android:text="@string/preview_date"
+    	    android:textColor="@color/Foodpills"
+    	    android:textSize="15sp" />
+    	
+    	<TextView
+    	    android:id="@+id/OCR_amt"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_alignLeft="@+id/recordAmtButton"
+    	    android:layout_alignParentRight="true"
+    	    android:layout_marginBottom="10dp"
+    	    android:layout_marginRight="5dp"
+    	    android:layout_marginTop="10dp"
+    	    android:gravity="right"
+    	    android:text="@string/preview_amt"
+    	    android:textColor="@color/Foodpills"
+    	    android:textSize="15sp" />
 
-	    <TextView
-	        android:id="@+id/OCRtext"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_above="@+id/saveButton"
-	        android:layout_alignParentLeft="true"
-	        android:layout_below="@id/image"
-	        android:gravity="center_horizontal"
-	        android:text="No Image"
-	        android:textSize="25dp" />
-
-	    <Button
-	        android:id="@+id/retakeButton"
-	        android:layout_width="109dp"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentRight="true"
-	        android:layout_below="@+id/OCRtext"
-	        android:text="Retake" />
-
-	    <ImageView
-	        android:id="@+id/previewImage"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_above="@+id/OCRtext"
-	        android:layout_alignParentLeft="true"
-	        android:layout_alignParentTop="true"
-	        android:gravity="center_horizontal" />
-
-	    <Button
-	        android:id="@+id/saveButton"
-	        android:layout_width="109dp"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentBottom="true"
-	        android:layout_alignParentLeft="true"
-	        android:text="Save" />
-    		   
-   	</RelativeLayout>
+		<com.SimpleScan.simplescan.Camera.Views.ZoomableImageView
+		    android:id="@+id/previewImage"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_above="@+id/recordDateButton"
+		    android:layout_below="@+id/OCR_date"
+		    android:layout_alignParentLeft="true"
+		    android:layout_alignParentRight="true"    
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginTop="15dp"
+		    android:layout_marginBottom="10dp"
+		    android:contentDescription="@string/zoom_desc" />
 	
-</LinearLayout>
+		<com.SimpleScan.simplescan.Camera.Views.DragRectView
+            android:id="@+id/dragRect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+			android:layout_alignTop="@+id/previewImage"
+			android:layout_alignBottom="@+id/previewImage"
+            android:layout_centerHorizontal="true" />
+
+		<Button
+		    android:id="@+id/recordDateButton"
+		    android:layout_width="33dp"
+		    android:layout_height="33dp"
+		    android:layout_alignParentBottom="true"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginTop="10dp"
+		    android:layout_marginBottom="20dp"
+		    android:background="@drawable/record_date_layout" />
+
+		<Button
+		    android:id="@+id/saveButton"
+		    android:layout_width="33dp"
+		    android:layout_height="33dp"
+		    android:layout_alignParentBottom="true"
+		    android:layout_alignParentLeft="true"
+		    android:layout_marginTop="10dp"
+		    android:layout_marginBottom="20dp"
+		    android:layout_marginLeft="10dp"
+		    android:background="@drawable/save_selector" />
+		
+		<Button
+		    android:id="@+id/retakeButton"
+		    android:layout_width="33dp"
+		    android:layout_height="33dp"
+		    android:layout_alignParentBottom="true"
+		    android:layout_alignParentRight="true"
+		    android:layout_marginTop="10dp"
+		    android:layout_marginBottom="20dp"
+		    android:layout_marginRight="10dp"
+		    android:background="@drawable/retake_selector" />
+
+		<Button
+		    android:id="@+id/recordNameButton"
+		    android:layout_width="33dp"
+		    android:layout_height="33dp"
+		    android:layout_toLeftOf="@+id/recordDateButton"
+		    android:layout_alignBaseline="@+id/recordDateButton"
+		    android:layout_alignBottom="@+id/recordDateButton"
+		    android:layout_marginRight="33dp"
+		    android:layout_marginLeft="33dp"
+		    android:background="@drawable/record_name_layout" />
+		
+		<Button
+		    android:id="@+id/recordAmtButton"
+		    android:layout_width="33dp"
+		    android:layout_height="33dp"
+		    android:layout_toRightOf="@+id/recordDateButton"
+		    android:layout_alignBaseline="@+id/recordDateButton"
+		    android:layout_alignBottom="@+id/recordDateButton"
+		    android:layout_marginRight="33dp"
+		    android:layout_marginLeft="33dp"
+		    android:background="@drawable/record_amt_layout" />
+    
+</RelativeLayout>

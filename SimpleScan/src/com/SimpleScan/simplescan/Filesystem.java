@@ -1,7 +1,6 @@
 package com.SimpleScan.simplescan;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,16 +14,15 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 public class Filesystem {
 	
 	public static final int MEDIA_TYPE_IMAGE = 1;
 
-	protected static String _appPath = Environment.getExternalStorageDirectory() + "/SimpleScan";	
-	protected static String _tessPath = Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract";
-	protected static String _traindataPath = Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract/tessdata";
-	public static String _ImgDirPath = Environment.getExternalStorageDirectory() + "/SimpleScan/images";
+	protected static String _appPath = Environment.getExternalStorageDirectory() + "/BasicCamera";	
+	protected static String _tessPath = Environment.getExternalStorageDirectory() + "/BasicCamera/tesseract";
+	protected static String _traindataPath = Environment.getExternalStorageDirectory() + "/BasicCamera/tesseract/tessdata";
+	public static String _ImgDirPath = Environment.getExternalStorageDirectory() + "/BasicCamera/images";
 	
 	public static void init(Context context) {
 		File app_dir = new File(_appPath);
@@ -40,22 +38,25 @@ public class Filesystem {
         }
 	}
 	
-	public static void saveBitmap (Bitmap bitmap) throws IOException {
+	public static String saveBitmap (Bitmap bitmap) throws IOException {
     	
     	File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
     	
     	if (pictureFile == null){
             Log.d("saveBitmap", "Error creating media file, check storage permissions: ");
-            return;
+            return null;
         }
     	
     	FileOutputStream fos = new FileOutputStream(pictureFile);
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
         fos.close();
+        
+        return pictureFile.getPath();
     }
 	
 	private static void makeAppSubdirs(Context context) {
-		File im_direct = new File( Environment.getExternalStorageDirectory() + "/SimpleScan/images" );
+		File im_direct = new File( Environment.getExternalStorageDirectory() + "/BasicCamera/images" );
+		
         if(!im_direct.exists()) {
         	if(im_direct.mkdir()) {
         		

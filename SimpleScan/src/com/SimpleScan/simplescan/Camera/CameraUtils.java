@@ -6,9 +6,9 @@ import android.hardware.Camera;
 import android.util.Log;
 
 public class CameraUtils {
-	
+
 	/** Check if this device has a camera */
-	private boolean checkCameraHardware(Context context) {
+	public static boolean checkCameraHardware(Context context) {
 	    if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
 	    	Log.i("checkCameraHardware", "this device has a camera");
 	        return true;
@@ -30,4 +30,9 @@ public class CameraUtils {
 	    }
 	    return c; // returns null if camera is unavailable
 	}
+	
+	public static boolean isFlashSupported(Context context){ 
+    	return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);   	  
+	}
+	
 }

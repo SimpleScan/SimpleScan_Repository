@@ -35,6 +35,8 @@ public class Main extends FragmentActivity implements OnItemClickListener {
 		super.onCreate(saveInstatnceState);
 		setContentView(R.layout.activity_main);
 		
+		Filesystem.init(this);
+		
 		//enable the action bar
 		getActionBar().setHomeButtonEnabled(true);
 		getActionBar().setDisplayHomeAsUpEnabled(true);		

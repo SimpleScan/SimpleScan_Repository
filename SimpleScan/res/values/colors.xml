@@ -16,4 +16,9 @@
     <color name="Navy">#FF000080</color>
     <color name="Fuchsia">#FFFF00FF</color>
     <color name="Purple">#FF800080</color>
+    
+    <color name="Pondwater">#FFA7DBD8</color>
+    <color name="Beachstorm">#FFE0E4CC</color>
+    <color name="Goldfish">#FFF38630</color>
+    <color name="Foodpills">#FFFA6900</color>
 </resources>
