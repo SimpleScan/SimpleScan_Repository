@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class DragRectVie extends View {
+public class DragRectView extends View {
 	private Paint mRectPaint;
 
 	private int mStartX = 0;
@@ -37,19 +37,19 @@ public class DragRectVie extends View {
 	    void onRectFinished(Rect rect);
 	}
 
-	public DragRectVie(final Context context) {
+	public DragRectView(final Context context) {
 	    super(context);
 	    init();
 	}
 
-	public DragRectVie(final Context context, final AttributeSet attrs) {
+	public DragRectView(final Context context, final AttributeSet attrs) {
 	    super(context, attrs);
 	    init();
 	    
 	    isCropping = false;
 	}
 
-	public DragRectVie(final Context context, final AttributeSet attrs, final int defStyle) {
+	public DragRectView(final Context context, final AttributeSet attrs, final int defStyle) {
 	    super(context, attrs, defStyle);
 	    init();
 	    
