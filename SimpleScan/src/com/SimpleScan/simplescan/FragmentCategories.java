@@ -117,6 +117,14 @@ public class FragmentCategories extends Fragment
 	private String colorPhraser(String color)
 	{
 		String result = "";
+		
+		if(color == "Red") result ="#DF0101";
+		else if(color == "Yellow") result = "#FFFF00";
+		else if(color == "Green") result = "#00FF00";
+		else if(color == "Blue") result = "#2E9AFE";
+		else if(color == "Purple") result = "#CC2EFA";
+		
+		/*
 		switch(color){
 		case"Red":
 			result ="#DF0101";
@@ -134,6 +142,7 @@ public class FragmentCategories extends Fragment
 			result ="#CC2EFA";
 			break;	
 		}
+		*/
 		return result;
 	}
 	
