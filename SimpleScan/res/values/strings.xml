@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SimpleScan</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
+    <string name="cate_color_prompt">Please select a color</string>
+    <string-array name="menu">
+        <item >Overall</item>
+        <item >View Expenses</item>
+        <item >View Contact List</item>
+        <item >View Categories</item>
+    </string-array>
+    <string name="dateFormat">MM/dd/yyyy</string> 
+    <string-array name="cate_color">
+        <item>Please select a color</item>
+        <item>Red</item>
+        <item>Yellow</item>
+        <item>Green</item>
+        <item>Blue</item>
+        <item>Purple</item>
+    </string-array>
+    
+    <string name="preview_name">Name</string>
+    <string name="preview_date">Date</string>
+    <string name="preview_amt">Amount</string>
+    <string name="zoom_desc">Preview Image</string>
+</resources>
