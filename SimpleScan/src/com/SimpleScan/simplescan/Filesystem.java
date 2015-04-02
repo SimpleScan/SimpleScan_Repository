@@ -19,10 +19,10 @@ public class Filesystem {
 	
 	public static final int MEDIA_TYPE_IMAGE = 1;
 
-	protected static String _appPath = Environment.getExternalStorageDirectory() + "/BasicCamera";	
-	protected static String _tessPath = Environment.getExternalStorageDirectory() + "/BasicCamera/tesseract";
-	protected static String _traindataPath = Environment.getExternalStorageDirectory() + "/BasicCamera/tesseract/tessdata";
-	public static String _ImgDirPath = Environment.getExternalStorageDirectory() + "/BasicCamera/images";
+	protected static String _appPath = Environment.getExternalStorageDirectory() + "/SimpleScan";	
+	protected static String _tessPath = Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract";
+	protected static String _traindataPath = Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract/tessdata";
+	public static String _ImgDirPath = Environment.getExternalStorageDirectory() + "/SimpleScan/images";
 	
 	public static void init(Context context) {
 		File app_dir = new File(_appPath);
@@ -55,7 +55,7 @@ public class Filesystem {
     }
 	
 	private static void makeAppSubdirs(Context context) {
-		File im_direct = new File( Environment.getExternalStorageDirectory() + "/BasicCamera/images" );
+		File im_direct = new File( Environment.getExternalStorageDirectory() + "/SimpleScan/images" );
 		
         if(!im_direct.exists()) {
         	if(im_direct.mkdir()) {
