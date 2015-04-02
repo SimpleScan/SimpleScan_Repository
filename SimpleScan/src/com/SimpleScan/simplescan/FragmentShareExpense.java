@@ -2,11 +2,14 @@ package com.SimpleScan.simplescan;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import com.SimpleScan.simplescan.Camera.BitmapUtils;
 import com.SimpleScan.simplescan.Camera.CameraUtils;
+import com.SimpleScan.simplescan.Entities.Category;
 import com.SimpleScan.simplescan.Entities.Expense;
 import com.SimpleScan.simplescan.sqlite.DBManager;
 
@@ -27,10 +30,12 @@ import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class FragmentShareExpense extends Fragment implements View.OnClickListener
@@ -41,7 +46,8 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	private EditText editName;
 	private EditText editDate;
 	private EditText editAmount;
-	
+	private Spinner spinner ;
+	private DBManager dbManager;
 	//For setDataFromCam
 	private static boolean cameFlag = false;
 	private static Expense camExpense = new Expense();
@@ -111,7 +117,7 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		
 		setUpEditExpense(v);
 		setUpDatePicker(v);
-		
+		setUpCategory(v);
 		hasImg = false;
 		mShortAnimDur = getResources().getInteger(android.R.integer.config_shortAnimTime);
 		
@@ -141,7 +147,24 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 			cameFlag = false;
 		}
 	}
-
+	private void setUpCategory(View v)
+	{
+		spinner = (Spinner)v.findViewById(R.id.SE_spinner);
+		List<String> cateNameList = new ArrayList<String>();
+		List<Category> categoriesList = new ArrayList<Category>();
+		dbManager = new DBManager(getActivity());
+		categoriesList = dbManager.getCategories();
+		for(Category c : categoriesList)
+		{
+			cateNameList.add(c.getTitle());
+		}
+		
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), 
+				android.R.layout.simple_spinner_item, cateNameList);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(adapter);
+	}
+	
 	private void setUpEditExpense(View v) {
 		// Set the default values for text fields
 		editName = (EditText) v.findViewById(R.id.SE_editName);
