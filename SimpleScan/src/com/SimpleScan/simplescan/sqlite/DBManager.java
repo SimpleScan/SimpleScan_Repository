@@ -48,8 +48,7 @@ public class DBManager {
 		User user = new User();
 
 		// Define a projection that specifies which columns from the database
-		//String[] columns = { UserTable._ID, UserTable.COLUMN_NAME_USERNAME,UserTable.COLUMN_NAME_USERID, };
-		String[] columns = { UserTable._ID, UserTable.COLUMN_NAME_USERNAME,};
+		String[] columns = { UserTable._ID, UserTable.COLUMN_NAME_USERNAME,UserTable.COLUMN_NAME_USERID, };
 		Cursor c = queryDatabase(UserTable.TABLE_NAME, columns, null, null,
 				null, null, null);
 		if( c != null && c.moveToFirst())
@@ -58,9 +57,10 @@ public class DBManager {
 			
 			user.setName(c.getString(c
 					.getColumnIndexOrThrow(UserTable.COLUMN_NAME_USERNAME)));
-			//user.setId(c.getString(c
-					//.getColumnIndexOrThrow(UserTable.COLUMN_NAME_USERID)));
+			user.setId(c.getString(c
+					.getColumnIndexOrThrow(UserTable.COLUMN_NAME_USERID)));
 		}
+		db.close();
 		return user;
 	}
 	
@@ -68,9 +68,9 @@ public class DBManager {
 	 * added by Kevin Chen (may need code reivew with Tyler)
 	 * Adds the Profile info to the database
 	 * @param name the User name
-	 * @param color the android device ID
+	 * @param the android device ID
 	 */
-	public void updateUser(String name) {
+	public void updateUser(String name, String userId) {
 		db = dbHelper.getReadableDatabase();
 
 		// Define a projection that specifies which columns from the database
@@ -78,15 +78,15 @@ public class DBManager {
 
 		Cursor c = queryDatabase(UserTable.TABLE_NAME, columns, null, null,
 				null, null, null);
-		// create for the existence 
+		// check for the existence, if exists, update the user name 
 		if( c != null && c.moveToFirst() )
 		{			
 			db = dbHelper.getWritableDatabase();
 			Log.i("update User -->"," update");
 			ContentValues values = new ContentValues();
 			values.put(UserTable.COLUMN_NAME_USERNAME, name);	
-			db.update(UserTable.TABLE_NAME, values, null, null);
-			
+			db.update(UserTable.TABLE_NAME, values, null, null);		
+			db.close();
 		}
 		else
 		{
@@ -94,8 +94,10 @@ public class DBManager {
 			Log.i("update User -->"," Insert");
 			ContentValues values = new ContentValues();
 	        values.put(UserTable.COLUMN_NAME_USERNAME, name);
-	        //values.put(UserTable.COLUMN_NAME_USERID, id);
+	        // only insert the android device id if the it doesn't exist in the DB
+	        values.put(UserTable.COLUMN_NAME_USERID, userId);
 	        db.insert(UserTable.TABLE_NAME, null, values);
+	        db.close();
 		}
 	}
 	
