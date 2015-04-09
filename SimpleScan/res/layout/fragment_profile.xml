@@ -1,0 +1,54 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:id="@+id/PRO_txtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="167dp"
+            android:text="Enter your name"
+            android:textSize="25sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ImageView
+            android:id="@+id/PRO_edit_icon"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_alignBottom="@+id/PRO_txtName"
+            android:layout_marginLeft="22dp"
+            android:layout_toRightOf="@+id/PRO_txtName"
+            android:src="@drawable/edit_icon" />
+
+        <EditText
+            android:id="@+id/PRO_editName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:ems="10"
+            android:inputType="textPersonName" 
+            android:visibility="gone"
+            />
+
+        <Button
+            android:id="@+id/PRO_btnSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/PRO_editName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="42dp"
+            android:text="Change" 
+            android:visibility="gone"
+            />
+
+    </RelativeLayout>
+
+</FrameLayout>

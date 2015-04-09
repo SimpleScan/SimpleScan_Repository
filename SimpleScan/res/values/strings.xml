@@ -12,6 +12,7 @@
         <item >View Expenses</item>
         <item >View Contact List</item>
         <item >View Categories</item>
+        <item >View Profile</item>
     </string-array>
     <string name="dateFormat">MM/dd/yyyy</string> 
     <string-array name="cate_color">

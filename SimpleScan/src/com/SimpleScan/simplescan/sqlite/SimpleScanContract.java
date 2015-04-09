@@ -26,11 +26,12 @@ public class SimpleScanContract {
 	    public static final String TABLE_NAME = "user";
 	    public static final String COLUMN_NAME_USERNAME = "username";
 	    //public static final String COLUMN_NAME_PICTUREID = "pictureid";
-	
+	    public static final String COLUMN_NAME_USERID = "userid";
 	    public static final String CREATE_TABLE = "CREATE TABLE " +
 	            TABLE_NAME + " (" +
 	            _ID + " INTEGER PRIMARY KEY," +
-	            COLUMN_NAME_USERNAME + TEXT_TYPE + ");";
+	            COLUMN_NAME_USERNAME + TEXT_TYPE + COMMA_SEP +
+	            COLUMN_NAME_USERID + TEXT_TYPE + ");";
 	            
 	    public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }

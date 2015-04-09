@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.SimpleScan.simplescan.Entities.Budget;
 import com.SimpleScan.simplescan.Entities.Category;
@@ -47,18 +48,61 @@ public class DBManager {
 		User user = new User();
 
 		// Define a projection that specifies which columns from the database
-		String[] columns = { UserTable._ID, UserTable.COLUMN_NAME_USERNAME, };
+		//String[] columns = { UserTable._ID, UserTable.COLUMN_NAME_USERNAME,UserTable.COLUMN_NAME_USERID, };
+		String[] columns = { UserTable._ID, UserTable.COLUMN_NAME_USERNAME,};
+		Cursor c = queryDatabase(UserTable.TABLE_NAME, columns, null, null,
+				null, null, null);
+		if( c != null && c.moveToFirst())
+		{
+			Log.i("getUserInfo -->"," exist");
+			
+			user.setName(c.getString(c
+					.getColumnIndexOrThrow(UserTable.COLUMN_NAME_USERNAME)));
+			//user.setId(c.getString(c
+					//.getColumnIndexOrThrow(UserTable.COLUMN_NAME_USERID)));
+		}
+		return user;
+	}
+	
+	/**
+	 * added by Kevin Chen (may need code reivew with Tyler)
+	 * Adds the Profile info to the database
+	 * @param name the User name
+	 * @param color the android device ID
+	 */
+	public void updateUser(String name) {
+		db = dbHelper.getReadableDatabase();
+
+		// Define a projection that specifies which columns from the database
+		String[] columns = { UserTable.COLUMN_NAME_USERNAME, };
 
 		Cursor c = queryDatabase(UserTable.TABLE_NAME, columns, null, null,
 				null, null, null);
-
-		c.moveToFirst();
-		user.setName(c.getString(c
-				.getColumnIndexOrThrow(UserTable.COLUMN_NAME_USERNAME)));
-
-		return user;
+		// create for the existence 
+		if( c != null && c.moveToFirst() )
+		{			
+			db = dbHelper.getWritableDatabase();
+			Log.i("update User -->"," update");
+			ContentValues values = new ContentValues();
+			values.put(UserTable.COLUMN_NAME_USERNAME, name);	
+			db.update(UserTable.TABLE_NAME, values, null, null);
+			
+		}
+		else
+		{
+			db = dbHelper.getWritableDatabase();
+			Log.i("update User -->"," Insert");
+			ContentValues values = new ContentValues();
+	        values.put(UserTable.COLUMN_NAME_USERNAME, name);
+	        //values.put(UserTable.COLUMN_NAME_USERID, id);
+	        db.insert(UserTable.TABLE_NAME, null, values);
+		}
 	}
+	
 
+	
+	
+	
 	/**
 	 * Gets a list of all expenses.
 	 * 
