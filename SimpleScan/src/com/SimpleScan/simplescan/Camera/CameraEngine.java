@@ -29,6 +29,14 @@ public class CameraEngine {
         return on;
     }
     
+    public Camera getCamera(){
+    	return camera;
+    }
+    
+    public SurfaceHolder getSurfaceHolder(){
+    	return surfaceHolder;
+    }
+    
     public CameraEngine(SurfaceHolder surfaceHolder){
         this.surfaceHolder = surfaceHolder;
     }
@@ -57,7 +65,7 @@ public class CameraEngine {
     	return flashMode;
     }
     
-    private void requestFlash() {
+    public void requestFlash() {
     	Parameters cam_parameters = camera.getParameters();
     	
     	switch(flashMode) {
@@ -111,9 +119,7 @@ public class CameraEngine {
         Log.d(TAG, "Entered CameraEngine - start()");
         this.camera = CameraUtils.getCameraInstance();
 
-        if (this.camera == null)
-            return;
-        
+        if (this.camera == null) return;        
         Log.d(TAG, "Got camera hardware");
         
         try {
