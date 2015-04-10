@@ -24,10 +24,9 @@ public class CameraUtils {
 	    try {
 	        c = Camera.open();
 	        Log.i("getCameraInstance", "attempt to get a Camera instance");
-	    }
-	    catch (Exception e){
+	    } catch (Exception e){
 	    	Log.e("getCameraInstance", "Camera is not available (in use or does not exist)");
-	    }
+	    } 
 	    return c; // returns null if camera is unavailable
 	}
 	

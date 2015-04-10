@@ -2,12 +2,9 @@ package com.SimpleScan.simplescan.Camera;
 
 import java.io.IOException;
 import android.content.Context;
-import android.graphics.PointF;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
-import android.util.FloatMath;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 public class CameraEngine {
@@ -158,5 +155,4 @@ public class CameraEngine {
     		camera.takePicture(shutterCallback, rawPictureCallback, jpegPictureCallback);
     	}
     } 
-    
 }

@@ -442,6 +442,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 	@Override
     public void onShutter() {
     }
-
+	
+	public Bitmap getPicture() {
+		return bitmap;
+	}
 }
 
