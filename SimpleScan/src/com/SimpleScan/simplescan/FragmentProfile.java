@@ -54,6 +54,8 @@ public class FragmentProfile extends Fragment
 			{
 				Log.i("Fragement Profile -->"," Unser name exist");
 				txtName.setText(userInfo.getName());
+				//TODO, should remove this later, now just wanna make sure the DB has the user ID
+				Toast.makeText(getActivity(),userInfo.getId().toString(), Toast.LENGTH_SHORT).show();
 			}
 		}
 		imgIcon.setOnClickListener(new OnClickListener()
@@ -62,8 +64,6 @@ public class FragmentProfile extends Fragment
 			{
 				editName.setVisibility(v.VISIBLE);
 				btnSubmit.setVisibility(v.VISIBLE);
-				//TODO, may store this id to database		
-				Toast.makeText(getActivity(),android_id, Toast.LENGTH_SHORT).show();
 			}
 		});
 		
@@ -79,7 +79,9 @@ public class FragmentProfile extends Fragment
 				else
 				{
 					txtName.setText(editName.getText().toString());
-					dbManager.updateUser(editName.getText().toString());
+					// insert the android device id, the DBmanager will check if the android device existence,
+					//if it exists, only update the user name
+					dbManager.updateUser(editName.getText().toString(), android_id);
 					editName.setVisibility(v.GONE);
 					btnSubmit.setVisibility(v.GONE);
 				}
