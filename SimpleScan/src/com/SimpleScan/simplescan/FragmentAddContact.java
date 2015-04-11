@@ -9,6 +9,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -41,6 +42,7 @@ public class FragmentAddContact extends Fragment implements OnClickListener {
 	/* Send a contact request to another existing user */
 	public void addContact() {
 		EditText editText = (EditText) getView().findViewById(R.id.editContactText);
+		
 		int newContactID = Integer.parseInt(editText.getText().toString());
 		ParseQuery<ParseUser> query = ParseUser.getQuery();
 		query.whereEqualTo("username", newContactID + ""); // finds whether the
@@ -51,6 +53,7 @@ public class FragmentAddContact extends Fragment implements OnClickListener {
 			public void done(List<ParseUser> objects, com.parse.ParseException e) {
 				EditText editText = (EditText) getView().findViewById(
 						R.id.editContactText);
+				TextView contactMessage = (TextView) getView().findViewById(R.id.contactMessage);
 				int newContactID = Integer.parseInt(editText.getText()
 						.toString());
 				if (e == null) {
@@ -63,10 +66,12 @@ public class FragmentAddContact extends Fragment implements OnClickListener {
 						newContact.saveInBackground();
 						reloadContactFragment();
 					} else {
-						editText.setText("Invalid ID, please try again.");
+						editText.setText("");
+						contactMessage.setText("Invalid ID. Please try again");
+						contactMessage.setTextColor(Color.RED);
 					}
 				} else {
-					editText.setText("Error. Something went wrong.");
+					contactMessage.setText("Error. Something went wrong.");
 					// Something went wrong.
 				}
 

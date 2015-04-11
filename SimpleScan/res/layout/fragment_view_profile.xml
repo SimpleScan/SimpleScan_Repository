@@ -82,8 +82,8 @@
                     android:textSize="30sp" >
                 </TextView>
 
-                <EditText
-                    android:id="@+id/editFirstName"
+                <TextView
+                    android:id="@+id/firstName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -92,7 +92,7 @@
                     android:inputType="text"
                     android:textColor="#ffffff"
                     android:textSize="30sp" >
-                </EditText>
+                </TextView>
             </LinearLayout>
 
             <LinearLayout
@@ -111,8 +111,8 @@
                     android:textColor="#ffffff"
                     android:textSize="30sp" />
 
-                <EditText
-                    android:id="@+id/editLastName"
+                <TextView
+                    android:id="@+id/lastName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -132,14 +132,14 @@
             android:gravity="center" >
 
             <Button
-                android:id="@+id/saveButton"
+                android:id="@+id/removeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="25dp"
                 android:background="#add8e6"
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"
-                android:text="Save"/>
+                android:text="Remove Contact"/>
         </RelativeLayout>
     </RelativeLayout>
 

@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="#000000" >
 
     <TextView
         android:id="@+id/textView1"
@@ -11,44 +12,53 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="22dp"
-        android:text="Add a Contact"
-        android:textSize="20sp" />
+        android:text="Add Contact"
+        android:textColor="#ffffff"
+        android:textSize="30sp" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal" 
-        android:layout_marginTop="172dp">
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/editContactText"
-            android:layout_weight="1"
-    		android:layout_width="0dp"
+    		android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            
+        	android:layout_centerVertical="true"
             android:ems="10"
             android:gravity="center"
             android:inputType="number"
-            android:hint="Enter ID Here" 
+            android:hint="Enter ID Here"
+            android:textColor="#ffffff" 
             android:textSize="30sp" >
 			
             <requestFocus />
         </EditText>
 
-        <Button
+        <TextView
+            android:id="@+id/contactMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editContactText"
+            android:layout_centerHorizontal="true"
+            android:text="Enter the ID of your contact"
+            android:textColor="#ffffff" 
+            android:textSize="20sp"/>
+
+    </RelativeLayout>
+
+    <Button
         android:id="@+id/insertContactButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add"/>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="258dp"
-        android:text="Enter the ID of your contact" />
+        android:text="Send Request"
+        android:background="#add8e6"
+       	android:paddingLeft="20dp"
+       	android:paddingRight="20dp" 
+       	android:layout_marginBottom="25dp"
+       	android:layout_alignParentBottom="true"
+        />
 
 </RelativeLayout>
