@@ -22,6 +22,11 @@ public class DBManagerDummy {
 		db.execSQL(DBTestScripts.UserScripts.INSERT_USER1);
 	}
 	
+	public void createUserData2(){
+		db = dbHelper.getWritableDatabase();
+		db.execSQL(DBTestScripts.UserScripts.INSERT_USER2);
+	}
+	
 	public void createExpenseData1(){
 		db = dbHelper.getWritableDatabase();
 		db.execSQL(DBTestScripts.ExpenseScripts.INSERT_EXPENSE1_5);

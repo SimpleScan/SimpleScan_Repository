@@ -36,6 +36,44 @@ public class DBManagerTest extends AndroidTestCase {
         assertEquals(DBTestScripts.UserScripts.USERNAME1, user.getName());
     }
     
+    public void testGetUserInfo(){
+    	setUp();
+    	dbTest.createUserData2();
+    	User user = db.getUserInfo();
+    	assertNotNull(user);
+    	assertEquals(DBTestScripts.UserScripts.USERNAME2, user.getName());
+    	assertEquals(DBTestScripts.UserScripts.USERID2, user.getId());
+    }
+    
+    public void testUpdateUserDoesntYetExist(){
+    	setUp();
+    	db.updateUser(DBTestScripts.UserScripts.USERNAME2, DBTestScripts.UserScripts.USERID2);
+    	User user = db.getUserInfo();
+    	assertNotNull(user);
+    	assertEquals(DBTestScripts.UserScripts.USERNAME2, user.getName());
+    	assertEquals(DBTestScripts.UserScripts.USERID2, user.getId());
+    }
+    
+    public void testUpdateUserAlreadyExists(){
+    	setUp();
+    	dbTest.createUserData2();
+    	db.updateUser("Tony the Tiger", DBTestScripts.UserScripts.USERID2);
+    	User user = db.getUserInfo();
+    	assertNotNull(user);
+    	assertEquals("Tony the Tiger", user.getName());
+    	assertEquals(DBTestScripts.UserScripts.USERID2, user.getId());
+    }
+    
+    public void testUpdateUserAlreadyExistsDiffId(){
+    	setUp();
+    	dbTest.createUserData2();
+    	db.updateUser("Tony the Tiger", "COMPLETELY DIFFERENT ID");
+    	User user = db.getUserInfo();
+    	assertNotNull(user);
+    	assertEquals("Tony the Tiger", user.getName());
+    	assertEquals(DBTestScripts.UserScripts.USERID2, user.getId());
+    }
+    
     public void testGetAllExpenses(){
     	setUp();
     	dbTest.createExpenseData1();

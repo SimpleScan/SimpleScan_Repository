@@ -16,9 +16,17 @@ public class DBTestScripts {
 	public static abstract class UserScripts {	    
 	    public static final String USERNAME1 = "tonyp";
 	    
+	    public static final String USERNAME2 = "tylerp";
+	    public static final String USERID2 = "100123";
+	    
 	    public static final String INSERT_USER1 = "INSERT INTO " + 
 	    		UserTable.TABLE_NAME +  "('" + UserTable.COLUMN_NAME_USERNAME + "') VALUES" + 
 	    		  "('" + USERNAME1 + "');";
+	    
+	    public static final String INSERT_USER2 = "INSERT INTO " + 
+	    		UserTable.TABLE_NAME +  "('" + UserTable.COLUMN_NAME_USERNAME + "', '" +
+	    		                               UserTable.COLUMN_NAME_USERID + "')" + " VALUES " + 
+	    		                               "('" + USERNAME2 + "', '" + USERID2 + "');";
 	}
 	
 	public static abstract class BudgetScripts {
