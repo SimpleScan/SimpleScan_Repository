@@ -27,16 +27,24 @@ public class FragmentProfile extends Fragment
 	private DBManager dbManager;
 	// the unique android ID, used for the parse platform 
 	private String android_id;
+	
 	public FragmentProfile() 
 	{
 		// Required empty public constructor
 	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) 
 	{	
 		View v = inflater.inflate(R.layout.fragment_profile, container, false);
-		
+		addComponents(v);		
+		return v;
+	}
+	
+	
+	public void addComponents(View v) 
+	{
 		btnSubmit = (Button)v.findViewById(R.id.PRO_btnSubmit);
 		txtName = (TextView)v.findViewById(R.id.PRO_txtName);
 		editName = (EditText)v.findViewById(R.id.PRO_editName);
@@ -46,18 +54,8 @@ public class FragmentProfile extends Fragment
 		//retrieve the user name from database
 		dbManager = new DBManager(getActivity());
 		User userInfo = dbManager.getUserInfo();
-		// check if the user set up the user name before
-		if(!userInfo.getName().equals("-1"))
-		{
-			Log.i("Fragement Profile -->"," userInfo exist");
-			if(!userInfo.getName().isEmpty())
-			{
-				Log.i("Fragement Profile -->"," Unser name exist");
-				txtName.setText(userInfo.getName());
-				//TODO, should remove this later, now just wanna make sure the DB has the user ID
-				Toast.makeText(getActivity(),userInfo.getId().toString(), Toast.LENGTH_SHORT).show();
-			}
-		}
+		loadUserName(userInfo);
+		
 		imgIcon.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v) 
@@ -69,7 +67,6 @@ public class FragmentProfile extends Fragment
 		
 		btnSubmit.setOnClickListener(new OnClickListener()
 		{
-
 			@Override
 			public void onClick(View v) {
 				if(editName.getText().toString().isEmpty())
@@ -85,10 +82,28 @@ public class FragmentProfile extends Fragment
 					editName.setVisibility(v.GONE);
 					btnSubmit.setVisibility(v.GONE);
 				}
-			}
-			
+			}			
 		});
-		
-		return v;
+	}
+	
+    /*
+	*  Method that check for the existence of the user info in the DB
+	*  if exists, load the user name, ID and display in the UI
+	*  if no, do nothing
+	*/
+	public void loadUserName(User userInfo)
+	{
+		// check if the user set up the user name before
+		if(!userInfo.getName().equals("-1"))
+		{
+			Log.i("Fragement Profile -->"," userInfo exist");
+			if(!userInfo.getName().isEmpty())
+			{
+				Log.i("Fragement Profile -->"," Unser name exist");
+				txtName.setText(userInfo.getName());
+				//TODO, should remove this later, now just wanna make sure the DB has the user ID
+				Toast.makeText(getActivity(),userInfo.getId().toString(), Toast.LENGTH_SHORT).show();
+			}
+		}
 	}
 }

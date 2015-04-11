@@ -21,13 +21,13 @@ import com.SimpleScan.simplescan.Entities.Category;
 
 public class FragmentCategories extends Fragment 
 {
-	EditText txtCateNmae;
-	Spinner spinner ;
-	Button btnSave;
-	TextView txtSaveCate;
-	TextView txtSaveMessage;
-	DBManager dbManager;
-	List<Category> cateList;
+	private EditText txtCateNmae;
+	private Spinner spinner ;
+	private Button btnSave;
+	private TextView txtSaveCate;
+	private TextView txtSaveMessage;
+	private DBManager dbManager;
+	private List<Category> cateList;
 	public FragmentCategories() 
 	{
 		// Required empty public constructor
@@ -43,7 +43,7 @@ public class FragmentCategories extends Fragment
 	}
 	
 
-	private void addComponents(View view) 
+	public void addComponents(View view) 
 	{
 		spinner = (Spinner)view.findViewById(R.id.cate_spinner);
 		txtCateNmae = (EditText)view.findViewById(R.id.cate_editName);
@@ -71,9 +71,8 @@ public class FragmentCategories extends Fragment
 		});
 	}
 	
-	private Boolean validateUserInput(List<Category> cateList)
+	public Boolean validateUserInput(List<Category> cateList)
 	{
-		boolean exist = false;
 		if(txtCateNmae.getText().toString().trim().isEmpty())
 		{
 			Toast.makeText(getActivity(),"Please enter the category name", Toast.LENGTH_SHORT).show();
@@ -102,7 +101,7 @@ public class FragmentCategories extends Fragment
 	}
 	
 	
-	private String colorPhraser(String color)
+	public String colorPhraser(String color)
 	{
 		String result = "";
 	

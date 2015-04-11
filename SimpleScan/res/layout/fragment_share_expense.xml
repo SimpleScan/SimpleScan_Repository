@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/SE_im"
-            android:layout_marginRight="21dp"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="23dp"
             android:layout_toLeftOf="@+id/SE_im"
             android:text="Name"
@@ -67,7 +67,6 @@
             android:ems="8" >
 
             <requestFocus android:layout_width="match_parent" />
-
         </EditText>
 
         <EditText
@@ -76,8 +75,17 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/SE_txtAmount"
             android:layout_toRightOf="@+id/SE_txtName"
-            android:inputType="date" 
-            android:ems="8" />
+            android:layout_toLeftOf="@+id/SE_btnDatePicker"
+            android:inputType="date"/>
+        
+        <Button
+    	    android:id="@+id/SE_btnDatePicker"
+    	    style="?android:attr/buttonStyleSmall"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_above="@+id/SE_txtAmount"
+    	    android:layout_alignRight="@+id/SE_editName"
+    	    android:text="Select" />
 
         <EditText
             android:id="@+id/SE_editAmount"
@@ -85,8 +93,8 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/SE_txtCate"
             android:layout_toRightOf="@+id/SE_txtName"
-            android:inputType="number"
-            android:ems="8" />
+            android:layout_alignRight="@+id/SE_editName"
+            android:inputType="numberDecimal" />
 
           <Spinner
             android:id="@+id/SE_spinner"
@@ -132,5 +140,7 @@
         android:layout_height="match_parent"
         android:visibility="invisible"
         android:contentDescription="description_zoom_touch_close" />
+
+    	
 
 </FrameLayout>
