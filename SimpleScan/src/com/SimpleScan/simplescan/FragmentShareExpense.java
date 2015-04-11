@@ -249,16 +249,24 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 			return;
 		}
 		double newAmount = Double.parseDouble(editAmount.getText().toString());
+		String imgPath = null;
+		String imgTitle = null;
+		
+		if (hasImg) {
+			imgPath = receiptImgPath;
+			imgTitle = receiptImgPath;
+		}
 		
 		DBManager dbManager = new DBManager(context);
 		// ID is -1 if expense was just created
 		if (id < 0) {
-			dbManager.addExpense(newAmount, newDate, newTitle, null, null, null);
+			dbManager.addExpense(newAmount, newDate, newTitle, null, imgTitle, imgPath);
 		} else {
-			dbManager.editExpense(id, newAmount, newDate, newTitle, null, null);
+			dbManager.editExpense(id, newAmount, newDate, newTitle, imgTitle, imgPath);
 		}
 		
 		context.makeToast("Changes saved");
+		context.goBack();
 	}
 	
 	private void deleteExpense() {
