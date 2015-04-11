@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 public class FragmentProfile extends Fragment 
 {
+	private static final String FRAGMENT_NAME = "View Profile";
 	private Button btnSubmit;
 	private TextView txtName;
 	private EditText editName;
@@ -34,7 +35,8 @@ public class FragmentProfile extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) 
-	{	
+	{
+		getActivity().setTitle(FRAGMENT_NAME);
 		View v = inflater.inflate(R.layout.fragment_profile, container, false);
 		
 		btnSubmit = (Button)v.findViewById(R.id.PRO_btnSubmit);

@@ -136,12 +136,8 @@ public class Main extends FragmentActivity implements OnItemClickListener {
 				break;
 		}
 		makeToast("On fragment : "+menu[position]);
-		changeFragment(newFragment, menu[position], false);
+		changeFragment(newFragment, false);
 		drawerLayout.closeDrawers();
-	}
-	
-	public void setTitle(String title) {
-		getActionBar().setTitle(title);
 	}
 	
 	/**
@@ -150,30 +146,14 @@ public class Main extends FragmentActivity implements OnItemClickListener {
 	 * @param newFragment The new Fragment to display
 	 * @param fragmentName The Fragment's name, to display as the title
 	 * @param addToBackStack true if it should be added to the backstack
-	 * 
-	 * TODO: Set current page name as backstack name
 	 */
-	public void changeFragment(Fragment newFragment, String fragmentName, boolean addToBackStack) {
-		setTitle(fragmentName);
+	public void changeFragment(Fragment newFragment, boolean addToBackStack) {
 		FragmentTransaction fTransaction  = fManager.beginTransaction();
 		fTransaction.replace(R.id.mainContent, newFragment);
 		if (addToBackStack) {
 			fTransaction.addToBackStack(null);
 		}
 		fTransaction.commit();	
-	}
-	
-	/**
-	 * Goes back. Funcationally the same as pressing the back button.
-	 * 
-	 * TODO: Get page name from the backstack name.
-	 */
-	public void goBack() {
-		if (fManager.getBackStackEntryCount() > 0) {
-			fManager.popBackStack();
-		} else {
-			makeToast("Nothing to go back to");
-		}
 	}
 	
 	/**

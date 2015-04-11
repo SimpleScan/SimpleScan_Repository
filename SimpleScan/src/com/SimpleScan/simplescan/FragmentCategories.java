@@ -17,10 +17,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.SimpleScan.simplescan.Entities.Category;
 
 public class FragmentCategories extends Fragment 
 {
+	private static final String FRAGMENT_NAME = "View Categories";
 	EditText txtCateNmae;
 	Spinner spinner ;
 	Button btnSave;
@@ -35,7 +37,8 @@ public class FragmentCategories extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) 
-	{			
+	{
+		getActivity().setTitle(FRAGMENT_NAME);
 		View v = inflater.inflate(R.layout.fragment_categories, container, false);		
 		addComponents(v);
 		

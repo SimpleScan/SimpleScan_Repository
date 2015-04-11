@@ -16,7 +16,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class FragmentOverview extends Fragment {
 	
@@ -28,7 +27,8 @@ public class FragmentOverview extends Fragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {	
+			Bundle savedInstanceState) {
+		getActivity().setTitle(FRAGMENT_NAME);
 		View v = inflater.inflate(R.layout.fragment_overview, container, false);
 		
 		// Display the remaining budget.
@@ -66,7 +66,7 @@ public class FragmentOverview extends Fragment {
 			display = "$" + budget.getCurrAmount();
 		} catch (Exception e) {
 			FragmentEditBudget newFragment = FragmentEditBudget.createNewBudget(context);
-			context.changeFragment(newFragment, "Add Budget", false);
+			context.changeFragment(newFragment, false);
 		}
 		textView.setText(display);
 	}
@@ -100,11 +100,10 @@ public class FragmentOverview extends Fragment {
 	}
 	
 	public void addExpenseFragment() {
-		getActivity().setTitle("Edit Expense");
-		Fragment fragment = FragmentShareExpense.createNewExpense(getActivity());
-		
-		Toast.makeText(getActivity().getBaseContext(), "Expense Created",Toast.LENGTH_SHORT).show();
-		((Main) getActivity()).changeFragment(fragment, "Edit Expense", true);
+		Fragment fragment = FragmentEditExpense.createNewExpense(getActivity());
+
+		Main context = (Main) getActivity();
+		context.changeFragment(fragment, true);
 	}
 	
 }

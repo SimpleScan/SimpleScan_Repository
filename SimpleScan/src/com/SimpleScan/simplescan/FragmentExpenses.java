@@ -19,6 +19,7 @@ import com.SimpleScan.simplescan.Entities.Expense;
 
 public class FragmentExpenses extends Fragment 
 {
+	private static final String FRAGMENT_NAME = "View Expenses";
 	private ExpandableListAdapter expandableListAdapter;
 
 	public FragmentExpenses() 
@@ -28,7 +29,8 @@ public class FragmentExpenses extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) 
-	{	
+	{
+		getActivity().setTitle(FRAGMENT_NAME);
 		View v = inflater.inflate(R.layout.fragment_expenses, container, false);
 		
 		// Create the categories spinner
@@ -95,8 +97,8 @@ public class FragmentExpenses extends Fragment
 						int groupPosition, int childPosition, long id) {
 					Expense expense = expandableListAdapter.getExpense(groupPosition, childPosition);
 					getActivity().setTitle("Edit Expense");
-					Fragment fragment = FragmentShareExpense.createNewInstance(expense);
-					((Main) getActivity()).changeFragment(fragment, "Edit Expense", true);
+					Fragment fragment = FragmentEditExpense.createNewInstance(expense);
+					((Main) getActivity()).changeFragment(fragment, true);
 					return false;
 				}
 			});
@@ -104,11 +106,9 @@ public class FragmentExpenses extends Fragment
 	}
 	
 	public void addExpenseFragment() {
-		getActivity().setTitle("Edit Expense");
-		Fragment fragment = FragmentShareExpense.createNewExpense(getActivity());
+		Fragment fragment = FragmentEditExpense.createNewExpense(getActivity());
 		
 		Main context = (Main) getActivity();
-		context.makeToast("Expense Created");
-		context.changeFragment(fragment, "Edit Expense", true);
+		context.changeFragment(fragment, true);
 	}
 }

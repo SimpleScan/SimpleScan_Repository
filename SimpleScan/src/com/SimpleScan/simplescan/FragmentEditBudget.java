@@ -69,7 +69,8 @@ public class FragmentEditBudget extends Fragment implements OnClickListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) 
-	{	
+	{
+		getActivity().setTitle(FRAGMENT_NAME);
 		View v = inflater.inflate(R.layout.fragment_edit_budget, container, false);
 		budget = (Budget) getArguments().getSerializable(BUDGET_KEY);
 		

@@ -184,7 +184,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 			String imgPath = Filesystem.saveBitmap (bitmap);
 			Toast.makeText(getApplicationContext(), "Data saved", Toast.LENGTH_SHORT).show();
 
-			FragmentShareExpense.setDataFromCam(nameText, dateText, amt, imgPath);
+			FragmentEditExpense.setDataFromCam(nameText, dateText, amt, imgPath);
 			finish();
 			
 		} catch (IOException e) {
