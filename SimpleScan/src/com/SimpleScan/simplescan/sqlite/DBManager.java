@@ -99,11 +99,7 @@ public class DBManager {
 	        db.insert(UserTable.TABLE_NAME, null, values);
 	        db.close();
 		}
-	}
-	
-
-	
-	
+	}	
 	
 	/**
 	 * Gets a list of all expenses.
@@ -137,7 +133,8 @@ public class DBManager {
 
 		// Define a projection that specifies which columns from the database
 		String[] columns = { ExpenseTable._ID, ExpenseTable.COLUMN_NAME_AMOUNT,
-				ExpenseTable.COLUMN_NAME_DATE, ExpenseTable.COLUMN_NAME_TITLE, };
+				ExpenseTable.COLUMN_NAME_DATE, ExpenseTable.COLUMN_NAME_TITLE, 
+				ExpenseTable.COLUMN_NAME_IMAGE_TITLE, ExpenseTable.COLUMN_NAME_IMAGE_PATH, };
 
 		String sortBy = ExpenseTable.COLUMN_NAME_DATE + " DESC " + limit;
 
@@ -168,6 +165,10 @@ public class DBManager {
 					.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_AMOUNT)));
 			e.setDate(c.getString(c
 					.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_DATE)));
+			e.setImageTitle(c.getString(c
+					.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_IMAGE_TITLE)));
+			e.setImagePath(c.getString(c
+					.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_IMAGE_PATH)));
 
 			expenses.add(e);
 			c.moveToNext();
@@ -198,8 +199,12 @@ public class DBManager {
 		values.put(ExpenseTable.COLUMN_NAME_AMOUNT, amount);
 		values.put(ExpenseTable.COLUMN_NAME_DATE, date);
 		values.put(ExpenseTable.COLUMN_NAME_TITLE, title);
-		// TODO: Optional category/imagetitle/imagepath
-		// db.insert(ExpenseTable.TABLE_NAME, null, values);
+		
+		if(imageTitle != null && imagePath != null){
+			values.put(ExpenseTable.COLUMN_NAME_IMAGE_TITLE, imageTitle);
+			values.put(ExpenseTable.COLUMN_NAME_IMAGE_TITLE, imagePath);
+		}
+
 		insert(ExpenseTable.TABLE_NAME, null, values);
 
 		updateBudget(amount);
