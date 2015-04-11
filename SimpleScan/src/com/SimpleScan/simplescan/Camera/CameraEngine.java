@@ -11,10 +11,10 @@ public class CameraEngine {
 	
 	static final String TAG = "DBG_" + CameraUtils.class.getName();
 	
-	boolean on;
-    Camera camera;
-    SurfaceHolder surfaceHolder;
-    int flashMode;
+	private boolean on;
+    private Camera camera;
+    private SurfaceHolder surfaceHolder;
+    private int flashMode;
     
     Camera.AutoFocusCallback autoFocusCallback = new Camera.AutoFocusCallback() {
         @Override
@@ -43,23 +43,26 @@ public class CameraEngine {
         if (isOn()) camera.autoFocus(autoFocusCallback);
     }
     
+    public int checkFlashMode() {
+    	return flashMode;
+    }
+    
     public void cycleFlashMode(Context context) {
     	if(camera == null) return;
     	if(isOn()){
 	    	if(CameraUtils.isFlashSupported(context)) {
-	    		if(flashMode == 0) {
-	    			flashMode = 1; //on
-	    		} else if(flashMode == 1) {
-	    			flashMode = 2; //auto
-	    		} else {
-	    			flashMode = 0; //off
+	    		switch(flashMode) {
+	    		case 0: 
+	    			flashMode = 1; //on 
+	    			break;
+	    		case 1:
+	    			flashMode = 2; //auto 
+	    			break;
+    			default:
+    				flashMode = 0; //off
 	    		}
 	    	} else 	flashMode = 0;
     	}
-    }
-    
-    public int checkFlashMode() {
-    	return flashMode;
     }
     
     public void requestFlash() {
@@ -67,20 +70,15 @@ public class CameraEngine {
     	
     	switch(flashMode) {
     		case 1:
-    			Log.i("requestFlash", "flash is turn on!");
     		    cam_parameters.setFlashMode(Parameters.FLASH_MODE_ON);
-    		    camera.setParameters(cam_parameters);
     			break;
     		case 2:
-    			Log.i("requestFlash", "flash is turn on!");
     		    cam_parameters.setFlashMode(Parameters.FLASH_MODE_AUTO);
-    		    camera.setParameters(cam_parameters);
     		    break;
     		default:
-    			Log.i("requestFlash", "flash is turn off!");
-    		    cam_parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
-    		    camera.setParameters(cam_parameters);
+    		    cam_parameters.setFlashMode(Parameters.FLASH_MODE_OFF); 
     	}
+    	camera.setParameters(cam_parameters);
     }
     
     public void requestZoom(String zoomMode) {
@@ -89,10 +87,7 @@ public class CameraEngine {
 	    	int maxZoom = cam_parameters.getMaxZoom();
 	    	int zoomFactor = maxZoom/5;
 	    	int zoom = cam_parameters.getZoom();
-			
-	    	if(zoomMode == "in") zoom += zoomFactor;
-	    	else if(zoomMode == "out") zoom -= zoomFactor;
-	    	/*
+
 			switch(zoomMode) {
 			case "in" :
 				zoom += zoomFactor;
@@ -101,7 +96,6 @@ public class CameraEngine {
 				zoom -= zoomFactor;
 				break;
 			}
-			*/
 			
 			if(zoom < 0) zoom = 0;
 			if(zoom > maxZoom) zoom = maxZoom;
@@ -112,12 +106,8 @@ public class CameraEngine {
     }
     
     public void start() {
-
-        Log.d(TAG, "Entered CameraEngine - start()");
         this.camera = CameraUtils.getCameraInstance();
-
         if (this.camera == null) return;        
-        Log.d(TAG, "Got camera hardware");
         
         try {
             this.camera.setPreviewDisplay(this.surfaceHolder);
@@ -126,27 +116,19 @@ public class CameraEngine {
 
             on = true;
             flashMode = 0;
-
-            Log.d(TAG, "CameraEngine preview started");
-
         } catch (IOException e) {
             Log.e(TAG, "Error in setPreviewDisplay");
         }
     }
     
     public void stop(){
-
         if(camera != null){
-            //this.autoFocusEngine.stop();
         	camera.cancelAutoFocus();
             camera.release();
             camera = null;
         }
-
         on = false;
         flashMode = 0;
-
-        Log.d(TAG, "CameraEngine Stopped");
     }
     
     public void takeShot(Camera.ShutterCallback shutterCallback, Camera.PictureCallback rawPictureCallback, Camera.PictureCallback jpegPictureCallback ){

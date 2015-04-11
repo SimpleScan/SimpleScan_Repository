@@ -292,12 +292,11 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                 @Override
                 public void onRectFinished(final Rect rect) {           
                     
-                	Bitmap previewBitmap = Bitmap.createScaledBitmap(PreviewImage.getPhotoBitmap(), PreviewImage.getWidth(), PreviewImage.getHeight(), false);            	            		
+                	Bitmap previewBitmap = BitmapUtils.createImageViewBitmap(PreviewImage);
                     
                     if (rect.height() <= previewBitmap.getHeight() && rect.width() <= previewBitmap.getWidth() 
                     &&  rect.height() > 0 && rect.width() > 0) {
-                    	
-                    	Bitmap croppedBitmap = Bitmap.createBitmap(previewBitmap, rect.left, rect.top, rect.width(), rect.height()); 
+                    	Bitmap croppedBitmap = BitmapUtils.createRectBitmap(previewBitmap, rect);
                     	updateRectView(croppedBitmap) ;   	
                     }          
                 }

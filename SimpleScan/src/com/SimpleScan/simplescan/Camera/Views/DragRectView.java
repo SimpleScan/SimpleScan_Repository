@@ -12,17 +12,15 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class DragRectView extends View {
+	
 	private Paint mRectPaint;
-
 	private int mStartX = 0;
 	private int mStartY = 0;
 	private int mEndX = 0;
 	private int mEndY = 0;
 	private boolean mDrawRect = false;
 	private TextPaint mTextPaint = null;
-
 	private OnUpCallback mCallback = null;
-	
 	private boolean isCropping;
 	
 	public boolean isCroppingMode() {
@@ -44,15 +42,13 @@ public class DragRectView extends View {
 
 	public DragRectView(final Context context, final AttributeSet attrs) {
 	    super(context, attrs);
-	    init();
-	    
+	    init(); 
 	    isCropping = false;
 	}
 
 	public DragRectView(final Context context, final AttributeSet attrs, final int defStyle) {
 	    super(context, attrs, defStyle);
-	    init();
-	    
+	    init(); 
 	    isCropping = false;
 	}
 	

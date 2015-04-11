@@ -4,7 +4,6 @@ import java.util.Locale;
 
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.util.Log;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
 public class OCR {
@@ -15,8 +14,7 @@ public class OCR {
 	public static final String DETECT_NUMBERS = "detect_numbers";
 	public static final String DETECT_DATE = "detect_date";
 	
-	private final static String [] MONTHS = {"january", "febuary", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"};
-	
+	private static final String [] MONTHS = {"january", "febuary", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"};
 	
 	//For EditExpense, convert amount from String to double, for budget subtracting 
 	public static double amtStr2double (String amtStr) {
@@ -33,14 +31,9 @@ public class OCR {
     }
 	
 	public static String detect_text(Bitmap targetBitmap, String detectOption){
-    	TessBaseAPI baseApi = new TessBaseAPI();
-    	Log.i("tessrect", "new tess object created");   	
+    	TessBaseAPI baseApi = new TessBaseAPI(); 	
     	baseApi.init(Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract/", "eng");
-    	Log.i("tessrect", "initialized");
-    	
     	baseApi.setImage(targetBitmap);
-    	Log.i("tessrect", "bitmap/image set");
-    	
     	String recognizedText = baseApi.getUTF8Text();
     	
     	if (detectOption == DETECT_NUMBERS) recognizedText = extractNumbers(recognizedText);
@@ -76,12 +69,9 @@ public class OCR {
     
     private static String extractDate(String inputString){
     	String outputString="";
-
     	inputString = inputString.toLowerCase(Locale.ENGLISH);
-    	Log.i("inputString", inputString);
 
-    	if(inputString.contains("/")) outputString = extractDateFromNumbers(inputString); //checking for numbers;
-    			
+    	if(inputString.contains("/")) outputString = extractDateFromNumbers(inputString); //checking for numbers; 			
     	if(outputString=="") outputString = extractDateFromLetters(inputString); //checking for alphabetically-spelling months
     	
     	return outputString;
@@ -106,13 +96,11 @@ public class OCR {
     			curMaxVal = accuracy[cur]/curMonth.length();
     		}
     	}
-    	Log.i("curMaxVal", String.valueOf(curMaxVal));
     	if(curMaxVal > 0) {
 	    	if(String.valueOf(curMaxIdx+1).length() == 1) m = "0"+String.valueOf(curMaxIdx+1)+"/";
 			else m = String.valueOf(curMaxIdx+1)+"/";
     	}
-    	Log.i("month", m);
-    	
+
 		for(int i=0; i<inputString.length(); i++) {	
     		if(m!="" && d!="") { //extracting year   			
     			if(i+3 < inputString.length()) {
@@ -121,9 +109,7 @@ public class OCR {
     						y = inputString.substring(i, i+4);	
     					}
     				}
-    			}
-    			Log.i("year", y);
-    			
+    			}		
     		} else if(m!="") { //extracting date
     			if(i+1 < inputString.length()) {
     				if(isNumber(inputString.charAt(i)) && isNumber(inputString.charAt(i+1))) {
@@ -134,12 +120,10 @@ public class OCR {
     				if(Integer.parseInt(inputString.substring(i, i+1)) >= 1 && Integer.parseInt(inputString.substring(i, i+1)) <= 9) 
     					d = "0"+inputString.substring(i, i+1)+"/";
     			} 	
-    			Log.i("date", d);  
 			} 
 		}
     	
 		if(m!="" && d!="" && y!="") extractedDate = m + d + y;
-		
     	return extractedDate;
     }
     
@@ -174,8 +158,7 @@ public class OCR {
 			}
 			else if(m=="" && d=="" && y=="") { //extracting month
     			if(i+3 <= inputString.length()) {
-    				if(isNumber(inputString.charAt(i)) && isNumber(inputString.charAt(i+1)) && inputString.charAt(i+2) == '/') {
-	    				
+    				if(isNumber(inputString.charAt(i)) && isNumber(inputString.charAt(i+1)) && inputString.charAt(i+2) == '/') {	
 		    			if (inputString.charAt(i) == '0') { 
 		    				switch(inputString.charAt(i+1)) {
 			    				case '1' :
@@ -204,7 +187,6 @@ public class OCR {
 				    				break;
 			    				case '9' :
 				    				m="09/";
-				    				//break;
 		    				} 
 		    			} else if(inputString.charAt(i) == '1') {
 		    				switch (inputString.charAt(i+1)) {
@@ -215,16 +197,13 @@ public class OCR {
 		    						m="11/";
 		    						break;
 		    					case '2' :
-		    						m="12/";
-		    						//break;	    						
+		    						m="12/";	    						
 		    				}
 	    				}
     				}
     			}
     			if (m=="" && i+2 <= inputString.length()) {
     				if(isNumber(inputString.charAt(i)) && inputString.charAt(i+1) == '/') {
-	    				Log.i("month", inputString.substring(i, i+2));
-	    				
 	    				switch(inputString.charAt(i)) {
 		    				case '1' :
 			    				m="01/";
@@ -252,15 +231,12 @@ public class OCR {
 			    				break;
 		    				case '9' :
 			    				m="09/";
-			    				//break;
 	    				} 
     				}
     			}
 			}
 		}   	
-    	
     	if(m!="" && d!="" && y!="") extractedDate = m + d + y;
-    	
     	return extractedDate;
     }
     
@@ -269,6 +245,5 @@ public class OCR {
     	|| input == '5' || input == '6' || input == '7' || input == '8' || input == '9'
     	|| input == '.') return true;
     	else return false;
-    }
-   
+    } 
 }

@@ -16,7 +16,11 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.widget.ImageView;
 
 public class ZoomableImageView extends ImageView {
-	private static final String TAG = "ZoomableImageView";       
+	
+	private static final String TAG = "ZoomableImageView";
+	
+	public static final int DEFAULT_SCALE_FIT_INSIDE = 0;
+    public static final int DEFAULT_SCALE_ORIGINAL = 1;
 	
 	private boolean isCropping;
 	
@@ -26,58 +30,44 @@ public class ZoomableImageView extends ImageView {
     private int containerWidth;
     private int containerHeight;
        
-    Paint background;   
+    private Paint background;   
    
     //Matrices will be used to move and zoom image
-    Matrix matrix = new Matrix();
-    Matrix savedMatrix = new Matrix();
+    private Matrix matrix = new Matrix();
+    private Matrix savedMatrix = new Matrix();
    
-    PointF start = new PointF();       
+    private PointF start = new PointF();       
    
-    float currentScale;
-    float curX;
-    float curY;
+    private float currentScale;
+    private float curX;
+    private float curY;
    
     //We can be in one of these 3 states
-    static final int NONE = 0;
-    static final int DRAG = 1;
-    static final int ZOOM = 2;
-    int mode = NONE;
+    private static final int NONE = 0;
+    private static final int DRAG = 1;
+    private static final int ZOOM = 2;
+    private int mode = NONE;
    
     //For animating stuff   
-    float targetX;
-    float targetY;
-    float targetScale;
-    float targetScaleX;
-    float targetScaleY;
-    float scaleChange;
-    float targetRatio;
-    float transitionalRatio;
-   
-    float easing = 0.2f;   
-    boolean isAnimating = false;
-   
-    float scaleDampingFactor = 0.5f;
+    private float targetX;
+    private float targetY;
+    private float targetScale;
+    private float targetScaleX;
+    private float targetScaleY;
+    private float scaleChange;
+    
+    private boolean isAnimating = false;
    
     //For pinch and zoom
-    float oldDist = 1f;   
-    PointF mid = new PointF();
+    private float oldDist = 1f;   
+    private PointF mid = new PointF();
    
     private Handler mHandler = new Handler();       
    
-    float minScale;
-    float maxScale = 8.0f;
-   
-    float wpRadius = 25.0f;
-    float wpInnerRadius = 20.0f;
-   
-    float screenDensity;
+    private float minScale;
+    private float maxScale = 8.0f;
    
     private GestureDetector gestureDetector;
-   
-    public static final int DEFAULT_SCALE_FIT_INSIDE = 0;
-    public static final int DEFAULT_SCALE_ORIGINAL = 1;
-   
     private int defaultScale;
    
     public boolean isCroppingMode() {
@@ -86,7 +76,6 @@ public class ZoomableImageView extends ImageView {
     
     public void setCroppingMode (boolean newCroppingMode) {
     	isCropping = newCroppingMode;
-    	
     	setFocusable(!isCropping);
         setFocusableInTouchMode(!isCropping);
     }
@@ -106,8 +95,6 @@ public class ZoomableImageView extends ImageView {
         
         setFocusable(true);
         setFocusableInTouchMode(true);
-       
-        screenDensity = context.getResources().getDisplayMetrics().density;
                        
         initPaints();
         gestureDetector = new GestureDetector(new MyGestureDetector());  
@@ -117,8 +104,7 @@ public class ZoomableImageView extends ImageView {
         super(context, attrs);
        
         isCropping = false;
-        
-        screenDensity = context.getResources().getDisplayMetrics().density;       
+  
         initPaints();
         gestureDetector = new GestureDetector(new MyGestureDetector());
        
@@ -421,8 +407,6 @@ public class ZoomableImageView extends ImageView {
     }
     
     private void setScaledImgBitmap(Bitmap srcImgBitmap, float curX, float curY, Matrix matrix) {
-    	System.out.println("From: " + " ImgBitmap.getWidth()="+srcImgBitmap.getWidth() + " ImgBitmap.getHeight()="+srcImgBitmap.getWidth());
-    	
     	if(srcImgBitmap!=null) {
         	float imgWidth = srcImgBitmap.getWidth()*currentScale;
         	float imgHeight = srcImgBitmap.getHeight()*currentScale;
@@ -434,37 +418,21 @@ public class ZoomableImageView extends ImageView {
         	
             if(curX >= 0) {
             	cropX = 0;
-            	if(imgWidth+curX < containerWidth) {
-            		cropWidth = imgWidth;
-            	} else {
-            		cropWidth = imgWidth  - curX;
-            		//cropWidth = containerWidth - curX;
-            	}
+            	if(imgWidth+curX < containerWidth) cropWidth = imgWidth;
+            	else  cropWidth = imgWidth  - curX;
             } else {
             	cropX = -curX;
-            	if(imgWidth+curX < containerWidth) {
-            		cropWidth = imgWidth + curX;
-            		//cropWidth = containerWidth + curX;
-            	} else {
-            		cropWidth = containerWidth;
-            	}
+            	if(imgWidth+curX < containerWidth) cropWidth = imgWidth + curX;
+            	else cropWidth = containerWidth;
             }
             if(curY >= 0) {
             	cropY = 0;
-            	if(imgHeight+curY < containerHeight) {
-            		cropHeight = imgHeight;
-            	} else {
-            		cropHeight = imgHeight - curY;
-            		//cropHeight = containerHeight - curY;
-            	}
+            	if(imgHeight+curY < containerHeight) cropHeight = imgHeight;
+            	else cropHeight = imgHeight - curY;		
             } else {
             	cropY = -curY;
-            	if(imgHeight+curY < containerHeight) {
-            		cropHeight = imgHeight + curY;
-            		//cropHeight = containerHeight + curY;
-            	} else {
-            		cropHeight = containerHeight;
-            	}
+            	if(imgHeight+curY < containerHeight) cropHeight = imgHeight + curY;
+            	else cropHeight = containerHeight;
             }        
             
         	if(cropX < 0) cropX = 0;
@@ -479,7 +447,6 @@ public class ZoomableImageView extends ImageView {
    
     public Bitmap getPhotoBitmap() {       
         return scaled_imgBitmap;
-    	//return imgBitmap;
     }
    
     private Runnable mUpdateImagePositionTask = new Runnable() {
@@ -573,30 +540,6 @@ public class ZoomableImageView extends ImageView {
             }                               
         }
     };
-   
-   /** Show an event in the LogCat view, for debugging */
-   private void dumpEvent(MotionEvent event) {
-      String names[] = { "DOWN", "UP", "MOVE", "CANCEL", "OUTSIDE", "POINTER_DOWN", "POINTER_UP", "7?", "8?", "9?" };
-      StringBuilder sb = new StringBuilder();
-      int action = event.getAction();
-      int actionCode = action & MotionEvent.ACTION_MASK;
-      sb.append("event ACTION_").append(names[actionCode]);
-      if (actionCode == MotionEvent.ACTION_POINTER_DOWN || actionCode == MotionEvent.ACTION_POINTER_UP) {
-         sb.append("(pid ").append(action >> MotionEvent.ACTION_POINTER_ID_SHIFT);
-         sb.append(")");
-      }
-      sb.append("[");
-     
-      for (int i = 0; i < event.getPointerCount(); i++) {
-         sb.append("#").append(i);
-         sb.append("(pid ").append(event.getPointerId(i));
-         sb.append(")=").append((int) event.getX(i));
-         sb.append(",").append((int) event.getY(i));
-         if (i + 1 < event.getPointerCount())
-            sb.append(";");
-      }
-      sb.append("]");
-   }
 
    class MyGestureDetector extends SimpleOnGestureListener {
         @Override
@@ -612,7 +555,6 @@ public class ZoomableImageView extends ImageView {
 	            if(Math.abs(currentScale - maxScale) > 0.1) targetScale = maxScale;
 	            else targetScale = minScale;
 
-	            targetRatio = targetScale / currentScale;
 	            mHandler.removeCallbacks(mUpdateImageScale);
 	            mHandler.post(mUpdateImageScale);  
             }

@@ -9,13 +9,8 @@ public class CameraUtils {
 
 	/** Check if this device has a camera */
 	public static boolean checkCameraHardware(Context context) {
-	    if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
-	    	Log.i("checkCameraHardware", "this device has a camera");
-	        return true;
-	    } else {
-	        Log.e("checkCameraHardware", "No Camera Found");
-	        return false;
-	    }
+	    if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) return true;
+	    else return false;
 	}
 	
 	/** A safe way to get an instance of the Camera object. */
@@ -23,7 +18,6 @@ public class CameraUtils {
 	    Camera c = null;
 	    try {
 	        c = Camera.open();
-	        Log.i("getCameraInstance", "attempt to get a Camera instance");
 	    } catch (Exception e){
 	    	Log.e("getCameraInstance", "Camera is not available (in use or does not exist)");
 	    } 
@@ -33,5 +27,4 @@ public class CameraUtils {
 	public static boolean isFlashSupported(Context context){ 
     	return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);   	  
 	}
-	
 }
