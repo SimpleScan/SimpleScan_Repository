@@ -79,15 +79,8 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		newExpense.setAmount(0.);
 		newExpense.setDate(sdf.format(calendar.getTime()));
 		newExpense.setTitle("expense");
-		DBManager dbManager = new DBManager(context);
-		dbManager.addExpense(
-				newExpense.getAmount(), 
-				newExpense.getDate(), 
-				newExpense.getTitle(), 
-				newExpense.getCategory(), 
-				newExpense.getImageTitle(), 
-				newExpense.getImagePath()
-				);
+		// ID is set to -1 to show that it hasn't been created yet
+		newExpense.setId(-1);
 		
 		// Create new instance
 		return createNewInstance(newExpense);
@@ -197,6 +190,7 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	
 	private void setUpDatePicker(View v) {
 		final Calendar calendar = Calendar.getInstance();
+		Button datePickerBtn = (Button) v.findViewById(R.id.SE_btnDatePicker);
 		
 		final DatePickerDialog.OnDateSetListener datePicker =
 				new DatePickerDialog.OnDateSetListener() {
@@ -210,7 +204,7 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 				editDate.setText(sdf.format(calendar.getTime()));
 			}
 		};
-		editDate.setOnClickListener(new View.OnClickListener() {
+		datePickerBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				new DatePickerDialog(getActivity(), 
@@ -257,7 +251,12 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		double newAmount = Double.parseDouble(editAmount.getText().toString());
 		
 		DBManager dbManager = new DBManager(context);
-		dbManager.editExpense(id, newAmount, newDate, newTitle, null, null);
+		// ID is -1 if expense was just created
+		if (id < 0) {
+			dbManager.addExpense(newAmount, newDate, newTitle, null, null, null);
+		} else {
+			dbManager.editExpense(id, newAmount, newDate, newTitle, null, null);
+		}
 		
 		context.makeToast("Changes saved");
 	}
