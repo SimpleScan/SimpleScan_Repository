@@ -157,6 +157,17 @@ public class Main extends FragmentActivity implements OnItemClickListener {
 	}
 	
 	/**
+	 * Goes back. Functionally the same as pressing the back button.
+	 */
+	public void goBack() {
+		if (fManager.getBackStackEntryCount() > 0) {
+			fManager.popBackStack();
+		} else {
+			makeToast("Nothing to go back to");
+		}
+	}
+	
+	/**
 	 * Makes a short toast.
 	 * 
 	 * @param message
