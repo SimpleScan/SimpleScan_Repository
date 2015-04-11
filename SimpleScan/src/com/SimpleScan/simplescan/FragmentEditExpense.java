@@ -108,7 +108,7 @@ public class FragmentEditExpense extends Fragment implements View.OnClickListene
 			Bundle savedInstanceState) 
 	{
 		getActivity().setTitle(FRAGMENT_NAME);
-		View v = inflater.inflate(R.layout.fragment_share_expense, container, false);
+		View v = inflater.inflate(R.layout.fragment_edit_expense, container, false);
 		expense = (Expense) getArguments().getSerializable(EXPENSE_KEY);
 		
 		setUpEditExpense(v);
@@ -128,10 +128,10 @@ public class FragmentEditExpense extends Fragment implements View.OnClickListene
 		if(cameFlag)
 		{
 			// grab the UI Component 
-			receiptImageView = (ImageView)getActivity().findViewById(R.id.SE_im);			
-			editName = (EditText)getActivity().findViewById(R.id.SE_editName);
-			editDate  = (EditText)getActivity().findViewById(R.id.SE_editDate);
-			editAmount = (EditText)getActivity().findViewById(R.id.SE_editAmount);
+			receiptImageView = (ImageView)getActivity().findViewById(R.id.EE_im);			
+			editName = (EditText)getActivity().findViewById(R.id.EE_editName);
+			editDate  = (EditText)getActivity().findViewById(R.id.EE_editDate);
+			editAmount = (EditText)getActivity().findViewById(R.id.EE_editAmount);
 			
 			// set the values for UI		
 			receiptImageView.setImageBitmap(receiptImg);
@@ -145,7 +145,7 @@ public class FragmentEditExpense extends Fragment implements View.OnClickListene
 	}
 	private void setUpCategory(View v)
 	{
-		spinner = (Spinner)v.findViewById(R.id.SE_spinner);
+		spinner = (Spinner)v.findViewById(R.id.EE_spinner);
 		List<String> cateNameList = new ArrayList<String>();
 		List<Category> categoriesList = new ArrayList<Category>();
 		dbManager = new DBManager(getActivity());
@@ -163,19 +163,19 @@ public class FragmentEditExpense extends Fragment implements View.OnClickListene
 	
 	private void setUpEditExpense(View v) {
 		// Set the default values for text fields
-		editName = (EditText) v.findViewById(R.id.SE_editName);
+		editName = (EditText) v.findViewById(R.id.EE_editName);
 		editName.setText(expense.getTitle());
-		editDate = (EditText) v.findViewById(R.id.SE_editDate);
+		editDate = (EditText) v.findViewById(R.id.EE_editDate);
 		editDate.setText(expense.getDate());
-		editAmount = (EditText) v.findViewById(R.id.SE_editAmount);
+		editAmount = (EditText) v.findViewById(R.id.EE_editAmount);
 		editAmount.setText("" + expense.getAmount());
 		
 		// Set button listeners
-	    Button saveButton = (Button) v.findViewById(R.id.SE_btnSave);
+	    Button saveButton = (Button) v.findViewById(R.id.EE_btnSave);
 	    saveButton.setOnClickListener(this);
-	    Button deleteButton = (Button) v.findViewById(R.id.SE_btnDel);
+	    Button deleteButton = (Button) v.findViewById(R.id.EE_btnDel);
 	    deleteButton.setOnClickListener(this);
-		ImageView ExpenseImg = (ImageView)v.findViewById(R.id.SE_im);
+		ImageView ExpenseImg = (ImageView)v.findViewById(R.id.EE_im);
 		ExpenseImg.setOnClickListener(this);
 		ExpenseImg.setOnLongClickListener(new OnLongClickListener() {
 			@Override
@@ -193,7 +193,7 @@ public class FragmentEditExpense extends Fragment implements View.OnClickListene
 	
 	private void setUpDatePicker(View v) {
 		final Calendar calendar = Calendar.getInstance();
-		Button datePickerBtn = (Button) v.findViewById(R.id.SE_btnDatePicker);
+		Button datePickerBtn = (Button) v.findViewById(R.id.EE_btnDatePicker);
 		
 		final DatePickerDialog.OnDateSetListener datePicker =
 				new DatePickerDialog.OnDateSetListener() {
@@ -223,13 +223,13 @@ public class FragmentEditExpense extends Fragment implements View.OnClickListene
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
-		case (R.id.SE_btnSave):
+		case (R.id.EE_btnSave):
 			saveExpense();
 			break;
-		case (R.id.SE_btnDel):
+		case (R.id.EE_btnDel):
 			deleteExpense();
 			break;
-		case (R.id.SE_im):
+		case (R.id.EE_im):
 			// To Tai: u can just change the class name here to navigate to your scan bill class 
 			startActivity(new Intent(getActivity(), CameraActivity.class));
 		default:
