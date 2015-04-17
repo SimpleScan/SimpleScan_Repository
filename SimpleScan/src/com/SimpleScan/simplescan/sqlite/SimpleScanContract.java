@@ -55,7 +55,8 @@ public class SimpleScanContract {
 	            COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
 	            COLUMN_NAME_CATEGORY_ID + TEXT_TYPE + COMMA_SEP +	
 	            COLUMN_NAME_SHARED_ID + TEXT_TYPE + COMMA_SEP +	
-	            COLUMN_NAME_IMAGE_TITLE + TEXT_TYPE + ");";
+	            COLUMN_NAME_IMAGE_TITLE + TEXT_TYPE + COMMA_SEP+
+	            COLUMN_NAME_IMAGE_PATH+TEXT_TYPE+");";
 		public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 	}
 	

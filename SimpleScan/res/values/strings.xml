@@ -8,11 +8,12 @@
     <string name="drawer_close">close</string>
     <string name="cate_color_prompt">Please select a color</string>
     <string-array name="menu">
-        <item >Overall</item>
-        <item >View Expenses</item>
-        <item >View Contact List</item>
-        <item >View Categories</item>
-        <item >View Profile</item>
+        <item>Overall</item>
+        <item>View Expenses</item>
+        <item>View Contact List</item>
+        <item>View Categories</item>
+        <item>View Profile</item>
+        <item>View Notification</item>
     </string-array>
     <string name="dateFormat">MM/dd/yyyy</string> 
     <string-array name="cate_color">

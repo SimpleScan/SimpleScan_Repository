@@ -132,6 +132,9 @@ public class Main extends FragmentActivity implements OnItemClickListener {
 			case 4:
 				newFragment = new FragmentProfile();
 				break;
+			case 5:
+				newFragment = new FragmentNotification();
+				break;
 			default:
 				break;
 		}
