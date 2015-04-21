@@ -8,6 +8,7 @@ import android.test.RenamingDelegatingContext;
 import com.SimpleScan.simplescan.Entities.Budget;
 import com.SimpleScan.simplescan.Entities.Category;
 import com.SimpleScan.simplescan.Entities.Expense;
+import com.SimpleScan.simplescan.Entities.Reminder;
 import com.SimpleScan.simplescan.Entities.User;
 import com.SimpleScan.simplescan.sqlite.DBManager;
 import com.SimpleScan.simplescan.test.DBManagerDummy;
@@ -15,6 +16,7 @@ import com.SimpleScan.simplescan.test.DBTestScripts;
 import com.SimpleScan.simplescan.test.DBTestScripts.BudgetScripts;
 import com.SimpleScan.simplescan.test.DBTestScripts.CategoryScripts;
 import com.SimpleScan.simplescan.test.DBTestScripts.ExpenseScripts;
+import com.SimpleScan.simplescan.test.DBTestScripts.ReminderScripts;
 
 public class DBManagerTest extends AndroidTestCase {
 	
@@ -182,6 +184,59 @@ public class DBManagerTest extends AndroidTestCase {
     	assertEquals(categories.size(), 4);
     	assertEquals(categories.get(3).getTitle(), CategoryScripts.TITLE4);
     	assertEquals(categories.get(3).getColor(), CategoryScripts.COLOR4);
+    }
+    
+    public void testGetReminders(){
+    	setUp();
+    	dbTest.createReminderData1();
+    	
+    	List<Reminder> reminders = db.getReminders();
+    	assertNotNull(reminders);
+    	assertEquals(3, reminders.size());
+    	assertEquals("Utilities", reminders.get(0).getTitle());
+    	assertEquals(80.00, reminders.get(1).getBilledAmount());
+    	assertEquals(ReminderScripts.REMIND_DATE3, reminders.get(2).getRemindDate());
+    }
+    
+    public void testAddReminder(){
+    	setUp();
+    	dbTest.createReminderData1();
+    	
+    	db.addReminder(ReminderScripts.TITLE4, ReminderScripts.BILLED_AMOUNT4, ReminderScripts.PAID_AMOUNT4,
+    			ReminderScripts.DUE_DATE4, ReminderScripts.REMIND_DATE4);
+    	
+    	List<Reminder> reminders = db.getReminders();
+    	assertNotNull(reminders);
+    	assertEquals(4, reminders.size());
+    	assertEquals(ReminderScripts.TITLE4, reminders.get(3).getTitle());
+    	assertEquals(ReminderScripts.DUE_DATE4, reminders.get(3).getDueDate());
+    }
+    
+    public void testEditReminder(){
+    	setUp();
+    	dbTest.createReminderData1();
+    	
+    	db.editReminder(1, ReminderScripts.TITLE4, ReminderScripts.BILLED_AMOUNT4, ReminderScripts.PAID_AMOUNT4,
+    			ReminderScripts.DUE_DATE4, ReminderScripts.REMIND_DATE4);
+    	
+    	List<Reminder> reminders = db.getReminders();
+    	assertNotNull(reminders);
+    	assertEquals(3, reminders.size());
+    	assertEquals(ReminderScripts.TITLE4, reminders.get(0).getTitle());
+    	assertEquals(ReminderScripts.PAID_AMOUNT4, reminders.get(0).getPaidAmount());
+    }
+    
+    public void testDeleteReminder(){
+    	setUp();
+    	dbTest.createReminderData1();
+    	
+    	db.deleteReminder(1);
+    	
+    	List<Reminder> reminders = db.getReminders();
+    	assertNotNull(reminders);
+    	assertEquals(2, reminders.size());
+    	assertEquals(ReminderScripts.TITLE2, reminders.get(0).getTitle());
+    	assertEquals(ReminderScripts.BILLED_AMOUNT3, reminders.get(1).getBilledAmount());
     }
     
     public void tearDown() throws Exception{

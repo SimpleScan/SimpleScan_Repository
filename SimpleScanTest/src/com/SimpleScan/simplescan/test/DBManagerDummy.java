@@ -54,8 +54,9 @@ public class DBManagerDummy {
 		
 	}
 	
-	public void reminderData1(){
-		
+	public void createReminderData1(){
+		db = dbHelper.getWritableDatabase();
+		db.execSQL(DBTestScripts.ReminderScripts.INSERT_REMINDER1_3);
 	}
 	
 	public void close(){

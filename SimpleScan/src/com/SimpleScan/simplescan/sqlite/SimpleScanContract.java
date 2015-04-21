@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
  */
 public class SimpleScanContract {
 
-	public static final  int    DATABASE_VERSION = 1;
+	public static final  int    DATABASE_VERSION = 2;
 	public static final  String DATABASE_NAME = "simplescan.db";
 	private static final String TEXT_TYPE = " TEXT";
 	private static final String INTEGER_TYPE = " INTEGER";	
@@ -124,16 +124,20 @@ public class SimpleScanContract {
 	/** Represents a reminder table */
 	public static abstract class ReminderTable implements BaseColumns {
 		public static final String TABLE_NAME = "reminder";
-		public static final String COLUMN_NAME_REMINDER_DATE = "reminderdate";
-		public static final String COLUMN_NAME_END_REMINDER_FOR_DATE = "reminderfordate";		
-		public static final String COLUMN_NAME_END_MESSAGE = "message";	
+		public static final String COLUMN_NAME_TITLE = "title";
+		public static final String COLUMN_NAME_BILLED_AMOUNT = "billedamount";
+		public static final String COLUMN_NAME_PAID_AMOUNT = "paidamount";
+		public static final String COLUMN_NAME_DUE_DATE = "duedate";
+		public static final String COLUMN_NAME_REMIND_DATE = "reminddate";
 		
 		public static final String CREATE_TABLE = "CREATE TABLE " +
 	            TABLE_NAME + " (" +
 	            _ID + " INTEGER PRIMARY KEY," +
-	            COLUMN_NAME_REMINDER_DATE + TEXT_TYPE + COMMA_SEP +	            
-	            COLUMN_NAME_END_REMINDER_FOR_DATE + TEXT_TYPE + COMMA_SEP +
-	            COLUMN_NAME_END_MESSAGE + TEXT_TYPE + ");";
+	            COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP + 
+	            COLUMN_NAME_BILLED_AMOUNT + REAL_TYPE + COMMA_SEP +	
+	            COLUMN_NAME_PAID_AMOUNT + REAL_TYPE + COMMA_SEP +
+	            COLUMN_NAME_DUE_DATE + TEXT_TYPE + COMMA_SEP +	            
+	            COLUMN_NAME_REMIND_DATE + TEXT_TYPE + ");";
 		public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 	}
 }

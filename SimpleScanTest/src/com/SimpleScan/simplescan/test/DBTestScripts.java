@@ -1,10 +1,10 @@
 package com.SimpleScan.simplescan.test;
 
-import com.SimpleScan.simplescan.sqlite.SimpleScanContract;
-import com.SimpleScan.simplescan.sqlite.SimpleScanContract.UserTable;
-import com.SimpleScan.simplescan.sqlite.SimpleScanContract.ExpenseTable;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract.BudgetTable;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract.CategoryTable;
+import com.SimpleScan.simplescan.sqlite.SimpleScanContract.ExpenseTable;
+import com.SimpleScan.simplescan.sqlite.SimpleScanContract.ReminderTable;
+import com.SimpleScan.simplescan.sqlite.SimpleScanContract.UserTable;
 
 /**
  * @author pearse1
@@ -97,6 +97,40 @@ public class DBTestScripts {
 				"('" + AMOUNT4 + "', '" + DATE4 + "', '" + TITLE4 + "')," + 
 				"('" + AMOUNT5 + "', '" + DATE5 + "', '" + TITLE5 + "');"; 		
 	}
+	
+	public static abstract class ReminderScripts {
+		public static final String TITLE1 = "Utilities";
+		public static final double BILLED_AMOUNT1 = 950.00;
+		public static final double PAID_AMOUNT1 = 30.00;
+		public static final String DUE_DATE1 = "2015-05-05 01:25:25";
+		public static final String REMIND_DATE1 = "2015-05-02 01:25:25";
+		
+		public static final String TITLE2 = "Basketball";
+		public static final double BILLED_AMOUNT2 = 80.00;
+		public static final double PAID_AMOUNT2 = 0.0;
+		public static final String DUE_DATE2 = "2015-04-25 09:34:11";
+		public static final String REMIND_DATE2 = "2015-04-24 09:34:11";
+		
+		public static final String TITLE3 = "Groceries";
+		public static final double BILLED_AMOUNT3 = 128.40;
+		public static final double PAID_AMOUNT3 = 0.0;
+		public static final String DUE_DATE3 = "2015-04-24 13:11:00";
+		public static final String REMIND_DATE3 = "2015-04-23 09:34:11";
+		
+		public static final String TITLE4 = "Credit Card";
+		public static final double BILLED_AMOUNT4 = 530.80;
+		public static final double PAID_AMOUNT4 = 231.00;
+		public static final String DUE_DATE4 = "2015-05-15 13:11:00";
+		public static final String REMIND_DATE4 = "2015-05-12 09:34:11";
+		
+		public static final String INSERT_REMINDER1_3 = "INSERT INTO " + 
+				ReminderTable.TABLE_NAME + " ('" + ReminderTable.COLUMN_NAME_TITLE + "', '" + 
+				ReminderTable.COLUMN_NAME_BILLED_AMOUNT + "', '" + ReminderTable.COLUMN_NAME_PAID_AMOUNT + "', '" +
+				ReminderTable.COLUMN_NAME_DUE_DATE + "', '" + ReminderTable.COLUMN_NAME_REMIND_DATE + "') VALUES " + 
+				"('" + TITLE1 + "', '" + BILLED_AMOUNT1 + "', '" + PAID_AMOUNT1 + "', '" + DUE_DATE1 + "', '" + REMIND_DATE1 + "')," + 
+				"('" + TITLE2 + "', '" + BILLED_AMOUNT2 + "', '" + PAID_AMOUNT2 + "', '" + DUE_DATE2 + "', '" + REMIND_DATE2 + "')," +
+				"('" + TITLE3 + "', '" + BILLED_AMOUNT3 + "', '" + PAID_AMOUNT3 + "', '" + DUE_DATE3 + "', '" + REMIND_DATE3 + "');";
+		}
 	
 	public static abstract class CategoryScripts {
 		public static final String TITLE1 = "Electric";
