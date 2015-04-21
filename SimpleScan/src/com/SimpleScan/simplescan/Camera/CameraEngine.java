@@ -5,6 +5,7 @@ import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 public class CameraEngine {
@@ -15,6 +16,10 @@ public class CameraEngine {
     private Camera camera;
     private SurfaceHolder surfaceHolder;
     private int flashMode;
+    
+    private float touch_oldDist = 0f;
+    private float touch_diffDist = 0f;
+    private boolean zooming = false;
     
     Camera.AutoFocusCallback autoFocusCallback = new Camera.AutoFocusCallback() {
         @Override
@@ -81,21 +86,39 @@ public class CameraEngine {
     	camera.setParameters(cam_parameters);
     }
     
-    public void requestZoom(String zoomMode) {
+    public void requestZoom(MotionEvent event) {
+    	switch(event.getAction() & MotionEvent.ACTION_MASK) {
+        case MotionEvent.ACTION_POINTER_DOWN:
+            touch_oldDist = TouchGeometry.spacing(event);           
+            if(touch_oldDist > 10f) zooming = true;
+        break;
+        case MotionEvent.ACTION_POINTER_UP:
+        	touch_diffDist = 0f;
+            zooming = false;
+        break;
+        case MotionEvent.ACTION_MOVE:           
+            if(zooming) {
+	        	float touch_newDist = TouchGeometry.spacing(event);               
+                if(touch_newDist > 10f) {
+                	touch_diffDist = touch_newDist - touch_oldDist;
+                	if(Math.abs(touch_diffDist) > 200) {
+                		int zoomAmt = (int) (touch_diffDist/200);
+                		doZoom(zoomAmt);
+                		touch_diffDist = 0;
+                	}
+                }	
+            }
+        break;                               
+        }
+    }
+    
+    private void doZoom(int zoomAmt) {
     	Parameters cam_parameters = camera.getParameters();
     	if(cam_parameters.isZoomSupported()) {
 	    	int maxZoom = cam_parameters.getMaxZoom();
-	    	int zoomFactor = maxZoom/5;
 	    	int zoom = cam_parameters.getZoom();
-
-			switch(zoomMode) {
-			case "in" :
-				zoom += zoomFactor;
-				break;
-			case "out" :
-				zoom -= zoomFactor;
-				break;
-			}
+	    	
+	    	zoom += zoomAmt;
 			
 			if(zoom < 0) zoom = 0;
 			if(zoom > maxZoom) zoom = maxZoom;

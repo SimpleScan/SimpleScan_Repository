@@ -1,5 +1,7 @@
 package com.SimpleScan.simplescan.Camera.Views;
 
+import com.SimpleScan.simplescan.Camera.TouchGeometry;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -8,7 +10,6 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.FloatMath;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -263,7 +264,7 @@ public class ZoomableImageView extends ImageView {
 	        break;
 	       
 	        case MotionEvent.ACTION_POINTER_DOWN: //contains index of the non-primary pointer that will change
-	            oldDist = spacing(event);           
+	            oldDist = TouchGeometry.spacing(event);           
 	            if(oldDist > 10f) { // if the initial locations of the two touches are at least 10f apart 
 	                savedMatrix.set(matrix);
 	                midPoint(mid, event);
@@ -299,7 +300,7 @@ public class ZoomableImageView extends ImageView {
 	                System.out.println("mode==DRAG: " + "diffX="+diffX + " diffY="+diffY + " curX="+curX + " curY="+curY + " currentScale="+currentScale);
 	                
 	            } else if(mode == ZOOM && isAnimating == false) {
-	                float newDist = spacing(event);               
+	                float newDist = TouchGeometry.spacing(event);               
 	                if(newDist > 10f) {
 	                    matrix.set(savedMatrix);
 	                    float scale = newDist / oldDist; //scale = change in distance                  
@@ -328,12 +329,6 @@ public class ZoomableImageView extends ImageView {
 	        invalidate();    
     	}
         return true;
-    }
-   
-    private float spacing(MotionEvent event) {
-        float x = event.getX(0) - event.getX(1);
-        float y = event.getY(0) - event.getY(1);
-        return FloatMath.sqrt(x * x + y * y);
     }
    
     private void midPoint(PointF point, MotionEvent event) {

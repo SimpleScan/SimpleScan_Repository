@@ -17,6 +17,7 @@ import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -36,8 +37,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     private Button shutterButton;
     private Button focusButton;
     private Button flashButton;
-    private Button zoominButton;
-    private Button zoomoutButton;
     //Camera back-end
     private SurfaceView cameraFrame;
     private CameraEngine cameraEngine;    
@@ -112,14 +111,17 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 		        if(v == shutterButton) cameraEngine.takeShot(this, this, this);	        
 		        if(v == focusButton) cameraEngine.requestFocus();
 		        if(v == flashButton) changeFlashButtonLayout();
-	
-		        if(v == zoominButton) cameraEngine.requestZoom("in");
-				if(v == zoomoutButton) cameraEngine.requestZoom("out");
 			}
 		}
     }
 
-    @Override
+	@Override
+    public boolean onTouchEvent(MotionEvent event) {
+		if(!_preview && checkCameraEngine()) cameraEngine.requestZoom(event);
+        return true;
+    }
+	
+	@Override
     public void onPictureTaken(byte[] data, Camera camera) { 	
     	if (data == null) return;
         bitmap = BitmapUtils.createPreviewBitmap(data);
@@ -193,6 +195,22 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     }
     
     private void updateRecordButtons(String theButton) {
+    	if(theButton == "name") {
+    		updateRecordNameButton(TOGGLE);
+			updateRecordDateButton(OFF);
+			updateRecordAmtButton(OFF);
+    	}
+    	if(theButton == "date") {
+    		updateRecordNameButton(OFF);
+			updateRecordDateButton(TOGGLE);
+			updateRecordAmtButton(OFF);
+    	}
+    	if(theButton == "date") {
+    		updateRecordNameButton(OFF);
+			updateRecordDateButton(OFF);
+			updateRecordAmtButton(TOGGLE);
+    	}
+/*
     	switch(theButton) {
     	case "name" :
     		updateRecordNameButton(TOGGLE);
@@ -210,6 +228,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 			updateRecordAmtButton(TOGGLE);
     		break;
     	}
+*/
     	updateOCRIcons();
 		updateRectViewStatus();	
     }
@@ -350,15 +369,11 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 		shutterButton = (Button) findViewById(R.id.shutter_button);
         focusButton = (Button) findViewById(R.id.focus_button);
         flashButton = (Button) findViewById(R.id.flash_button);
-        zoominButton = (Button) findViewById(R.id.zoomin_button);
-        zoomoutButton = (Button) findViewById(R.id.zoomout_button);
         cameraFrame = (SurfaceView) findViewById(R.id.camera_frame);
         
         shutterButton.setOnClickListener(this);
         focusButton.setOnClickListener(this);
         flashButton.setOnClickListener(this);
-        zoominButton.setOnClickListener(this);
-        zoomoutButton.setOnClickListener(this);
 
         SurfaceHolder surfaceHolder = cameraFrame.getHolder();
         surfaceHolder.addCallback(this);
