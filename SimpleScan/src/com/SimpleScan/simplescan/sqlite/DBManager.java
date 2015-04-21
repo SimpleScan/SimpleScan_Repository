@@ -13,10 +13,12 @@ import android.util.Log;
 import com.SimpleScan.simplescan.Entities.Budget;
 import com.SimpleScan.simplescan.Entities.Category;
 import com.SimpleScan.simplescan.Entities.Expense;
+import com.SimpleScan.simplescan.Entities.Reminder;
 import com.SimpleScan.simplescan.Entities.User;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract.BudgetTable;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract.CategoryTable;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract.ExpenseTable;
+import com.SimpleScan.simplescan.sqlite.SimpleScanContract.ReminderTable;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract.UserTable;
 
 /**
@@ -417,6 +419,135 @@ public class DBManager {
 
         db.insert(CategoryTable.TABLE_NAME, null, values);
 	}
+	
+	/**
+	 * Get all user reminders.
+	 * 
+	 * @return list of reminders
+	 */
+	public List<Reminder> getReminders(){
+		db = dbHelper.getReadableDatabase();
+
+		// Define a projection that specifies which columns from the database
+		String[] columns = { ReminderTable._ID, ReminderTable.COLUMN_NAME_TITLE,
+				ReminderTable.COLUMN_NAME_BILLED_AMOUNT, ReminderTable.COLUMN_NAME_PAID_AMOUNT, 
+				ReminderTable.COLUMN_NAME_DUE_DATE, ReminderTable.COLUMN_NAME_REMIND_DATE };
+
+		String sortBy = ExpenseTable._ID + " ASC;";
+
+		Cursor c = queryDatabase(ReminderTable.TABLE_NAME, columns, null, null,
+				null, null, sortBy);
+		List<Reminder> reminders = loadReminders(c);
+		close();
+		return reminders;
+	}
+	
+	/**
+	 * Creates a list of reminders from a cursor object
+	 * 
+	 * @param c cursor to sql table object
+	 * @return list of reminders
+	 */
+	private List<Reminder> loadReminders(Cursor c) {
+		List<Reminder> reminders = new ArrayList<Reminder>();
+		
+		c.moveToFirst();
+		
+		while(!c.isAfterLast()){
+			Reminder r = new Reminder();
+			r.setId(c.getInt(c.getColumnIndexOrThrow(ReminderTable._ID)));
+			r.setTitle(c.getString(c.getColumnIndexOrThrow(ReminderTable.COLUMN_NAME_TITLE)));
+			r.setBilledAmount(c.getDouble(c.getColumnIndexOrThrow(ReminderTable.COLUMN_NAME_BILLED_AMOUNT)));
+			r.setPaidAmount(c.getDouble(c.getColumnIndexOrThrow(ReminderTable.COLUMN_NAME_PAID_AMOUNT)));
+			r.setDueDate(c.getString(c.getColumnIndexOrThrow(ReminderTable.COLUMN_NAME_DUE_DATE)));
+			r.setRemindDate(c.getString(c.getColumnIndexOrThrow(ReminderTable.COLUMN_NAME_REMIND_DATE)));
+			
+			reminders.add(r);
+			c.moveToNext();
+		}
+		return reminders;
+	}
+	
+	/**
+	 * Adds a reminder to the database.
+	 * 
+	 * 
+	 * @param title the title of the reminder
+	 * @param billedAmount the original amount
+	 * @param (kind of optional: input -1 if no value is to be inserted) paidAmount the amount that has been paid
+	 * @param dueDate the due date
+	 * @param (optional) remindDate when to remind the user
+	 */
+	public void addReminder(String title, double billedAmount, double paidAmount, String dueDate, String remindDate){
+		db = dbHelper.getWritableDatabase();
+		
+		ContentValues values = new ContentValues();
+		values.put(ReminderTable.COLUMN_NAME_TITLE, title);
+		values.put(ReminderTable.COLUMN_NAME_BILLED_AMOUNT, billedAmount);		
+		values.put(ReminderTable.COLUMN_NAME_DUE_DATE, dueDate);
+		
+		if(paidAmount >= 0.0){
+			values.put(ReminderTable.COLUMN_NAME_PAID_AMOUNT, paidAmount);
+		}
+		if(remindDate != null){
+			values.put(ReminderTable.COLUMN_NAME_REMIND_DATE, remindDate);
+		}
+		
+		insert(ReminderTable.TABLE_NAME, null, values);
+		close();
+	}
+	
+	/**
+	 * Edits an existing reminder in the database.
+	 * 
+	 * @param id the id
+	 * @param title the title
+	 * @param billedAmount the original amount
+	 * @param paidAmount the amount paid
+	 * @param dueDate the due date
+	 * @param remindDate the date to remind the user
+	 */
+	public void editReminder(int id, String title, double billedAmount, double paidAmount,
+							 String dueDate, String remindDate){
+		db = dbHelper.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		
+		if(title != null){
+			values.put(ReminderTable.COLUMN_NAME_TITLE, title);
+		}
+		if(billedAmount >= 0.0){
+			values.put(ReminderTable.COLUMN_NAME_BILLED_AMOUNT, billedAmount);
+		}
+		if(paidAmount >= 0.0){
+			values.put(ReminderTable.COLUMN_NAME_PAID_AMOUNT, paidAmount);
+		}
+		if(dueDate != null){
+			values.put(ReminderTable.COLUMN_NAME_DUE_DATE, dueDate);
+		}
+		if(remindDate != null){
+			values.put(ReminderTable.COLUMN_NAME_REMIND_DATE, remindDate);
+		}
+		
+		String[] whereArgs = {Integer.toString(id), };
+		
+		db.update(ReminderTable.TABLE_NAME, values, "_id=?", whereArgs);
+		close();
+	}
+	
+	/**
+	 * Removes a specific reminder from the database
+	 *  
+	 * @param id the id
+	 */
+	public void deleteReminder(int id){
+		db = dbHelper.getWritableDatabase();
+		
+		String[] whereArgs = {Integer.toString(id), };
+		
+		db.delete(ReminderTable.TABLE_NAME, "_id=?", whereArgs);
+		close();
+	}
+
 	/**
 	 * Closes any remaining open connections.
 	 */
