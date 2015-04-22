@@ -168,27 +168,10 @@ public class ReminderActivity extends Activity implements FragmentManager.OnBack
    		 	
    		 	allReminders = dbManager.getReminders();
    		 	numReminders = allReminders.size(); 	
-   		 	Log.i("numReminders", String.valueOf(numReminders));
    		 	
    		 	if(numReminders>0){
    		 		emptyText.setVisibility(View.INVISIBLE);
-	   		 	for(int i=0; i<numReminders; i++) {
-		   		 	if(allReminders == null) Log.e("allReminders", "is null");
-		        	else {
-		        		Log.i("allReminders", "is not null");
-		        		if(allReminders.get(i) == null) Log.e("reminder"+String.valueOf(i), "is null");
-		        		else {
-		        			Log.i("reminder"+String.valueOf(i), "is not null");
-		        			
-		        			if(allReminders.get(i).getTitle() == null) Log.e("title of reminder"+String.valueOf(i), "is null");
-		        			else Log.i("reminder"+String.valueOf(i), allReminders.get(i).getTitle());
-		        			
-		        			if(allReminders.get(i).getDueDate() == null) Log.e("date of reminder"+String.valueOf(i), "is null");
-		        			else Log.i("reminder"+String.valueOf(i), allReminders.get(i).getDueDate());
-		        			
-		        			Log.i("reminder"+String.valueOf(i), String.valueOf(allReminders.get(i).getBilledAmount()));	
-		        		}
-		        	}
+	   		 	for(int i=0; i<numReminders; i++) { 	
 	   		 		addItem(allReminders.get(i).getTitle());
 	   		 	}
    		 	}
@@ -340,7 +323,7 @@ public class ReminderActivity extends Activity implements FragmentManager.OnBack
         private void saveReminder() {
     		int id = reminder.getId();
 
-    		String newTitle = reminder.getTitle();
+    		String newTitle = editTitle.getText().toString();
     		
     		String newDueDate = editDueDate.getText().toString();
     		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
