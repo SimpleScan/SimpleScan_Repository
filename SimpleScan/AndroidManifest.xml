@@ -36,7 +36,11 @@
         <activity
             android:name=".CameraActivity"
             android:screenOrientation="portrait"/>
-       
+        
+        <activity
+            android:name=".ReminderActivity"
+            android:screenOrientation="portrait"/>
+
         <!-- lock the screenOrientation for now. May implement this if we have more time on the UI design -->
         <activity 
             android:name=".Main"         	
