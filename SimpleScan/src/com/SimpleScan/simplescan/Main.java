@@ -1,5 +1,6 @@
 package com.SimpleScan.simplescan;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -133,8 +134,10 @@ public class Main extends FragmentActivity implements OnItemClickListener {
 				newFragment = new FragmentProfile();
 				break;
 			case 5:
-				newFragment = new FragmentNotification();
-				break;
+				startActivity(new Intent(this, ReminderActivity.class));
+				return;
+				//newFragment = new FragmentNotification();
+				//break;
 			default:
 				break;
 		}
