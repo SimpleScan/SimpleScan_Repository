@@ -16,7 +16,7 @@
         android:layout_margin="3dp"
         android:background="@drawable/notification_icon" />
   
-    <TextView android:id="@+id/countryText"
+    <TextView android:id="@+id/reminderMessage"
         style="?android:textAppearanceMedium"
         android:layout_width="0dp"
         android:layout_weight="1"

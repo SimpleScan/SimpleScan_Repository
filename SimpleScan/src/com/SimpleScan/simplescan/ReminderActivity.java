@@ -3,6 +3,7 @@ package com.SimpleScan.simplescan;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import com.SimpleScan.simplescan.Entities.Reminder;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 
 public class ReminderActivity extends Activity implements FragmentManager.OnBackStackChangedListener {    
     
+	private static final String REMINDER_KEY = "reminder_key";
 	private static FragmentManager mFragmentManager;
 	private static CardFrontFragment mCardFrontFragment;
 	private static CardBackFragment mCardBackFragment;
@@ -85,10 +87,6 @@ public class ReminderActivity extends Activity implements FragmentManager.OnBack
             case R.id.action_go_back:
             	NavUtils.navigateUpTo(this, new Intent(this, Main.class));
                 return true;
-                
-            case R.id.action_flip_card:
-                flipCard();
-                return true;  
         }
 
         return super.onOptionsItemSelected(item);
@@ -150,6 +148,7 @@ public class ReminderActivity extends Activity implements FragmentManager.OnBack
         private Button	addButton;  
         private TextView emptyText;
         
+        private List<Reminder> allReminders;
         private int numReminders;
     	
     	public CardFrontFragment() {
@@ -162,17 +161,35 @@ public class ReminderActivity extends Activity implements FragmentManager.OnBack
         	v = inflater.inflate(R.layout.fragment_card_front, container, false);
         	context = v.getContext();
         	dbManager = new DBManager(context);
-        	//numReminders = dbManager.getReminders().length();   	
-        	numReminders = 2;
-        	
+
         	mContainerView = (ViewGroup) v.findViewById(R.id.RowsContainer);
    		 	addButton = (Button) v.findViewById(R.id.add_button);
    		 	emptyText = (TextView) v.findViewById(android.R.id.empty);
    		 	
+   		 	allReminders = dbManager.getReminders();
+   		 	numReminders = allReminders.size(); 	
+   		 	Log.i("numReminders", String.valueOf(numReminders));
+   		 	
    		 	if(numReminders>0){
    		 		emptyText.setVisibility(View.INVISIBLE);
 	   		 	for(int i=0; i<numReminders; i++) {
-	   		 		addItem();
+		   		 	if(allReminders == null) Log.e("allReminders", "is null");
+		        	else {
+		        		Log.i("allReminders", "is not null");
+		        		if(allReminders.get(i) == null) Log.e("reminder"+String.valueOf(i), "is null");
+		        		else {
+		        			Log.i("reminder"+String.valueOf(i), "is not null");
+		        			
+		        			if(allReminders.get(i).getTitle() == null) Log.e("title of reminder"+String.valueOf(i), "is null");
+		        			else Log.i("reminder"+String.valueOf(i), allReminders.get(i).getTitle());
+		        			
+		        			if(allReminders.get(i).getDueDate() == null) Log.e("date of reminder"+String.valueOf(i), "is null");
+		        			else Log.i("reminder"+String.valueOf(i), allReminders.get(i).getDueDate());
+		        			
+		        			Log.i("reminder"+String.valueOf(i), String.valueOf(allReminders.get(i).getBilledAmount()));	
+		        		}
+		        	}
+	   		 		addItem(allReminders.get(i).getTitle());
 	   		 	}
    		 	}
    		 	
@@ -186,17 +203,15 @@ public class ReminderActivity extends Activity implements FragmentManager.OnBack
             return v;
         }
         
-        private void addItem() {
-            final String countryName = BILLS[(int) (Math.random() * BILLS.length)];
-            
+        private void addItem(final String title) {       	
         	// Instantiate a new "row" view.
             final ViewGroup newView = (ViewGroup) LayoutInflater.from(context).inflate(
                     R.layout.layoutchange_list_item, mContainerView, false);
             
             // Set the text in the new row to a random country.
-            TextView countryTextView = (TextView) newView.findViewById(R.id.countryText);
-            countryTextView.setText(countryName);
-            countryTextView.setOnLongClickListener(new View.OnLongClickListener() {
+            TextView reminderMessageView = (TextView) newView.findViewById(R.id.reminderMessage);
+            reminderMessageView.setText(title);
+            reminderMessageView.setOnLongClickListener(new View.OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View v) {
 					flipCard();
@@ -223,8 +238,8 @@ public class ReminderActivity extends Activity implements FragmentManager.OnBack
             newView.findViewById(R.id.notify_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Notification countryNotification = new Notification(context, countryName, "SimpleScan: from " + countryName, false);
-                    countryNotification.sendNotification(context, 001);
+                    Notification countryNotification = new Notification(context, title, "SimpleScan: from " + title, false);
+                	countryNotification.sendNotification(context, 001);
                 }
             });
 
@@ -275,11 +290,11 @@ public class ReminderActivity extends Activity implements FragmentManager.OnBack
         private void setUpEditExpense(View v) {
     		// Set the default values for text fields
         	editTitle = (EditText) v.findViewById(R.id.editTextTitle);
-        	//editTitle.setText(expense.getTitle());
+        	editTitle.setText(reminder.getTitle());
     		editDueDate = (EditText) v.findViewById(R.id.editTextDueDate);
-    		//editDueDate.setText(expense.getDate());
+    		editDueDate.setText(reminder.getDueDate());
     		editAmount = (EditText) v.findViewById(R.id.editTextAmount);
-    		//editAmount.setText("" + expense.getAmount());
+    		editAmount.setText("" + reminder.getBilledAmount());
     		
     		// Set button listener
     		Button saveButton = (Button) v.findViewById(R.id.btnSave);
@@ -323,10 +338,9 @@ public class ReminderActivity extends Activity implements FragmentManager.OnBack
     	}
         
         private void saveReminder() {
-    		//int id = reminder.getId();
-    		
-    		//String newTitle = reminder.getTitle();
-    		String newTitle = editTitle.getText().toString();
+    		int id = reminder.getId();
+
+    		String newTitle = reminder.getTitle();
     		
     		String newDueDate = editDueDate.getText().toString();
     		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
@@ -335,17 +349,16 @@ public class ReminderActivity extends Activity implements FragmentManager.OnBack
     		} catch (ParseException e) {
     			return;
     		}
-    		double newAmount = Double.parseDouble(editAmount.getText().toString());
+    		double newBilledAmount = Double.parseDouble(editAmount.getText().toString());
     		
-    		/*
     		DBManager dbManager = new DBManager(context);
-    		// ID is -1 if expense was just created
-    		if (id < 0) {
-    			dbManager.addReminder(newAmount, newDueDate, newTitle, null, null, null);
+    		// ID is -1 if expense was just created??
+    		if (id <= 0) {
+    			dbManager.addReminder(newTitle, newBilledAmount, 0, newDueDate, "");
     		} else {
-    			dbManager.editReminder(id, newAmount, newDueDate, newTitle, null, null);
+    			dbManager.editReminder(id, newTitle, newBilledAmount, 0, newDueDate, "");
+    			//dbManager.editReminder(id, newTitle, newBilledAmount, newPaidAmount, newDueDate, "");
     		}
-    		*/
     	}
         
         private void deleteExpense() {
