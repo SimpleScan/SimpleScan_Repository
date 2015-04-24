@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="14"
         android:targetSdkVersion="21" />
 
     <application
@@ -26,6 +26,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".CameraActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ReminderActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- lock the screenOrientation for now. May implement this if we have more time on the UI design -->
         <activity

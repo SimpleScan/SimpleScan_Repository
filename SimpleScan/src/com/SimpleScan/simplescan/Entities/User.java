@@ -14,8 +14,9 @@ import android.media.Image;
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
-	private long id;
+	
+	//private long id; -- Kevin
+	private String id;
 	private String name;
 	private Image userPicture;
 	private List<Contact> contacts;
@@ -29,14 +30,16 @@ public class User implements Serializable {
 	 * Public Constructor.
 	 */
 	public User(){
-		
+		name = "-1"; // indicator for the first initial 
 	}
 
-	public long getId() {
+	//public long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	//public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

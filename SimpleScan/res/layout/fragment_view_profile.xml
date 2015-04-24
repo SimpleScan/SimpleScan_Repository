@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-	<RelativeLayout
+
+    <RelativeLayout
+        android:id="@+id/loading_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000000"
-        android:id="@+id/loading_frame"
-        >
+        android:background="#000000" >
 
         <ProgressBar
             android:id="@+id/progressBar1"
@@ -23,16 +23,16 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/progressBar1"
             android:layout_centerHorizontal="true"
-            android:textColor="#ffffff"
             android:text="Loading profile ..."
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffff" />
     </RelativeLayout>
+
     <RelativeLayout
+        android:id="@+id/connect_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" 
-        android:visibility="gone"
-        android:id="@+id/connect_frame">
+        android:layout_height="match_parent"
+        android:visibility="gone" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -132,6 +132,24 @@
             android:gravity="center" >
 
             <Button
+                android:id="@+id/shareButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="100dp"
+                android:background="#add8e6"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:text="Share an Expense" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:gravity="center" >
+
+            <Button
                 android:id="@+id/removeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -139,7 +157,7 @@
                 android:background="#add8e6"
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"
-                android:text="Remove Contact"/>
+                android:text="Remove Contact" />
         </RelativeLayout>
     </RelativeLayout>
 

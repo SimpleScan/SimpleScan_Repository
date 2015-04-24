@@ -44,7 +44,9 @@ public class FragmentViewProfile extends Fragment implements OnClickListener{
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_view_profile, container, false);
 		Button b = (Button) v.findViewById(R.id.removeButton);
+		Button b2 = (Button) v.findViewById(R.id.shareButton);
 		b.setOnClickListener(this);
+		b2.setOnClickListener(this);
 		return v;
 	}
 	
@@ -94,49 +96,58 @@ public class FragmentViewProfile extends Fragment implements OnClickListener{
 		InputMethodManager inputManager = (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		inputManager.hideSoftInputFromWindow(this.getActivity().getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
 		switch (v.getId()) {
-		case R.id.removeButton:
-			ParseQuery<ParseObject> query = ParseQuery.getQuery("Contact");
-			query.whereEqualTo("id_friend", contactID);
-			query.whereEqualTo("id_user", Integer.parseInt(ParseUser.getCurrentUser().getUsername()));
-			query.findInBackground(new FindCallback<ParseObject>() {
-			    public void done(List<ParseObject> profile, ParseException e) {
-			        if (e == null) {
-			        	if (profile.size() == 0) { /* generate new empty profile if one doesn't exist */
-			       
-			        	}
-			        	else{
-			        		profile.get(0).deleteInBackground();
-			        		ParseQuery<ParseObject> query = ParseQuery.getQuery("Contact");
-			    			query.whereEqualTo("id_user", contactID);
-			    			query.whereEqualTo("id_friend", Integer.parseInt(ParseUser.getCurrentUser().getUsername()));
-			    			query.findInBackground(new FindCallback<ParseObject>() {
-			    			    public void done(List<ParseObject> profile, ParseException e) {
-			    			        if (e == null) {
-			    			        	if (profile.size() == 0) { /* generate new empty profile if one doesn't exist */
-			    			       
-			    			        	}
-			    			        	else{
-			    			        		profile.get(0).deleteInBackground();
-			    			        	}
-			    			        	Fragment fragment = new FragmentContact();
-			    						FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-			    						FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-			    						fragmentTransaction.replace(R.id.mainContent, fragment);
-			    						fragmentTransaction.addToBackStack(null);
-			    						fragmentTransaction.commit();
-			    			        } else {
-			    			            Log.d("profile", "Error: " + e.getMessage());
-			    			        }
-			    			    }
-			    			});
-			        	}
-			        } else {
-			            Log.d("profile", "Error: " + e.getMessage());
-			        }
-			    }
-			});
-
-			break;
+			case R.id.removeButton:
+				ParseQuery<ParseObject> query = ParseQuery.getQuery("Contact");
+				query.whereEqualTo("id_friend", contactID);
+				query.whereEqualTo("id_user", Integer.parseInt(ParseUser.getCurrentUser().getUsername()));
+				query.findInBackground(new FindCallback<ParseObject>() {
+				    public void done(List<ParseObject> profile, ParseException e) {
+				        if (e == null) {
+				        	if (profile.size() == 0) { /* generate new empty profile if one doesn't exist */
+				       
+				        	}
+				        	else{
+				        		profile.get(0).deleteInBackground();
+				        		ParseQuery<ParseObject> query = ParseQuery.getQuery("Contact");
+				    			query.whereEqualTo("id_user", contactID);
+				    			query.whereEqualTo("id_friend", Integer.parseInt(ParseUser.getCurrentUser().getUsername()));
+				    			query.findInBackground(new FindCallback<ParseObject>() {
+				    			    public void done(List<ParseObject> profile, ParseException e) {
+				    			        if (e == null) {
+				    			        	if (profile.size() == 0) { /* generate new empty profile if one doesn't exist */
+				    			       
+				    			        	}
+				    			        	else{
+				    			        		profile.get(0).deleteInBackground();
+				    			        	}
+				    			        	Fragment fragment = new FragmentContact();
+				    						FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+				    						FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+				    						fragmentTransaction.replace(R.id.mainContent, fragment);
+				    						fragmentTransaction.addToBackStack(null);
+				    						fragmentTransaction.commit();
+				    			        } else {
+				    			            Log.d("profile", "Error: " + e.getMessage());
+				    			        }
+				    			    }
+				    			});
+				        	}
+				        } else {
+				            Log.d("profile", "Error: " + e.getMessage());
+				        }
+				    }
+				});
+	
+				break;
+			case R.id.shareButton:
+				Fragment fragment = new FragmentShareSelect(contactID);
+				FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+				fragmentTransaction.replace(R.id.mainContent, fragment);
+				fragmentTransaction.addToBackStack(null);
+				fragmentTransaction.commit();
+	
+				break;
 		}
 	}
 	

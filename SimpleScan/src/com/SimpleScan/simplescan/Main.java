@@ -1,11 +1,11 @@
 package com.SimpleScan.simplescan;
 
-import com.parse.Parse;
-import com.parse.ParseObject;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -20,20 +20,28 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-public class Main extends FragmentActivity implements OnItemClickListener 
-{
+public class Main extends FragmentActivity implements OnItemClickListener {
+	
 	private DrawerLayout drawerLayout;
 	private ListView listView;
 	private String[] menu;
-	
 	private ActionBarDrawerToggle drawerListener;
 	private FragmentManager fManager;
+	
+	//key pair for restore the instance state 
+	static final String STATE_SCORE = "mainScore";
+	static final String STATE_LEVEL = "mainLevel";
+	private int mCurrentScore;
+	private int mCurrentLevel;
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-	protected void onCreate(Bundle saveInstatnceState)
-	{
+	protected void onCreate(Bundle saveInstatnceState) {
 		super.onCreate(saveInstatnceState);
 		setContentView(R.layout.activity_main);
+		
+		Filesystem.init(this);
+		
+		//enable the action bar
 		getActionBar().setHomeButtonEnabled(true);
 		getActionBar().setDisplayHomeAsUpEnabled(true);		
 		menu = getResources().getStringArray(R.array.menu);
@@ -45,16 +53,42 @@ public class Main extends FragmentActivity implements OnItemClickListener
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 		drawerListener = new ActionBarDrawerToggle(this,drawerLayout,R.string.drawer_open,R.string.drawer_close);
 		drawerLayout.setDrawerListener(drawerListener);
-		// fragment manager	
+		// fragment manager
 		fManager = getSupportFragmentManager();
 		FragmentTransaction fTransaction  = fManager.beginTransaction();
-		FragmentOverall fragmentOverall = new FragmentOverall();
+		FragmentOverview fragmentOverall = new FragmentOverview();
 		fTransaction.add(R.id.mainContent,fragmentOverall);
 		fTransaction.commit();
 	}
+	
+	/*
+	 * Kevin
+	 * @see android.support.v4.app.FragmentActivity#onSaveInstanceState(android.os.Bundle)
+	 */
 	@Override
-	public boolean onOptionsItemSelected(MenuItem menuItem)
-	{
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	    // Save the user's current state
+	    savedInstanceState.putInt(STATE_SCORE, mCurrentScore);
+	    savedInstanceState.putInt(STATE_LEVEL, mCurrentLevel);
+	    
+	    // Always call the superclass so it can save the view hierarchy state
+	    super.onSaveInstanceState(savedInstanceState);
+	}
+	/*
+	 * Kevin
+	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
+	 */
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+	    // Always call the superclass so it can restore the view hierarchy
+	    super.onRestoreInstanceState(savedInstanceState);
+	   
+	    // Restore state members from saved instance
+	    mCurrentScore = savedInstanceState.getInt(STATE_SCORE);
+	    mCurrentLevel = savedInstanceState.getInt(STATE_LEVEL);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem)	{
 		if(drawerListener.onOptionsItemSelected(menuItem))
 		{
 			return true;
@@ -63,16 +97,14 @@ public class Main extends FragmentActivity implements OnItemClickListener
 	}
 	
 	@Override
-	public void onConfigurationChanged(Configuration config)
-	{
+	public void onConfigurationChanged(Configuration config)	{
 	
 		super.onConfigurationChanged(config);
 		drawerListener.onConfigurationChanged(config);
 	}
 
 	@Override
-	protected void onPostCreate(Bundle savedInstanceState)
-	{
+	protected void onPostCreate(Bundle savedInstanceState)	{
 		super.onPostCreate(savedInstanceState);
 		drawerListener.syncState();
 	}
@@ -80,49 +112,91 @@ public class Main extends FragmentActivity implements OnItemClickListener
 	
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) 
-	{
+			long id) {
 		selectItem(position);
 		
 	}
-	public void selectItem(int position) 
-	{
+	
+	public void selectItem(int position) {
 		listView.setItemChecked(position, true);
-		setTitle(menu[position]);
-		FragmentTransaction fTransaction  = fManager.beginTransaction();
-		Toast.makeText(getBaseContext(), "On fragment : "+menu[position],Toast.LENGTH_SHORT).show();
-		/*
-		 * need to research how to implement backstack here
-		 */
-		switch (position)
-		{
+		Fragment newFragment = null;
+		switch (position) {
 			case 0:
-				fTransaction.replace(R.id.mainContent,new FragmentOverall());
-				fTransaction.commit();	
+				newFragment = new FragmentOverview();
 				break;
 			case 1:
-				fTransaction.replace(R.id.mainContent, new FragmentExpense());
-				fTransaction.commit();	
+				newFragment = new FragmentExpenses();
 				break;
 			case 2:
-				fTransaction.replace(R.id.mainContent, new FragmentContact());
-				fTransaction.commit();	
+				newFragment = new FragmentContact();
 				break;
 			case 3:
-				fTransaction.replace(R.id.mainContent, new FragmentConnect());
-				fTransaction.commit();	
+				newFragment = new FragmentCategories();
+				break;
+			case 4:
+				newFragment = new FragmentProfile();
+				break;
+			case 5:
+				startActivity(new Intent(this, ReminderActivity.class));
+				return;
+			case 6:
+				newFragment = new FragmentConnect();
+				break;
+				//newFragment = new FragmentNotification();
+				//break;
+			case 7:
+				newFragment = new FragmentViewShared();
 				break;
 			default:
 				break;
-			
 		}
+		makeToast("On fragment : "+menu[position]);
+		changeFragment(newFragment, menu[position], false);
 		drawerLayout.closeDrawers();
-		
-	}
-	public void setTitle(String title)
-	{
-		getActionBar().setTitle(title);
-		
 	}
 	
+	public void setTitle(String title) {
+		getActionBar().setTitle(title);
+	}
+	
+	/**
+	 * Replaces the current mainContent fragment with a new one.
+	 * 
+	 * @param newFragment The new Fragment to display
+	 * @param fragmentName The Fragment's name, to display as the title
+	 * @param addToBackStack true if it should be added to the backstack
+	 * 
+	 * TODO: Set current page name as backstack name
+	 */
+	public void changeFragment(Fragment newFragment, String fragmentName, boolean addToBackStack) {
+		setTitle(fragmentName);
+		FragmentTransaction fTransaction  = fManager.beginTransaction();
+		fTransaction.replace(R.id.mainContent, newFragment);
+		if (addToBackStack) {
+			fTransaction.addToBackStack(null);
+		}
+		fTransaction.commit();	
+	}
+	
+	/**
+	 * Goes back. Funcationally the same as pressing the back button.
+	 * 
+	 * TODO: Get page name from the backstack name.
+	 */
+	public void goBack() {
+		if (fManager.getBackStackEntryCount() > 0) {
+			fManager.popBackStack();
+		} else {
+			makeToast("Nothing to go back to");
+		}
+	}
+	
+	/**
+	 * Makes a short toast.
+	 * 
+	 * @param message
+	 */
+	public void makeToast(String message) {
+		Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT).show();
+	}
 }
