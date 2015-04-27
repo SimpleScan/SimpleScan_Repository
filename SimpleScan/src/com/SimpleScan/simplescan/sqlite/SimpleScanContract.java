@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
  */
 public class SimpleScanContract {
 
-	public static final  int    DATABASE_VERSION = 2;
+	public static final  int    DATABASE_VERSION = 3;
 	public static final  String DATABASE_NAME = "simplescan.db";
 	private static final String TEXT_TYPE = " TEXT";
 	private static final String INTEGER_TYPE = " INTEGER";	
@@ -63,16 +63,22 @@ public class SimpleScanContract {
 	/** Represents a shared expense table */
 	public static abstract class SharedExpenseTable implements BaseColumns {
 		public static final String TABLE_NAME = "sharedexpense";
-		public static final String COLUMN_NAME_EXPENSE_ID = "expenseid";
-		public static final String COLUMN_NAME_CONTACT_ID = "contactid";
-		public static final String COLUMN_NAME_HAS_PAID = "haspaid";
+		public static final String COLUMN_NAME_CONTACT_ID1 = "contactid1";		
+		public static final String COLUMN_NAME_HAS_PAID1 = "haspaid1";		
+		public static final String COLUMN_NAME_CONTACT_ID2 = "contactid2";		
+		public static final String COLUMN_NAME_HAS_PAID2 = "haspaid2";		
+		public static final String COLUMN_NAME_CONTACT_ID3 = "contactid3";		
+		public static final String COLUMN_NAME_HAS_PAID3 = "haspaid3";	
 		
 		public static final String CREATE_TABLE = "CREATE TABLE " +
 	            TABLE_NAME + " (" +
 	            _ID + " INTEGER PRIMARY KEY," +
-	            COLUMN_NAME_EXPENSE_ID + TEXT_TYPE + COMMA_SEP +	            
-	            COLUMN_NAME_CONTACT_ID + TEXT_TYPE + COMMA_SEP +
-	            COLUMN_NAME_HAS_PAID + TEXT_TYPE + ");";
+	            COLUMN_NAME_CONTACT_ID1 + TEXT_TYPE + COMMA_SEP +	            
+	            COLUMN_NAME_HAS_PAID1 + REAL_TYPE + COMMA_SEP +
+	            COLUMN_NAME_CONTACT_ID2 + TEXT_TYPE + COMMA_SEP +	            
+	            COLUMN_NAME_HAS_PAID2 + REAL_TYPE + COMMA_SEP +
+	            COLUMN_NAME_CONTACT_ID3 + TEXT_TYPE + COMMA_SEP +	            
+	            COLUMN_NAME_HAS_PAID3 + REAL_TYPE + ");";
 		public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 	}
 	

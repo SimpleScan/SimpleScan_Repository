@@ -26,6 +26,7 @@ import android.test.AndroidTestCase;
 import android.test.UiThreadTest;
 import android.util.Log;
 
+import com.SimpleScan.simplescan.FragmentCategories;
 import com.SimpleScan.simplescan.FragmentEditBudget;
 import com.SimpleScan.simplescan.FragmentOverview;
 import com.SimpleScan.simplescan.Main;
@@ -33,6 +34,7 @@ import com.SimpleScan.simplescan.R;
 import com.SimpleScan.simplescan.sqlite.DBManager;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract;
 import com.SimpleScan.simplescan.test.DBManagerDummy;
+
 
 //Some Standard Imports
 import android.util.Log;
@@ -43,6 +45,7 @@ import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView
 import com.google.android.apps.common.testing.ui.espresso.ViewInteraction; //stores found controls
 import com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions;//checking/asserting view state is correct
 import com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers;
+
 
 //static imports for quick access to frequently used methods.
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.*; //click()
@@ -123,8 +126,14 @@ public class BudgetActivityTest extends android.test.ActivityInstrumentationTest
 			}			
 		}
 		
-		fManager = getActivity().getSupportFragmentManager();		
+		/******************************************************/
+		FragmentCategories fragCate = new FragmentCategories();
+		FragmentTransaction fTransaction  = fManager.beginTransaction();
+		fTransaction.replace(android.R.id.content, fragCate,"Cate");
+		fTransaction.commit();
+		fManager = getActivity().getSupportFragmentManager();
 		fragments = fManager.getFragments();
+		/******************************************************/
 		assertNotNull(fragments);
 		for(Fragment f : fragments){
 			if(f != null && f.isVisible() && (f instanceof FragmentOverview)){		

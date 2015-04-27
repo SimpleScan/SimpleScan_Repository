@@ -98,6 +98,15 @@ public class DBTestScripts {
 				"('" + AMOUNT5 + "', '" + DATE5 + "', '" + TITLE5 + "');"; 		
 	}
 	
+	public static abstract class SharedExpenseScripts {
+		public static final String USER_ID1_1 = "76767";
+		public static final boolean HAS_PAID1_1 = false;
+		public static final String USER_ID2_1 = "12333";
+		public static final boolean HAS_PAID2_1 = true;
+		public static final String USER_ID3_1 = "54321";
+		public static final boolean HAS_PAID3_1 = true;
+	}
+	
 	public static abstract class ReminderScripts {
 		public static final String TITLE1 = "Utilities";
 		public static final double BILLED_AMOUNT1 = 950.00;
