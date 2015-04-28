@@ -8,6 +8,8 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="21" />
     
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    
     <uses-permission android:name="android.permission.CAMERA" /> 
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature
@@ -44,8 +46,10 @@
         <!-- lock the screenOrientation for now. May implement this if we have more time on the UI design -->
         <activity 
             android:name=".Main"         	
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
+        
+        <receiver android:name="com.SimpleScan.simplescan.Tools.AlarmManagerBroadcastReceiver" />
+        
     </application>
 
 </manifest>

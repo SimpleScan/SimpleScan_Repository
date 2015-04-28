@@ -4,25 +4,43 @@
     android:divider="?android:dividerVertical"
     android:dividerPadding="8dp"
     android:gravity="center"
-    android:orientation="horizontal"
-    android:showDividers="middle" >
-
-    <!-- Dummy text view that will display the name of a random country. -->
-
-    <Button
-        android:id="@+id/notify_button"
-        android:layout_width="42dp"
-        android:layout_height="match_parent"
-        android:layout_margin="3dp"
-        android:background="@drawable/notification_icon" />
-  
-    <TextView android:id="@+id/reminderMessage"
+    android:orientation="horizontal" 
+    android:clickable="true" >
+   
+    <TextView
+        android:id="@+id/reminderTitle"
         style="?android:textAppearanceMedium"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:paddingLeft="?android:listPreferredItemPaddingLeft" 
-        android:clickable="true" />
+        android:layout_weight="0.7"
+        android:clickable="true"
+        android:paddingLeft="?android:listPreferredItemPaddingLeft"
+        android:textColor="@color/White"
+        android:textSize="18sp" />
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.3"
+        android:paddingLeft="?android:listPreferredItemPaddingLeft"
+        android:orientation="vertical" >
+        
+        <TextView
+	        android:id="@+id/reminderAmtInfo"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:clickable="true"
+	        android:textColor="@color/White"
+	        android:textSize="12sp" />
+        
+        <TextView
+	        android:id="@+id/reminderDateInfo"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:clickable="true"
+	        android:textColor="@color/White"
+	        android:textSize="12sp" /> 
+    </LinearLayout>
 	
     <!-- A button that, when pressed, will delete this list item row from its container. -->
     <Button

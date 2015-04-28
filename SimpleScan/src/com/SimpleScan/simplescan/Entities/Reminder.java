@@ -1,7 +1,6 @@
 package com.SimpleScan.simplescan.Entities;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author pearse1
