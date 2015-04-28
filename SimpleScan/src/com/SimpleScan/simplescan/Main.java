@@ -1,5 +1,7 @@
 package com.SimpleScan.simplescan;
 
+import com.SimpleScan.simplescan.Tools.Filesystem;
+
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;

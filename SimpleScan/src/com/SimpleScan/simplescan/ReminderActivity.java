@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.SimpleScan.simplescan.Entities.Reminder;
+import com.SimpleScan.simplescan.Tools.Notification;
 import com.SimpleScan.simplescan.sqlite.DBManager;
 
 import android.app.Activity;

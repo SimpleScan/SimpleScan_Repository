@@ -8,6 +8,7 @@ import com.SimpleScan.simplescan.Camera.CameraUtils;
 import com.SimpleScan.simplescan.Camera.OCR;
 import com.SimpleScan.simplescan.Camera.Views.DragRectView;
 import com.SimpleScan.simplescan.Camera.Views.ZoomableImageView;
+import com.SimpleScan.simplescan.Tools.Filesystem;
 
 import android.app.Activity;
 import android.content.Intent;

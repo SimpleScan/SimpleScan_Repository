@@ -1,4 +1,4 @@
-package com.SimpleScan.simplescan.Camera;
+package com.SimpleScan.simplescan.Tools;
 
 import android.util.FloatMath;
 import android.view.MotionEvent;

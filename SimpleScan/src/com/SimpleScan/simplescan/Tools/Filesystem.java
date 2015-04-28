@@ -1,4 +1,4 @@
-package com.SimpleScan.simplescan;
+package com.SimpleScan.simplescan.Tools;
 
 import java.io.File;
 import java.io.FileOutputStream;

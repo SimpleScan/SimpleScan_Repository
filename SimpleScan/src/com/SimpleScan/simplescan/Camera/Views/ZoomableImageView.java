@@ -1,6 +1,6 @@
 package com.SimpleScan.simplescan.Camera.Views;
 
-import com.SimpleScan.simplescan.Camera.TouchGeometry;
+import com.SimpleScan.simplescan.Tools.TouchGeometry;
 
 import android.content.Context;
 import android.graphics.Bitmap;

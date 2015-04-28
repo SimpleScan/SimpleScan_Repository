@@ -1,4 +1,8 @@
-package com.SimpleScan.simplescan;
+package com.SimpleScan.simplescan.Tools;
+
+import com.SimpleScan.simplescan.Main;
+import com.SimpleScan.simplescan.R;
+import com.SimpleScan.simplescan.R.drawable;
 
 import android.app.Activity;
 import android.app.NotificationManager;

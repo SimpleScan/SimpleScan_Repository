@@ -1,6 +1,9 @@
 package com.SimpleScan.simplescan.Camera;
 
 import java.io.IOException;
+
+import com.SimpleScan.simplescan.Tools.TouchGeometry;
+
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;

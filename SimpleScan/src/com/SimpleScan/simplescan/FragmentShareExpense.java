@@ -262,7 +262,8 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		if (id < 0) {
 			dbManager.addExpense(newAmount, newDate, newTitle, null, imgTitle, imgPath);
 		} else {
-			dbManager.editExpense(id, newAmount, newDate, newTitle, imgTitle, imgPath);
+			//sharedID = -1 for now
+			dbManager.editExpense(id, -1, newAmount, newDate, newTitle, imgTitle, imgPath);
 		}
 		
 		context.makeToast("Changes saved");
