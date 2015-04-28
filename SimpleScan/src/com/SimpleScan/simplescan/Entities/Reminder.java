@@ -21,6 +21,8 @@ public class Reminder implements Serializable {
 	private double billedAmount;
 	private double paidAmount;
 	
+	private boolean remindAgain;
+	
 	/**
 	 * Public Constructor.
 	 */
@@ -74,6 +76,14 @@ public class Reminder implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public boolean isRemindAgain() {
+		return remindAgain;
+	}
+
+	public void setRemindAgain(boolean remindAgain) {
+		this.remindAgain = remindAgain;
 	}
 
 	

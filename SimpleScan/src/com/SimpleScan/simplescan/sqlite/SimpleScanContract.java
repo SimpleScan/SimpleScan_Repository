@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
  */
 public class SimpleScanContract {
 
-	public static final  int    DATABASE_VERSION = 3;
+	public static final  int    DATABASE_VERSION = 4;
 	public static final  String DATABASE_NAME = "simplescan.db";
 	private static final String TEXT_TYPE = " TEXT";
 	private static final String INTEGER_TYPE = " INTEGER";	
@@ -135,6 +135,7 @@ public class SimpleScanContract {
 		public static final String COLUMN_NAME_PAID_AMOUNT = "paidamount";
 		public static final String COLUMN_NAME_DUE_DATE = "duedate";
 		public static final String COLUMN_NAME_REMIND_DATE = "reminddate";
+		public static final String COLUMN_NAME_REMIND_AGAIN = "remindagain";
 		
 		public static final String CREATE_TABLE = "CREATE TABLE " +
 	            TABLE_NAME + " (" +
@@ -143,7 +144,8 @@ public class SimpleScanContract {
 	            COLUMN_NAME_BILLED_AMOUNT + REAL_TYPE + COMMA_SEP +	
 	            COLUMN_NAME_PAID_AMOUNT + REAL_TYPE + COMMA_SEP +
 	            COLUMN_NAME_DUE_DATE + TEXT_TYPE + COMMA_SEP +	            
-	            COLUMN_NAME_REMIND_DATE + TEXT_TYPE + ");";
+	            COLUMN_NAME_REMIND_DATE + TEXT_TYPE + COMMA_SEP + 
+	            COLUMN_NAME_REMIND_AGAIN + REAL_TYPE + ");";
 		public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 	}
 }

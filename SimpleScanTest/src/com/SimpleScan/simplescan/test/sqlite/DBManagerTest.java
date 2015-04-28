@@ -337,7 +337,7 @@ public class DBManagerTest extends AndroidTestCase {
     	dbTest.createReminderData1();
     	
     	db.addReminder(ReminderScripts.TITLE4, ReminderScripts.BILLED_AMOUNT4, ReminderScripts.PAID_AMOUNT4,
-    			ReminderScripts.DUE_DATE4, ReminderScripts.REMIND_DATE4);
+    			ReminderScripts.DUE_DATE4, ReminderScripts.REMIND_DATE4, ReminderScripts.REMIND_AGAIN4);
     	
     	List<Reminder> reminders = db.getReminders();
     	assertNotNull(reminders);
@@ -351,7 +351,7 @@ public class DBManagerTest extends AndroidTestCase {
     	dbTest.createReminderData1();
     	
     	db.editReminder(1, ReminderScripts.TITLE4, ReminderScripts.BILLED_AMOUNT4, ReminderScripts.PAID_AMOUNT4,
-    			ReminderScripts.DUE_DATE4, ReminderScripts.REMIND_DATE4);
+    			ReminderScripts.DUE_DATE4, ReminderScripts.REMIND_DATE4, ReminderScripts.REMIND_AGAIN4);
     	
     	List<Reminder> reminders = db.getReminders();
     	assertNotNull(reminders);
@@ -378,7 +378,7 @@ public class DBManagerTest extends AndroidTestCase {
     	dbTest.createReminderData1();
     	
     	db.addReminder(ReminderScripts.TITLE4, ReminderScripts.BILLED_AMOUNT4, ReminderScripts.PAID_AMOUNT4,
-    			ReminderScripts.DUE_DATE4, ReminderScripts.REMIND_DATE4);
+    			ReminderScripts.DUE_DATE4, ReminderScripts.REMIND_DATE4, ReminderScripts.REMIND_AGAIN4);
     	
     	List<Reminder> reminders = db.getReminders();
     	assertNotNull(reminders);

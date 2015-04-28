@@ -445,7 +445,8 @@ public class DBManager {
 		// Define a projection that specifies which columns from the database
 		String[] columns = { ReminderTable._ID, ReminderTable.COLUMN_NAME_TITLE,
 				ReminderTable.COLUMN_NAME_BILLED_AMOUNT, ReminderTable.COLUMN_NAME_PAID_AMOUNT, 
-				ReminderTable.COLUMN_NAME_DUE_DATE, ReminderTable.COLUMN_NAME_REMIND_DATE };
+				ReminderTable.COLUMN_NAME_DUE_DATE, ReminderTable.COLUMN_NAME_REMIND_DATE,
+				ReminderTable.COLUMN_NAME_REMIND_AGAIN };
 
 		String sortBy = ExpenseTable._ID + " ASC;";
 
@@ -475,6 +476,7 @@ public class DBManager {
 			r.setPaidAmount(c.getDouble(c.getColumnIndexOrThrow(ReminderTable.COLUMN_NAME_PAID_AMOUNT)));
 			r.setDueDate(c.getString(c.getColumnIndexOrThrow(ReminderTable.COLUMN_NAME_DUE_DATE)));
 			r.setRemindDate(c.getString(c.getColumnIndexOrThrow(ReminderTable.COLUMN_NAME_REMIND_DATE)));
+			r.setRemindAgain((c.getInt(c.getColumnIndexOrThrow(ReminderTable.COLUMN_NAME_REMIND_AGAIN))>0));
 			
 			reminders.add(r);
 			c.moveToNext();
@@ -492,13 +494,14 @@ public class DBManager {
 	 * @param dueDate the due date
 	 * @param (optional) remindDate when to remind the user
 	 */
-	public void addReminder(String title, double billedAmount, double paidAmount, String dueDate, String remindDate){
+	public void addReminder(String title, double billedAmount, double paidAmount, String dueDate, String remindDate, boolean remindAgain){
 		db = dbHelper.getWritableDatabase();
 		
 		ContentValues values = new ContentValues();
 		values.put(ReminderTable.COLUMN_NAME_TITLE, title);
 		values.put(ReminderTable.COLUMN_NAME_BILLED_AMOUNT, billedAmount);		
 		values.put(ReminderTable.COLUMN_NAME_DUE_DATE, dueDate);
+		values.put(ReminderTable.COLUMN_NAME_REMIND_AGAIN, remindAgain);
 		
 		if(paidAmount >= 0.0){
 			values.put(ReminderTable.COLUMN_NAME_PAID_AMOUNT, paidAmount);
@@ -522,7 +525,7 @@ public class DBManager {
 	 * @param remindDate the date to remind the user
 	 */
 	public void editReminder(int id, String title, double billedAmount, double paidAmount,
-							 String dueDate, String remindDate){
+							 String dueDate, String remindDate, boolean remindAgain){
 		db = dbHelper.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		
@@ -541,6 +544,7 @@ public class DBManager {
 		if(remindDate != null){
 			values.put(ReminderTable.COLUMN_NAME_REMIND_DATE, remindDate);
 		}
+		values.put(ReminderTable.COLUMN_NAME_REMIND_AGAIN, remindAgain);
 		
 		String[] whereArgs = {Integer.toString(id), };
 		

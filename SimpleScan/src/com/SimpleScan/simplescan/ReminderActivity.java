@@ -337,9 +337,11 @@ public class ReminderActivity extends Activity implements FragmentManager.OnBack
     		DBManager dbManager = new DBManager(context);
     		// ID is -1 if expense was just created??
     		if (id <= 0) {
-    			dbManager.addReminder(newTitle, newBilledAmount, 0, newDueDate, "");
+    			// you'll need to change last parameter for remindAgain column
+    			dbManager.addReminder(newTitle, newBilledAmount, 0, newDueDate, "", false);
     		} else {
-    			dbManager.editReminder(id, newTitle, newBilledAmount, 0, newDueDate, "");
+    			// you'll need to change last parameter for remindAgain column
+    			dbManager.editReminder(id, newTitle, newBilledAmount, 0, newDueDate, "", false);
     			//dbManager.editReminder(id, newTitle, newBilledAmount, newPaidAmount, newDueDate, "");
     		}
     	}
