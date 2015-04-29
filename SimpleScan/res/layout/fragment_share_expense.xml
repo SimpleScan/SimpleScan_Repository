@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragmentShareExpense_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/FlatBlue">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,6 +18,7 @@
             android:layout_marginTop="23dp"
             android:layout_toLeftOf="@+id/SE_im"
             android:text="Name"
+            android:textColor="@color/White"
             android:textSize="15sp" />
 
         <ImageView
@@ -36,6 +38,7 @@
             android:layout_below="@+id/SE_txtName"
             android:layout_marginTop="30dp"
             android:text="Date"
+            android:textColor="@color/White"
             android:textSize="15sp" />
 
         <TextView
@@ -46,6 +49,7 @@
             android:layout_below="@+id/SE_txtDate"
             android:layout_marginTop="30dp"
             android:text="Amount"
+            android:textColor="@color/White"
             android:textSize="15sp" />
 
         <TextView
@@ -56,6 +60,7 @@
             android:layout_below="@+id/SE_txtAmount"
             android:layout_marginTop="30dp"
             android:text="Category"
+            android:textColor="@color/White"
             android:textSize="15sp" />
 
         <EditText
@@ -64,7 +69,8 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/SE_txtName"
             android:layout_toRightOf="@+id/SE_txtName"
-            android:ems="8" >
+            android:ems="8"
+            android:textColor="@color/White" >
 
             <requestFocus android:layout_width="match_parent" />
         </EditText>
@@ -74,35 +80,65 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/SE_txtAmount"
-            android:layout_toRightOf="@+id/SE_txtName"
             android:layout_toLeftOf="@+id/SE_btnDatePicker"
-            android:inputType="date"/>
+            android:layout_toRightOf="@+id/SE_txtName"
+            android:inputType="date"
+            android:textColor="@color/White" />
         
         <Button
     	    android:id="@+id/SE_btnDatePicker"
     	    style="?android:attr/buttonStyleSmall"
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
+    	    android:layout_width="30dp"
+    	    android:layout_height="30dp"
     	    android:layout_above="@+id/SE_txtAmount"
     	    android:layout_alignRight="@+id/SE_editName"
-    	    android:text="Select" />
+    	    android:background="@drawable/calendar_icon" />
 
         <EditText
             android:id="@+id/SE_editAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/SE_txtCate"
-            android:layout_toRightOf="@+id/SE_txtName"
             android:layout_alignRight="@+id/SE_editName"
-            android:inputType="numberDecimal" />
+            android:layout_toRightOf="@+id/SE_txtName"
+            android:inputType="numberDecimal"
+            android:textColor="@color/White" />
 
           <Spinner
             android:id="@+id/SE_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/SE_editAmount"
-            android:layout_alignTop="@+id/SE_txtCate" />
+            android:layout_alignTop="@+id/SE_txtCate" />      
+          
+          <Button
+                android:id="@+id/SE_btnSave"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/SE_btnDel"
+                android:layout_margin="15dp"
+                android:background="@drawable/save_icon" />
 
+            <Button
+                android:id="@+id/SE_btnDel"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="15dp"
+                android:background="@drawable/flat_delete_button"  />
+
+            <Button
+                android:id="@+id/SE_btnShare"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@+id/SE_btnDel"
+                android:layout_margin="15dp"
+                android:background="@drawable/flat_share_button" />
+            
+<!--  
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -131,7 +167,7 @@
                 android:text="Share " />
 
         </LinearLayout>
-
+-->
     </RelativeLayout>
     
     	<ImageView

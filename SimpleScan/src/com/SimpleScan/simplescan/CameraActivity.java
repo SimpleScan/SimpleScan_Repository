@@ -18,6 +18,7 @@ import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -35,9 +36,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 	
 	//For Camera
 	//Camera front-end
-    private Button shutterButton;
-    private Button focusButton;
-    private Button flashButton;
+    private Button shutterButton, focusButton, flashButton;
     //Camera back-end
     private SurfaceView cameraFrame;
     private CameraEngine cameraEngine;    
@@ -45,14 +44,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     //For Preview
     private boolean _preview;
     //Preview front-end
-    private Button saveButton;
-    private Button retakeButton;
-    private Button recordNameButton;
-    private Button recordDateButton;
-    private Button recordAmtButton;
-    private TextView OCR_name;
-    private TextView OCR_date;
-    private TextView OCR_amt;    
+    private Button saveButton, retakeButton;
+    private Button recordNameButton, recordDateButton, recordAmtButton;
+    private TextView OCR_name, OCR_date, OCR_amt;  
     private ZoomableImageView PreviewImage;
     private DragRectView Rectview;    
 	//Preview back-end
@@ -206,7 +200,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 			updateRecordDateButton(TOGGLE);
 			updateRecordAmtButton(OFF);
     	}
-    	if(theButton == "date") {
+    	if(theButton == "amt") {
     		updateRecordNameButton(OFF);
 			updateRecordDateButton(OFF);
 			updateRecordAmtButton(TOGGLE);
@@ -235,20 +229,33 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     }
     
     private void updateRecordNameButton (int status) {	
-		if(status == TOGGLE) {
+    	if(status == TOGGLE) {
 	    	if(recordNameOn){
 				recordNameOn = false;			
-				if(nameText=="") OCR_name.setText("Name");
-				else OCR_name.setText(nameText);
+				if(nameText=="") {
+					OCR_name.setText("Title");
+					Toast.makeText(getApplicationContext(), "Title", Toast.LENGTH_SHORT).show();
+				}
+				else {
+					OCR_name.setText(nameText);
+					Toast.makeText(getApplicationContext(), nameText, Toast.LENGTH_SHORT).show();
+				}
 			} else {
 				recordNameOn = true;	
 				OCR_name.setText("Crop the name");	
+				Toast.makeText(getApplicationContext(), "Crop the title", Toast.LENGTH_SHORT).show();
 			}
 		} else {
 			if(recordNameOn){
 				recordNameOn = false;			
-				if(nameText=="") OCR_name.setText("Name");
-				else OCR_name.setText(nameText);
+				if(nameText=="") {
+					OCR_name.setText("Title");
+					Toast.makeText(getApplicationContext(), "Title", Toast.LENGTH_SHORT).show();
+				}
+				else {
+					OCR_name.setText(nameText);
+					Toast.makeText(getApplicationContext(), nameText, Toast.LENGTH_SHORT).show();
+				}
 			}
 		}
     }
@@ -256,17 +263,30 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     	if(status == TOGGLE) {
     		if(recordDateOn) {
 				recordDateOn = false;			
-				if(dateText=="") OCR_date.setText("Date");
-				else OCR_date.setText(dateText);
+				if(dateText=="") {
+					OCR_date.setText("Date");
+					Toast.makeText(getApplicationContext(), "Date", Toast.LENGTH_SHORT).show();
+				}
+				else {
+					OCR_date.setText(dateText);
+					Toast.makeText(getApplicationContext(), dateText, Toast.LENGTH_SHORT).show();
+				}
     		} else {
     			recordDateOn = true;
     			OCR_date.setText("Crop the date");
+    			Toast.makeText(getApplicationContext(), "Crop the date", Toast.LENGTH_SHORT).show();
     		}
     	} else {
     		if(recordDateOn) {
 				recordDateOn = false;			
-				if(dateText=="") OCR_date.setText("Date");
-				else OCR_date.setText(dateText);
+				if(dateText=="") {
+					OCR_date.setText("Date");
+					Toast.makeText(getApplicationContext(), "Date", Toast.LENGTH_SHORT).show();
+				}
+				else {
+					OCR_date.setText(dateText);
+					Toast.makeText(getApplicationContext(), dateText, Toast.LENGTH_SHORT).show();
+				}
     		}
     	}
     }
@@ -274,17 +294,31 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     	if(status == TOGGLE) {
     		if(recordAmtOn) {
 		    	recordAmtOn = false;
-				if(amtText=="") OCR_amt.setText("Amount");
-				else OCR_amt.setText("$"+amtText);
+				if(amtText=="") {
+					OCR_amt.setText("Amount");
+					Toast.makeText(getApplicationContext(), "Amount", Toast.LENGTH_SHORT).show();
+				}
+				else {
+					OCR_amt.setText("$"+amtText);
+					Toast.makeText(getApplicationContext(), "$"+amtText, Toast.LENGTH_SHORT).show();
+				}
+				
     		} else {
     			recordAmtOn = true;
 				OCR_amt.setText("Crop the amount");
+				Toast.makeText(getApplicationContext(), "Crop the amount", Toast.LENGTH_SHORT).show();
     		}
     	} else {
     		if(recordAmtOn) {
 		    	recordAmtOn = false;
-				if(amtText=="") OCR_amt.setText("Amount");
-				else OCR_amt.setText("$"+amtText);
+				if(amtText=="") {
+					OCR_amt.setText("Amount");
+					Toast.makeText(getApplicationContext(), "Amount", Toast.LENGTH_SHORT).show();
+				}
+				else {
+					OCR_amt.setText("$"+amtText);
+					Toast.makeText(getApplicationContext(), "$"+amtText, Toast.LENGTH_SHORT).show();
+				}
     		}
     	}
     }
@@ -350,9 +384,14 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     	}
     	if(recordAmtOn) {
     		amtText = OCR.detect_text(croppedBitmap, "detect_numbers");
-    		if(amtText != "Couldn't detect amount") OCR_amt.setText("$"+amtText);
-    		else OCR_amt.setText(amtText);
-    		Toast.makeText(getApplicationContext(), amtText, Toast.LENGTH_SHORT).show();
+    		if(amtText != "Couldn't detect amount") {
+    			OCR_amt.setText("$"+amtText);
+    			Toast.makeText(getApplicationContext(), "$"+amtText, Toast.LENGTH_SHORT).show(); 
+    		}
+    		else {
+    			OCR_amt.setText(amtText);
+    			Toast.makeText(getApplicationContext(), amtText, Toast.LENGTH_SHORT).show();
+    		}
     		
     		try {
     			amt=OCR.amtStr2double(amtText);

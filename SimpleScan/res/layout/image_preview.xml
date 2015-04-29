@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:background="@color/FlatDarkOrange"
     android:gravity="center_horizontal|center_vertical" >
-    	
+   	
     	<TextView
     	    android:id="@+id/OCR_name"
     	    android:layout_width="wrap_content"
@@ -58,7 +58,8 @@
 		    android:layout_marginTop="15dp"
 		    android:layout_marginBottom="10dp"
 		    android:contentDescription="@string/zoom_desc" />
-	
+
+		    
 		<com.SimpleScan.simplescan.Camera.Views.DragRectView
             android:id="@+id/dragRect"
             android:layout_width="match_parent"
@@ -108,8 +109,8 @@
 		    android:layout_toLeftOf="@+id/recordDateButton"
 		    android:layout_alignBaseline="@+id/recordDateButton"
 		    android:layout_alignBottom="@+id/recordDateButton"
-		    android:layout_marginRight="33dp"
-		    android:layout_marginLeft="33dp"
+		    android:layout_marginRight="35dp"
+		    android:layout_marginLeft="35dp"
 		    android:background="@drawable/record_name_layout" />
 		
 		<Button
@@ -119,8 +120,8 @@
 		    android:layout_toRightOf="@+id/recordDateButton"
 		    android:layout_alignBaseline="@+id/recordDateButton"
 		    android:layout_alignBottom="@+id/recordDateButton"
-		    android:layout_marginRight="33dp"
-		    android:layout_marginLeft="33dp"
+		    android:layout_marginRight="35dp"
+		    android:layout_marginLeft="35dp"
 		    android:background="@drawable/record_amt_layout" />
-    
+
 </RelativeLayout>
