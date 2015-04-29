@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/FlatBlue">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -10,12 +11,12 @@
 
         <Button
             android:id="@+id/cate_btnsave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="34dp"
-            android:text="Save" />
+            android:background="@drawable/flat_submit_button" />
 
         <Spinner
             android:id="@+id/cate_spinner"
@@ -32,7 +33,8 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/cate_txtName"
             android:layout_alignLeft="@+id/cate_spinner"
-            android:ems="8" >
+            android:ems="8"
+            android:textColor="@color/White" >
 
             <requestFocus />
         </EditText>
@@ -46,6 +48,7 @@
             android:layout_marginTop="64dp"
             android:text="Category Color"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/White"
             android:textSize="15sp" />
 
         <TextView
@@ -57,6 +60,7 @@
             android:layout_toLeftOf="@+id/cate_editName"
             android:text="Category Name"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/White"
             android:textSize="15sp" />
 
         <TextView
@@ -66,7 +70,8 @@
             android:layout_above="@+id/cate_btnsave"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="56dp"
-            android:text="" />
+            android:text=""
+            android:textColor="@color/White" />
 
         <TextView
             android:id="@+id/cate_txtSaveCate"
@@ -76,7 +81,8 @@
             android:layout_marginTop="22dp"
             android:layout_toLeftOf="@+id/cate_txtDBInfo"
             android:text=""
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/White" />
 
         <TextView
             android:id="@+id/cate_txtSaveMessage"
@@ -86,7 +92,8 @@
             android:layout_alignBottom="@+id/cate_txtSaveCate"
             android:layout_toRightOf="@+id/cate_txtSaveCate"
             android:text=""
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/White" />
 
     </RelativeLayout>
 

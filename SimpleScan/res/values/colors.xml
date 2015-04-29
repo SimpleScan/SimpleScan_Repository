@@ -17,6 +17,12 @@
     <color name="Fuchsia">#FFFF00FF</color>
     <color name="Purple">#FF800080</color>
     
+    <color name="FlatBlue">#FF2C82C9</color>
+    <color name="FlatGreen">#FF2CC990</color>
+    <color name="FlatYellow">#FFEEE657</color>
+    <color name="FlatOrange">#FFFCB941</color>
+    <color name="FlatRed">#FFFC6042</color>
+    
     <color name="Pondwater">#FFA7DBD8</color>
     <color name="Beachstorm">#FFE0E4CC</color>
     <color name="Goldfish">#FFF38630</color>
