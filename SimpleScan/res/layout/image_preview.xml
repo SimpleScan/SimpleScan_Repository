@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/Beachstorm"
+    android:background="@color/FlatDarkOrange"
     android:gravity="center_horizontal|center_vertical" >
     	
     	<TextView
@@ -16,7 +16,7 @@
     	    android:layout_marginTop="10dp"
     	    android:gravity="left"
     	    android:text="@string/preview_name"
-    	    android:textColor="@color/Foodpills"
+    	    android:textColor="@color/FlatDarkBrown"
     	    android:textSize="15sp" />
     	
     	<TextView
@@ -29,7 +29,7 @@
     	    android:layout_toRightOf="@+id/OCR_name"
     	    android:gravity="center_horizontal"
     	    android:text="@string/preview_date"
-    	    android:textColor="@color/Foodpills"
+    	    android:textColor="@color/FlatDarkBrown"
     	    android:textSize="15sp" />
     	
     	<TextView
@@ -43,7 +43,7 @@
     	    android:layout_marginTop="10dp"
     	    android:gravity="right"
     	    android:text="@string/preview_amt"
-    	    android:textColor="@color/Foodpills"
+    	    android:textColor="@color/FlatDarkBrown"
     	    android:textSize="15sp" />
 
 		<com.SimpleScan.simplescan.Camera.Views.ZoomableImageView

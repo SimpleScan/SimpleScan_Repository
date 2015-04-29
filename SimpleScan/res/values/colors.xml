@@ -22,6 +22,11 @@
     <color name="FlatYellow">#FFEEE657</color>
     <color name="FlatOrange">#FFFCB941</color>
     <color name="FlatRed">#FFFC6042</color>
+    <color name="FlatDarkOrange">#FFEE9521</color>
+    <color name="FlatLightBrown">#FFB6836C</color>
+    <color name="FlatDarkBrown">#FF874516</color>
+    <color name="FlatLightAqua">#FF1DAC9E</color>
+    <color name="FlatDarkAqua">#FF21A59A</color>
     
     <color name="Pondwater">#FFA7DBD8</color>
     <color name="Beachstorm">#FFE0E4CC</color>
