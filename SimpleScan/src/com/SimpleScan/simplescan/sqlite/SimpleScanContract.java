@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
  */
 public class SimpleScanContract {
 
-	public static final  int    DATABASE_VERSION = 4;
+	public static final  int    DATABASE_VERSION = 5;
 	public static final  String DATABASE_NAME = "simplescan.db";
 	private static final String TEXT_TYPE = " TEXT";
 	private static final String INTEGER_TYPE = " INTEGER";	
@@ -42,7 +42,7 @@ public class SimpleScanContract {
 		public static final String COLUMN_NAME_AMOUNT = "amount";
 		public static final String COLUMN_NAME_DATE = "date";
 		public static final String COLUMN_NAME_TITLE = "title";
-		public static final String COLUMN_NAME_CATEGORY_ID = "categoryid";
+		public static final String COLUMN_NAME_CATEGORY_NAME = "categoryname";
 		public static final String COLUMN_NAME_SHARED_ID = "sharedid";
 		public static final String COLUMN_NAME_IMAGE_TITLE = "imagetitle";
 		public static final String COLUMN_NAME_IMAGE_PATH = "imagepath";
@@ -53,7 +53,7 @@ public class SimpleScanContract {
 	            COLUMN_NAME_AMOUNT + REAL_TYPE + COMMA_SEP +	         	
 	            COLUMN_NAME_DATE + TEXT_TYPE + COMMA_SEP +
 	            COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
-	            COLUMN_NAME_CATEGORY_ID + TEXT_TYPE + COMMA_SEP +	
+	            COLUMN_NAME_CATEGORY_NAME + TEXT_TYPE + COMMA_SEP +	
 	            COLUMN_NAME_SHARED_ID + TEXT_TYPE + COMMA_SEP +	
 	            COLUMN_NAME_IMAGE_TITLE + TEXT_TYPE + COMMA_SEP+
 	            COLUMN_NAME_IMAGE_PATH+TEXT_TYPE+");";

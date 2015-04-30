@@ -138,7 +138,8 @@ public class DBManager {
 		// Define a projection that specifies which columns from the database
 		String[] columns = { ExpenseTable._ID, ExpenseTable.COLUMN_NAME_AMOUNT,
 				ExpenseTable.COLUMN_NAME_DATE, ExpenseTable.COLUMN_NAME_TITLE, 
-				ExpenseTable.COLUMN_NAME_IMAGE_TITLE, ExpenseTable.COLUMN_NAME_IMAGE_PATH, };
+				ExpenseTable.COLUMN_NAME_CATEGORY_NAME, ExpenseTable.COLUMN_NAME_IMAGE_TITLE,
+				ExpenseTable.COLUMN_NAME_IMAGE_PATH, };
 
 		String sortBy = ExpenseTable.COLUMN_NAME_DATE + " DESC " + limit;
 
@@ -158,6 +159,8 @@ public class DBManager {
 	 */
 	private List<Expense> loadExpenses(Cursor c) {
 		List<Expense> expenses = new ArrayList<Expense>();
+		List<Category> categories = getCategories();
+
 		c.moveToFirst();
 
 		while (!c.isAfterLast()) {
@@ -181,12 +184,34 @@ public class DBManager {
 					.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_IMAGE_TITLE)));
 			e.setImagePath(c.getString(c
 					.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_IMAGE_PATH)));
+			
+			// get category name and find its category color.
+			String cName = c.getString(c.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_CATEGORY_NAME));
+			if(cName != null){
+				Category category = findCategoryInList(categories, cName);
+				e.setCategory(category);
+			}
 
 			expenses.add(e);
 			c.moveToNext();
 		}
 
 		return expenses;
+	}
+
+	/**
+	 * Private helper function that finds a category in a list given a name.
+	 * 
+	 * @param categories the list to search through
+	 * @param categoryName the name of the category to be searched for.
+	 * @return a category from the list or null
+	 */
+	private Category findCategoryInList(List<Category> categories, String categoryName) {
+		for(Category c : categories){
+			if(c.getTitle().equals(categoryName))
+				return c;
+		}
+		return null;
 	}
 
 	/**
@@ -212,6 +237,10 @@ public class DBManager {
 		values.put(ExpenseTable.COLUMN_NAME_DATE, date);
 		values.put(ExpenseTable.COLUMN_NAME_TITLE, title);
 		
+		if(category != null){
+			values.put(ExpenseTable.COLUMN_NAME_CATEGORY_NAME, category.getTitle());
+		}
+		
 		if(imageTitle != null && imagePath != null){
 			values.put(ExpenseTable.COLUMN_NAME_IMAGE_TITLE, imageTitle);
 			values.put(ExpenseTable.COLUMN_NAME_IMAGE_TITLE, imagePath);
@@ -222,7 +251,7 @@ public class DBManager {
 		updateBudget(amount);
 	}
 	
-	public void editExpense(int id, int sharedExpenseId, double amount, String date, String title,
+	public void editExpense(int id, int sharedExpenseId, double amount, String date, String title, Category category,
 			String imageTitle, String imagePath){
 	
 		db = dbHelper.getWritableDatabase();
@@ -240,6 +269,9 @@ public class DBManager {
 		}
 		if(title != null){
 			values.put(ExpenseTable.COLUMN_NAME_TITLE, title);
+		}
+		if(category != null){
+			values.put(ExpenseTable.COLUMN_NAME_CATEGORY_NAME, category.getTitle());
 		}
 		if(imageTitle != null){
 			values.put(ExpenseTable.COLUMN_NAME_IMAGE_TITLE , imageTitle);
@@ -631,7 +663,7 @@ public class DBManager {
  		c.moveToFirst();
  		int sharedId = c.getInt(c.getColumnIndexOrThrow(SharedExpenseTable._ID));
         // update the expense with the new sharedid
- 		editExpense(expenseId, sharedId, -1, null, null, null, null);
+ 		editExpense(expenseId, sharedId, -1, null, null, null, null, null);
 	}
 	
 	/**

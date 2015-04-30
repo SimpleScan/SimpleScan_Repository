@@ -120,7 +120,7 @@ public class DBManagerTest extends AndroidTestCase {
     	setUp();
     	dbTest.createExpenseData1();
     	
-    	db.editExpense(1, -1, 30.00, null, "Electric Bill", null, null);
+    	db.editExpense(1, -1, 30.00, null, "Electric Bill", null, null, null);
     	List<Expense> expenses = db.getExpenses();
     	assertNotNull(expenses);
     	assertEquals(expenses.get(0).getAmount(), 30.00);
