@@ -17,12 +17,15 @@
     <color name="Fuchsia">#FFFF00FF</color>
     <color name="Purple">#FF800080</color>
     
-    <color name="FlatBlue">#FF2C82C9</color>
+    <color name="FlatBlue">#FF67C7ED</color>
     <color name="FlatGreen">#FF2CC990</color>
-    <color name="FlatYellow">#FFEEE657</color>
+    <color name="FlatYellow">#FFFFDB6A</color>
+    <color name="FlatDarkYellow">#FFFFD57B</color>
     <color name="FlatOrange">#FFFCB941</color>
     <color name="FlatRed">#FFFC6042</color>
-    <color name="FlatGray">#FFD4D4D4</color>
+    <color name="FlatPink">#FFF3778A</color>
+    <color name="FlatGray">#FFADADAD</color>
+    <color name="FlatAqua">#FF81D0D5</color>
     <color name="FlatDarkOrange">#FFEE9521</color>
     <color name="FlatLightBrown">#FFB6836C</color>
     <color name="FlatDarkBrown">#FF874516</color>

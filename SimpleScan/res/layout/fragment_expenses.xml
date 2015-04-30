@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
-    android:background="@color/FlatGray">
+    android:background="@color/FlatPink">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -43,10 +43,11 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="62dp"
-            android:gravity="center"
             android:layout_marginTop="16dp"
+            android:gravity="center"
             android:text="Categories:"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/White" />
 
         <CheckBox
             android:id="@+id/E_sharedCheckbox"
@@ -56,7 +57,9 @@
             android:layout_alignBottom="@+id/E_addExpenseButton"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="10dp"
-            android:text="Display Shared Only" />
+            android:text="Display Shared Only"
+            android:textColor="@color/White"
+            android:textColorHint="@color/White" />
 
     </RelativeLayout>
 

@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class FragmentEditBudget extends Fragment implements OnClickListener {
 	
@@ -152,8 +153,10 @@ public class FragmentEditBudget extends Fragment implements OnClickListener {
 		switch(view.getId()) {
 			case(R.id.EB_btnSave):
 				saveBudget();
+				addOverviewFragment();
 				break;
 			case(R.id.EB_btnCancel):
+				addOverviewFragment();
 				break;
 			default:
 				break;
@@ -180,6 +183,14 @@ public class FragmentEditBudget extends Fragment implements OnClickListener {
 		dbManager.createBudget(newBudget, newStartDate, newEndDate);
 		
 		context.makeToast("New budget of " + newBudget);
+	}
+	
+	public void addOverviewFragment() {
+		getActivity().setTitle("Overview");
+		Fragment fragment = new FragmentOverview();
+		
+		Toast.makeText(getActivity().getBaseContext(), "Overview", Toast.LENGTH_SHORT).show();
+		((Main) getActivity()).changeFragment(fragment, "Overview", true);
 	}
 
 }

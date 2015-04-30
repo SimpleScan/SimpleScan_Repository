@@ -3,7 +3,7 @@
     android:id="@+id/fragmentCardBack_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FC6042">
+    android:background="@color/FlatAqua">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -45,7 +45,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/checkboxRepeatedAlarm"
-            android:layout_above="@+id/checkboxRepeatedAlarm" />
+            android:layout_above="@+id/checkboxRepeatedAlarm" 
+
+            />
         
         <CheckBox
             android:id="@+id/checkboxRepeatedAlarm"
@@ -55,6 +57,7 @@
             android:layout_centerVertical="true"
             android:text="Repeated monthly"
             android:textColor="@color/White"
+            android:textColorHint="@color/White"
             android:textSize="12sp" />
         
         <EditText

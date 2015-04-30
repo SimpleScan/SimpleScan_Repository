@@ -69,6 +69,13 @@ public class FragmentOverview extends Fragment {
 			context.changeFragment(newFragment, "Add Budget", false);
 		}
 		textView.setText(display);
+		textView.setOnLongClickListener(new View.OnLongClickListener(){
+			@Override
+			public boolean onLongClick(View v) {
+				addBudgetFragment();
+				return true;
+			}
+		});
 	}
 	
 	/**
@@ -107,4 +114,10 @@ public class FragmentOverview extends Fragment {
 		((Main) getActivity()).changeFragment(fragment, "Edit Expense", true);
 	}
 	
+	public void addBudgetFragment() {
+		getActivity().setTitle("Edit Budget");
+		Fragment fragment = FragmentEditBudget.createNewBudget(getActivity());
+
+		((Main) getActivity()).changeFragment(fragment, "Edit Budget", true);
+	}
 }
