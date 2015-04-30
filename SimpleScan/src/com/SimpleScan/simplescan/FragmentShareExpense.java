@@ -271,7 +271,12 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 	}
 	
 	private void deleteExpense() {
-		// Does nothing
+		Main context = (Main) getActivity();
+		DBManager dbManager = new DBManager(context);
+		
+		dbManager.deleteExpense(expense.getId());
+		
+		context.goBack();
 	}
 	
 	public static void setDataFromCam(String title, String date, double amount, String imgPath)
