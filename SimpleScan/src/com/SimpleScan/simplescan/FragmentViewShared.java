@@ -55,8 +55,9 @@ public class FragmentViewShared extends Fragment {
 					ArrayList<Expense> expenseList = new ArrayList<Expense>();
 					for (int i = 0; i < objects.size(); i++) {
 						Expense exp = new Expense();
-						exp.setTitle(objects.get(i).getString("title"));
+						exp.setTitle(objects.get(i).getString("title")+" (shared w/ "+objects.get(i).getInt("id_receiver")+")");
 						exp.setAmount(objects.get(i).getDouble("amount"));
+					
 						expenseList.add(exp);
 					}
 					expenseAdapter = new ExpenseListViewAdapter(a, expenseList);

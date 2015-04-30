@@ -1,0 +1,93 @@
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <Button
+            android:id="@+id/cate_btnsave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="34dp"
+            android:text="Save" />
+
+        <Spinner
+            android:id="@+id/cate_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/cate_btnsave"
+            android:layout_alignTop="@+id/cate_txtColor"
+            android:entries="@array/cate_color"
+            android:prompt="@string/cate_color_prompt" />
+
+        <EditText
+            android:id="@+id/cate_editName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/cate_txtName"
+            android:layout_alignLeft="@+id/cate_spinner"
+            android:ems="8" >
+
+            <requestFocus />
+        </EditText>
+
+        <TextView
+            android:id="@+id/cate_txtColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/cate_txtName"
+            android:layout_below="@+id/cate_txtName"
+            android:layout_marginTop="64dp"
+            android:text="Category Color"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/cate_txtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="66dp"
+            android:layout_toLeftOf="@+id/cate_editName"
+            android:text="Category Name"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/cate_txtDBInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/cate_btnsave"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="56dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/cate_txtSaveCate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cate_spinner"
+            android:layout_marginTop="22dp"
+            android:layout_toLeftOf="@+id/cate_txtDBInfo"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/cate_txtSaveMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/cate_txtSaveCate"
+            android:layout_alignBottom="@+id/cate_txtSaveCate"
+            android:layout_toRightOf="@+id/cate_txtSaveCate"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </RelativeLayout>
+
+</FrameLayout>

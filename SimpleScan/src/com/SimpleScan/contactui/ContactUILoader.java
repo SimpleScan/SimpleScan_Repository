@@ -1,4 +1,4 @@
-package contactui;
+package com.SimpleScan.contactui;
 
 import android.app.ActionBar.LayoutParams;
 import android.graphics.Color;

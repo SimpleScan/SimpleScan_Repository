@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="White">#FFFFFFFF</color>
+    <color name="Silver">#FFC0C0C0</color>
+    <color name="Gray">#FF808080</color>
+    <color name="Black">#FF000000</color>
+    <color name="Red">#FFFF0000</color>
+    <color name="Maroon">#FF800000</color>
+    <color name="Yellow">#FFFFFF00</color>
+    <color name="Olive">#FF808000</color>
+    <color name="Lime">#FF00FF00</color>
+    <color name="Green">#FF008000</color>
+    <color name="Aqua">#FF00FFFF</color>
+    <color name="Teal">#FF008080</color>
+    <color name="Blue">#FF0000FF</color>
+    <color name="Navy">#FF000080</color>
+    <color name="Fuchsia">#FFFF00FF</color>
+    <color name="Purple">#FF800080</color>
+    
+    <color name="FlatBlue">#FF67C7ED</color>
+    <color name="FlatGreen">#FF2CC990</color>
+    <color name="FlatYellow">#FFFFDB6A</color>
+    <color name="FlatDarkYellow">#FFFFD57B</color>
+    <color name="FlatOrange">#FFFCB941</color>
+    <color name="FlatRed">#FFFC6042</color>
+    <color name="FlatPink">#FFF3778A</color>
+    <color name="FlatGray">#FFADADAD</color>
+    <color name="FlatAqua">#FF81D0D5</color>
+    <color name="FlatDarkOrange">#FFEE9521</color>
+    <color name="FlatLightBrown">#FFB6836C</color>
+    <color name="FlatDarkBrown">#FF874516</color>
+    <color name="FlatLightAqua">#FF1DAC9E</color>
+    <color name="FlatDarkAqua">#FF21A59A</color>
+    
+    <color name="Pondwater">#FFA7DBD8</color>
+    <color name="Beachstorm">#FFE0E4CC</color>
+    <color name="Goldfish">#FFF38630</color>
+    <color name="Foodpills">#FFFA6900</color>
+</resources>

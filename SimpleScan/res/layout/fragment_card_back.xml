@@ -1,0 +1,98 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragmentCardBack_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FC6042">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        
+        <EditText
+            android:id="@+id/editTextTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/editTextDueDate"
+            android:layout_alignLeft="@+id/editTextDueDate"
+            android:ems="8"
+            android:textColor="@color/White" >
+
+            <requestFocus android:layout_width="match_parent" />
+        </EditText>
+        
+        <EditText
+            android:id="@+id/editTextDueDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:ems="6"
+            android:inputType="date"
+            android:textColor="@color/White" />
+        
+        <Button
+    	    android:id="@+id/btnDatePicker"
+    	    style="?android:attr/buttonStyleSmall"
+    	    android:layout_width="30dp"
+    	    android:layout_height="30dp"
+    	    android:layout_toRightOf="@+id/editTextDueDate"
+    	    android:layout_alignBottom="@+id/editTextDueDate"
+    	    android:layout_marginLeft="5dp"
+    	    android:background="@drawable/calendar_icon"/>
+        
+        <EditText
+            android:id="@+id/editTextAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/editTextDueDate"
+            android:layout_below="@+id/editTextDueDate"
+            android:ems="6"
+            android:inputType="numberDecimal"
+            android:textColor="@color/White" />
+ 
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/editTextTitle"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@+id/editTextTitle"
+            android:text="Title:"
+            android:textColor="@color/White"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/txtDueDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/editTextDueDate"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@+id/editTextDueDate"
+            android:text="Due Date:"
+            android:textColor="@color/White"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/txtAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/editTextAmount"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@+id/editTextAmount"
+            android:text="Amount:"
+            android:textColor="@color/White"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/save_icon" />
+
+    </RelativeLayout>
+
+</FrameLayout>

@@ -1,11 +1,13 @@
 package com.SimpleScan.simplescan;
 
 import java.util.List;
+
+import com.SimpleScan.contactui.ContactUILoader;
 import com.parse.FindCallback;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import contactui.ContactUILoader;
+
 import android.annotation.TargetApi;
 import android.app.ActionBar.LayoutParams;
 import android.graphics.Color;
