@@ -12,9 +12,8 @@
         <item>View Expenses</item>
         <item>View Contact List</item>
         <item>Categories</item>
-        
         <item>View Profile</item>
-        <item>View Notification</item>
+        <item>View Reminders</item>
         <item>Connect</item>
         <item>Shared Expenses</item>
     </string-array>
