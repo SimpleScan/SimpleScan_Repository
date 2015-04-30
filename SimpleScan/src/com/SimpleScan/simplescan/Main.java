@@ -1,9 +1,11 @@
 package com.SimpleScan.simplescan;
 
+import android.annotation.TargetApi;
 import com.SimpleScan.simplescan.Tools.Filesystem;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -34,6 +36,7 @@ public class Main extends FragmentActivity implements OnItemClickListener {
 	private int mCurrentScore;
 	private int mCurrentLevel;
 
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	protected void onCreate(Bundle saveInstatnceState) {
 		super.onCreate(saveInstatnceState);
 		setContentView(R.layout.activity_main);
@@ -138,8 +141,14 @@ public class Main extends FragmentActivity implements OnItemClickListener {
 			case 5:
 				startActivity(new Intent(this, ReminderActivity.class));
 				return;
+			case 6:
+				newFragment = new FragmentConnect();
+				break;
 				//newFragment = new FragmentNotification();
 				//break;
+			case 7:
+				newFragment = new FragmentViewShared();
+				break;
 			default:
 				break;
 		}

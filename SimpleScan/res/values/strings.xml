@@ -11,9 +11,12 @@
         <item>Overall</item>
         <item>View Expenses</item>
         <item>View Contact List</item>
-        <item>View Categories</item>
+        <item>Categories</item>
+        
         <item>View Profile</item>
         <item>View Notification</item>
+        <item>Connect</item>
+        <item>Shared Expenses</item>
     </string-array>
     <string name="dateFormat">MM/dd/yyyy</string> 
     <string-array name="cate_color">
@@ -29,4 +32,11 @@
     <string name="preview_date">Date</string>
     <string name="preview_amt">Amount</string>
     <string name="zoom_desc">Preview Image</string>
+    <string name="contact_description">Contact Icon</string>
+    <string name="contact_title">My Contacts</string>
+    <string name="contact_add">Add Contact</string>
+    <string name="contact_name">Sample Name</string>
+    <string name="offline_label">Offline</string>
+    <string name="title_activity_fragment_connect">FragmentConnect</string>
+
 </resources>
