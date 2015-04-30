@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/editTextDueDate"
             android:layout_alignLeft="@+id/editTextDueDate"
+            android:inputType="text"
             android:ems="8"
             android:textColor="@color/White" >
             <requestFocus android:layout_width="match_parent" />

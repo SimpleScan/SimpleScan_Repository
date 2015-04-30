@@ -47,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/EB_txtBudget"
             android:layout_toRightOf="@+id/EB_txtBudget"
+            android:inputType="text"
             android:ems="8"
             android:textColor="@color/White" >
 

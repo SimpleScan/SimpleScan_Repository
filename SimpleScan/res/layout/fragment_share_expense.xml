@@ -70,6 +70,7 @@
             android:layout_alignBottom="@+id/SE_txtName"
             android:layout_toRightOf="@+id/SE_txtName"
             android:ems="8"
+            android:inputType="text"
             android:textColor="@color/White" >
 
             <requestFocus android:layout_width="match_parent" />

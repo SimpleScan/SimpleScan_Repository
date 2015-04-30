@@ -32,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/cate_txtName"
             android:layout_alignLeft="@+id/cate_spinner"
+            android:inputType="text"
             android:ems="8"
             android:textColor="@color/White" >
 
