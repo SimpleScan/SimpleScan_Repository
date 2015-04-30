@@ -204,7 +204,7 @@ public class DBManager {
 	 *            a scanned image of the expense.
 	 */
 	public void addExpense(double amount, String date, String title,
-			Category category, String imageTitle, String imagePath) {
+		Category category, String imageTitle, String imagePath) {
 		db = dbHelper.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -251,6 +251,27 @@ public class DBManager {
 		String[] whereArgs = {Integer.toString(id), };
 		
 		db.update(ExpenseTable.TABLE_NAME, values, "_id=?", whereArgs);
+	}
+	
+	/**
+	 * Deletes a specific expense (along with it's shared expense if it exists) from the expense table (and possibly shared
+	 * expense table)
+	 * 
+	 * @param expenseId the id of the expense
+	 */
+	public void deleteExpense(int expenseId){
+		SharedExpense se = getSharedExpense(expenseId);
+		
+		if(se != null){
+			int sharedExpenseId = se.getId();
+			
+			deleteSharedExpense(sharedExpenseId);
+		}
+		
+		String[] whereArgs = {Integer.toString(expenseId), };		
+		db = dbHelper.getWritableDatabase();
+		db.delete(ExpenseTable.TABLE_NAME, "_id=?", whereArgs);
+		close();
 	}
 	
 	/**
@@ -716,6 +737,20 @@ public class DBManager {
 		e.setUserId3(c.getString(c.getColumnIndexOrThrow(SharedExpenseTable.COLUMN_NAME_CONTACT_ID3)));		
 		e.setHasPaid3((c.getInt(c.getColumnIndexOrThrow(SharedExpenseTable.COLUMN_NAME_HAS_PAID3))>0));
 		return e;
+	}
+	
+	/**
+	 * Deletes a specific shared expense from the shared expense table.
+	 * 
+	 * @param id the id of the shared expense.
+	 */
+	public void deleteSharedExpense(int id){
+		db = dbHelper.getWritableDatabase();
+		
+		String[] whereArgs = {Integer.toString(id), };
+		
+		db.delete(SharedExpenseTable.TABLE_NAME, "_id=?", whereArgs);
+		close();
 	}
 
 	/**

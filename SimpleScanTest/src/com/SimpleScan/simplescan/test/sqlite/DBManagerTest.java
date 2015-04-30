@@ -127,6 +127,33 @@ public class DBManagerTest extends AndroidTestCase {
     	assertEquals(expenses.get(0).getTitle(), "Electric Bill");
     }
     
+    public void testDeleteExpense(){
+    	setUp();
+    	dbTest.createExpenseData1();
+    	
+    	db.deleteExpense(1);
+    	List<Expense> expenses = db.getExpenses();
+    	
+    	assertNotNull(expenses);
+    	assertEquals(4, expenses.size());
+    }
+    
+    public void testDeleteExpenseWithSharedExpense(){
+    	setUp();
+    	dbTest.createExpenseData1();
+    	
+    	db.addSharedExpense(5, SharedExpenseScripts.USER_ID1_1, SharedExpenseScripts.HAS_PAID1_1,
+    			SharedExpenseScripts.USER_ID2_1, SharedExpenseScripts.HAS_PAID2_1,
+    			SharedExpenseScripts.USER_ID3_1, SharedExpenseScripts.HAS_PAID3_1);    	
+    	
+    	db.deleteExpense(5);
+    	
+    	List<Expense> expenses = db.getExpenses();
+    	assertNotNull(expenses);
+    	assertEquals(4, expenses.size());
+    	assertNull(db.getSharedExpense(5));
+    }
+    
     public void testAddSharedExpense1(){
     	setUp();
     	dbTest.createExpenseData1();
