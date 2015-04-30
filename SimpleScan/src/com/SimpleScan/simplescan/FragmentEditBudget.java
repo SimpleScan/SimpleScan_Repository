@@ -189,8 +189,8 @@ public class FragmentEditBudget extends Fragment implements OnClickListener {
 		getActivity().setTitle("Overview");
 		Fragment fragment = new FragmentOverview();
 		
-		Toast.makeText(getActivity().getBaseContext(), "Overview", Toast.LENGTH_SHORT).show();
-		((Main) getActivity()).changeFragment(fragment, "Overview", true);
+		Toast.makeText(getActivity().getBaseContext(), "Overall", Toast.LENGTH_SHORT).show();
+		((Main) getActivity()).changeFragment(fragment, "Overall", true);
 	}
 
 }

@@ -110,14 +110,15 @@ public class FragmentOverview extends Fragment {
 		getActivity().setTitle("Edit Expense");
 		Fragment fragment = FragmentShareExpense.createNewExpense(getActivity());
 		
-		Toast.makeText(getActivity().getBaseContext(), "Expense Created",Toast.LENGTH_SHORT).show();
+		Toast.makeText(getActivity().getBaseContext(), "Create new expense",Toast.LENGTH_SHORT).show();
 		((Main) getActivity()).changeFragment(fragment, "Edit Expense", true);
 	}
 	
 	public void addBudgetFragment() {
 		getActivity().setTitle("Edit Budget");
 		Fragment fragment = FragmentEditBudget.createNewBudget(getActivity());
-
+		
+		Toast.makeText(getActivity().getBaseContext(), "Create new budget",Toast.LENGTH_SHORT).show();
 		((Main) getActivity()).changeFragment(fragment, "Edit Budget", true);
 	}
 }
