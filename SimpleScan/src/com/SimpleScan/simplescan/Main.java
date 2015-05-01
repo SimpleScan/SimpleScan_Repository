@@ -1,7 +1,10 @@
 package com.SimpleScan.simplescan;
 
 import android.annotation.TargetApi;
+
+import com.SimpleScan.simplescan.Entities.User;
 import com.SimpleScan.simplescan.Tools.Filesystem;
+import com.SimpleScan.simplescan.sqlite.DBManager;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -13,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,6 +33,7 @@ public class Main extends FragmentActivity implements OnItemClickListener {
 	private String[] menu;
 	private ActionBarDrawerToggle drawerListener;
 	private FragmentManager fManager;
+	private DBManager dbManager; 
 	
 	//key pair for restore the instance state 
 	static final String STATE_SCORE = "mainScore";
@@ -55,12 +60,27 @@ public class Main extends FragmentActivity implements OnItemClickListener {
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 		drawerListener = new ActionBarDrawerToggle(this,drawerLayout,R.string.drawer_open,R.string.drawer_close);
 		drawerLayout.setDrawerListener(drawerListener);
+		// dbManager 
+		dbManager = new DBManager(this);
 		// fragment manager
 		fManager = getSupportFragmentManager();
 		FragmentTransaction fTransaction  = fManager.beginTransaction();
-		FragmentOverview fragmentOverall = new FragmentOverview();
-		fTransaction.add(R.id.mainContent,fragmentOverall);
-		fTransaction.commit();
+		// check if the user have set up the profile before
+		User userInfo = dbManager.getUserInfo();
+		if(loadUserName(userInfo))
+		{
+			FragmentOverview fragmentOverall = new FragmentOverview();
+			fTransaction.add(R.id.mainContent,fragmentOverall);
+			fTransaction.commit();
+		}
+		else
+		{
+			FragmentConnect fragmentConnect = new FragmentConnect();
+			fTransaction.add(R.id.mainContent,fragmentConnect);
+			fTransaction.commit();
+		}
+		
+		
 	}
 	
 	/*
@@ -200,5 +220,26 @@ public class Main extends FragmentActivity implements OnItemClickListener {
 	 */
 	public void makeToast(String message) {
 		Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT).show();
+	}
+	
+	/*
+	*  Method that check for the existence of the user info in the DB
+	*  if exists, load the user name, ID and display in the UI
+	*  if no, do nothing
+	*/
+	public boolean loadUserName(User userInfo)
+	{
+		// check if the user set up the user name before
+		if(!userInfo.getName().equals("-1"))
+		{
+			Log.i("Fragement Profile -->"," userInfo exist");
+			if(!userInfo.getName().isEmpty())
+			{
+				return true;
+			}
+			else return false;
+		}
+		else
+			return false;
 	}
 }
