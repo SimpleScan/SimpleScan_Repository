@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000000"
-        android:id="@+id/loading_frame"
-        >
+        android:background="@color/FlatBlue"
+        android:id="@+id/loading_frame" >
 
         <ProgressBar
             android:id="@+id/progressBar1"
@@ -28,114 +28,72 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </RelativeLayout>
+
+    
 	<RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/contact_frame"
         android:visibility="gone"
-        android:background="#000000"
-        >
-	    <RelativeLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:background="@drawable/customborder" >
+        android:background="@color/FlatBlue" >
+          
+        <TextView
+	        android:id="@+id/txtContact"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:layout_centerHorizontal="true"
+	        android:layout_margin="35dp"
+	        android:text="@string/contact_title"
+	        android:textColor="@color/White"
+	        android:textSize="25sp" />
+	        
+		<LinearLayout
+           android:id="@+id/acontacts_layout"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/txtContact"
+           android:layout_above="@+id/txtPendingRequest"
+           android:orientation="vertical" 
+           android:paddingLeft="10dp"
+           android:paddingRight="10dp"
+           android:layout_margin="10dp">
+       	</LinearLayout>
+            
+        <TextView
+           android:id="@+id/txtPendingRequest"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_centerHorizontal="true"
+		   android:layout_centerVertical="true"
+           android:text="Pending Requests"
+           android:textColor="@color/White"
+           android:textSize="25sp" />
+
+       	<LinearLayout
+           android:id="@+id/rcontacts_layout"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/txtPendingRequest"
+           android:layout_above="@+id/addContact"
+           android:orientation="vertical" 
+           android:paddingLeft="10dp"
+           android:paddingRight="10dp"
+           android:layout_margin="10dp">
+       	</LinearLayout>
+            
+        <TextView
+	        android:id="@+id/addContact"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_centerHorizontal="true"
+	        android:layout_margin="35dp"
+	        android:onClick="onClick"
+	        android:text="@string/contact_add"
+	        android:textColor="@color/White"
+	        android:textSize="25sp" />
+        
+    </RelativeLayout>
 	
-	        <ImageView
-	            android:id="@+id/contactImage"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_alignBottom="@+id/txtContact"
-	            android:layout_marginRight="14dp"
-	            android:layout_toLeftOf="@+id/txtContact"
-	            android:contentDescription="@string/contact_description"
-	            android:src="@drawable/ic_contact_icon" />
-	
-	        <TextView
-	            android:id="@+id/txtContact"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_alignParentTop="true"
-	            android:layout_centerHorizontal="true"
-	            android:layout_marginTop="36dp"
-	            android:text="@string/contact_title"
-	            android:textColor="#ffffff"
-	            android:textSize="25sp" />
-	    </RelativeLayout>
-	
-	    <RelativeLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent" >
-		
-	        <ImageView
-	            android:id="@+id/addContactImage"
-	            android:layout_width="15dp"
-	            android:layout_height="15dp"
-	            android:layout_alignTop="@+id/addContact"
-	            android:layout_toLeftOf="@+id/addContact"
-	            android:src="@drawable/ic_add_contact" />
-			
-	        <LinearLayout
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:layout_alignParentLeft="true"
-	            android:layout_alignParentRight="true"
-	            android:layout_alignParentTop="true"
-	            android:layout_marginTop="86dp"
-	            android:orientation="vertical"
-	            >
-				<LinearLayout
-	                android:id="@+id/acontacts_layout"
-	                android:layout_width="fill_parent"
-	                android:layout_height="wrap_content"
-	                android:layout_alignParentLeft="true"
-	                android:layout_alignParentRight="true"
-	                android:layout_alignParentTop="true"
-	                android:orientation="vertical" 
-	                android:paddingLeft="10dp"
-	                android:paddingRight="10dp"
-	                android:layout_marginTop="20dp">
-	            </LinearLayout>
-	            <TextView
-	                android:layout_width="fill_parent"
-	                android:layout_height="wrap_content"
-	                android:layout_marginTop="50dp"
-	                android:gravity="center"
-	                android:text="Pending Requests"
-	                android:textColor="#ffffff"
-	                android:textSize="25sp" />
-	
-	            <LinearLayout
-	                android:id="@+id/rcontacts_layout"
-	                android:layout_width="fill_parent"
-	                android:layout_height="wrap_content"
-	                android:layout_alignParentLeft="true"
-	                android:layout_alignParentRight="true"
-	                android:layout_alignParentTop="true"
-	                android:orientation="vertical" 
-	                android:paddingLeft="10dp"
-	                android:paddingRight="10dp"
-	                android:layout_marginTop="20dp">
-	            </LinearLayout>
-	        </LinearLayout>
-			<TextView
-			    	android:id="@+id/test"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:gravity="center"
-	                android:text=""
-	                android:textSize="25sp" 
-	                />
-	        <TextView
-	            android:id="@+id/addContact"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_alignParentBottom="true"
-	            android:layout_centerHorizontal="true"
-	            android:layout_marginBottom="32dp"
-	            android:onClick="onClick"
-	            android:text="@string/contact_add"
-	            android:textColor="#ffffff"
-	            android:textSize="25sp" />
-	    </RelativeLayout>
-	</RelativeLayout>
 </RelativeLayout>
