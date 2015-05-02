@@ -44,15 +44,17 @@ public class ExpenseListViewAdapter extends BaseAdapter {
 			LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			arg1 = inflater.inflate(R.layout.list_single, arg2, false);
 		}
-
-		TextView stopName = (TextView) arg1.findViewById(R.id.textView1);
-		TextView stopDist = (TextView) arg1.findViewById(R.id.textView2);
-
+		
+		//TextView stopName = (TextView) arg1.findViewById(R.id.textView1);
+		//TextView stopDist = (TextView) arg1.findViewById(R.id.textView2);
+		
 		Expense ex = expenseList.get(arg0);
-
-		stopName.setText(ex.getTitle());
-		stopDist.setText("$"+ex.getAmount());
-
+		
+		//stopName.setText(ex.getTitle());
+		//stopDist.setText("$"+ex.getAmount());
+		
+		((TextView) arg1.findViewById(R.id.txtExpense)).setText(ex.getDate()+"  $"+ex.getAmount()+" - "+ex.getTitle());
+		
 		return arg1;
 	}
 

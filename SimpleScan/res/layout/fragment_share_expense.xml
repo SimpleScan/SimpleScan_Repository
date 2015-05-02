@@ -117,19 +117,23 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_alignParentBottom="true"
-                android:layout_toLeftOf="@+id/SE_btnDel"
-                android:layout_margin="15dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="60dp"
                 android:background="@drawable/save_icon" />
 
             <Button
                 android:id="@+id/SE_btnDel"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
-                android:layout_margin="15dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="60dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
                 android:background="@drawable/flat_delete_button"  />
-
+<!--  
             <Button
                 android:id="@+id/SE_btnShare"
                 android:layout_width="60dp"
@@ -138,7 +142,7 @@
                 android:layout_toRightOf="@+id/SE_btnDel"
                 android:layout_margin="15dp"
                 android:background="@drawable/flat_share_button" />
-            
+-->            
 <!--  
         <LinearLayout
             android:layout_width="match_parent"
