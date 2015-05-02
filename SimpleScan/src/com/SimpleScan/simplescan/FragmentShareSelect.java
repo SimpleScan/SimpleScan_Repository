@@ -49,7 +49,7 @@ public class FragmentShareSelect extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 Expense e = expenseAdapter.getItem(arg2);
-                System.out.println(e.getAmount()+"\n");
+                //System.out.println(e.getAmount()+"\n");
         		ParseObject newSE = new ParseObject("ShareRequest");
 				newSE.put("id_sender", myID);
 				newSE.put("id_receiver", contactID);
@@ -57,6 +57,13 @@ public class FragmentShareSelect extends Fragment{
 				newSE.put("title",e.getTitle());
 				newSE.put("amount", e.getAmount());
 				newSE.saveInBackground();
+				
+				//Tai did this, updating DBManager
+				Main context = (Main) getActivity();
+				DBManager dbManager = new DBManager(context);
+				dbManager.editExpense(e.getId(), contactID, e.getAmount(), e.getDate(), e.getTitle(), e.getCategory(), e.getImageTitle(), e.getImagePath());
+				//Then update sharedExpenseTable
+				
 				Fragment fragment = new FragmentViewShared();
 				FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -1,7 +1,30 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content" >
-
+    
+	<TextView
+        android:id="@+id/txtExpense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="5dp"
+        android:gravity="bottom"
+        android:text="Date: $Amt - Title"
+        android:textSize="15sp" 
+        android:textColor="@color/White" />
+	
+	<TextView
+        android:id="@+id/txtSharedID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dp"
+        android:gravity="bottom"
+        android:text="Shared: "
+        android:textSize="15sp"
+        android:textColor="@color/White" 
+        android:visibility="gone" />
+<!--  
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -25,5 +48,5 @@
         android:text="Stop Name"
         android:textColor="#000000"
         android:textSize="20sp" />
-
+-->
 </RelativeLayout>

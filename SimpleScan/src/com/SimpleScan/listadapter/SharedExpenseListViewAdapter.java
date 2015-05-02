@@ -7,11 +7,13 @@ import com.SimpleScan.simplescan.Entities.Expense;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SharedExpenseListViewAdapter extends BaseAdapter {
 	Activity activity;
@@ -46,14 +48,18 @@ public class SharedExpenseListViewAdapter extends BaseAdapter {
 			arg1 = inflater.inflate(R.layout.list_single, arg2, false);
 		}
 
-		TextView stopName = (TextView) arg1.findViewById(R.id.textView1);
-		TextView stopDist = (TextView) arg1.findViewById(R.id.textView2);
+		//TextView stopName = (TextView) arg1.findViewById(R.id.textView1);
+		//TextView stopDist = (TextView) arg1.findViewById(R.id.textView2);
 
 		Expense ex = expenseList.get(arg0);
 
-		stopName.setText(ex.getTitle());
-		stopDist.setText("$"+ex.getAmount());
-
+		//stopName.setText(ex.getTitle());
+		//stopDist.setText("$"+ex.getAmount());
+		
+		((TextView) arg1.findViewById(R.id.txtExpense)).setText(ex.getDate()+"  $"+ex.getAmount()+" - "+ex.getTitle());
+		((TextView) arg1.findViewById(R.id.txtSharedID)).setText("Shared: " + String.valueOf(ex.getSharedId()));
+		((TextView) arg1.findViewById(R.id.txtSharedID)).setVisibility(View.VISIBLE);
+		
 		return arg1;
 	}
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.SimpleScan.listadapter.ExpenseListViewAdapter;
+import com.SimpleScan.listadapter.SharedExpenseListViewAdapter;
 import com.SimpleScan.simplescan.Entities.Expense;
 import com.SimpleScan.simplescan.sqlite.DBManager;
 import com.parse.FindCallback;
@@ -28,7 +29,7 @@ public class FragmentViewShared extends Fragment {
 	private int myID;
 	protected View v;
 	Activity a;
-	ExpenseListViewAdapter expenseAdapter;
+	SharedExpenseListViewAdapter SharedExpenseAdapter;
 	public FragmentViewShared() { 
 		this.myID = Integer.parseInt(ParseUser.getCurrentUser().getUsername());
 	}
@@ -55,14 +56,15 @@ public class FragmentViewShared extends Fragment {
 					ArrayList<Expense> expenseList = new ArrayList<Expense>();
 					for (int i = 0; i < objects.size(); i++) {
 						Expense exp = new Expense();
-						exp.setTitle(objects.get(i).getString("title")+" (shared w/ "+objects.get(i).getInt("id_receiver")+")");
+						exp.setTitle(objects.get(i).getString("title"));
 						exp.setAmount(objects.get(i).getDouble("amount"));
-					
+						exp.setSharedId(objects.get(i).getInt("id_receiver"));
+						
 						expenseList.add(exp);
 					}
-					expenseAdapter = new ExpenseListViewAdapter(a, expenseList);
+					SharedExpenseAdapter = new SharedExpenseListViewAdapter(a, expenseList, "");
 					ListView expensesLV = (ListView) v.findViewById(R.id.list_expenses);
-					expensesLV.setAdapter(expenseAdapter);
+					expensesLV.setAdapter(SharedExpenseAdapter);
 					
 				} else {
 					Log.d("contact", "Error: " + e.getMessage());
