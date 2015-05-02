@@ -109,6 +109,7 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		expense = (Expense) getArguments().getSerializable(EXPENSE_KEY);
 		
 		setUpEditExpense(v);
+		setUpReceiptImage(v);
 		setUpDatePicker(v);
 		setUpCategory(v);
 		hasImg = false;
@@ -158,21 +159,12 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		spinner.setAdapter(adapter);
 	}
 	
-	private void setUpEditExpense(View v) {
-		// Set the default values for text fields
-		editName = (EditText) v.findViewById(R.id.SE_editName);
-		editName.setText(expense.getTitle());
-		editDate = (EditText) v.findViewById(R.id.SE_editDate);
-		editDate.setText(expense.getDate());
-		editAmount = (EditText) v.findViewById(R.id.SE_editAmount);
-		editAmount.setText("" + expense.getAmount());
-		
-		// Set button listeners
-	    Button saveButton = (Button) v.findViewById(R.id.SE_btnSave);
-	    saveButton.setOnClickListener(this);
-	    Button deleteButton = (Button) v.findViewById(R.id.SE_btnDel);
-	    deleteButton.setOnClickListener(this);
-		ImageView ExpenseImg = (ImageView)v.findViewById(R.id.SE_im);
+	private void setUpReceiptImage(View v) {
+		ImageView ExpenseImg = (ImageView) v.findViewById(R.id.SE_im);
+		if(expense.getImagePath() != null) {
+			receiptImg = BitmapUtils.createSampledBitmap(expense.getImagePath(), 1);
+		    ExpenseImg.setImageBitmap(receiptImg);
+		}
 		ExpenseImg.setOnClickListener(this);
 		ExpenseImg.setOnLongClickListener(new OnLongClickListener() {
 			@Override
@@ -186,6 +178,22 @@ public class FragmentShareExpense extends Fragment implements View.OnClickListen
 		        return true;
 		    }
 		});
+	}
+	
+	private void setUpEditExpense(View v) {
+		// Set the default values for text fields
+		editName = (EditText) v.findViewById(R.id.SE_editName);
+		editName.setText(expense.getTitle());
+		editDate = (EditText) v.findViewById(R.id.SE_editDate);
+		editDate.setText(expense.getDate());
+		editAmount = (EditText) v.findViewById(R.id.SE_editAmount);
+		editAmount.setText("" + expense.getAmount());
+		
+		// Set button listeners
+	    Button saveButton = (Button) v.findViewById(R.id.SE_btnSave);
+	    saveButton.setOnClickListener(this);
+	    Button deleteButton = (Button) v.findViewById(R.id.SE_btnDel);
+	    deleteButton.setOnClickListener(this); 
 	}
 	
 	private void setUpDatePicker(View v) {

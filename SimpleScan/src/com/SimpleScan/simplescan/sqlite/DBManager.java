@@ -241,9 +241,12 @@ public class DBManager {
 			values.put(ExpenseTable.COLUMN_NAME_CATEGORY_NAME, category.getTitle());
 		}
 		
-		if(imageTitle != null && imagePath != null){
+		if(imageTitle != null) {
 			values.put(ExpenseTable.COLUMN_NAME_IMAGE_TITLE, imageTitle);
-			values.put(ExpenseTable.COLUMN_NAME_IMAGE_TITLE, imagePath);
+		}
+		
+		if(imagePath != null) { 
+			values.put(ExpenseTable.COLUMN_NAME_IMAGE_PATH, imagePath);
 		}
 
 		insert(ExpenseTable.TABLE_NAME, null, values);
