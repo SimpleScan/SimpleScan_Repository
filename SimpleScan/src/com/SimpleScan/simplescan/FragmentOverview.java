@@ -114,8 +114,9 @@ public class FragmentOverview extends Fragment {
 					android.R.layout.simple_list_item_1, emptyMsg);
 			listView.setAdapter(adapter);
 		} else {
-			ArrayAdapter<Expense> adapter = new ArrayAdapter<Expense>(getActivity(),
-					android.R.layout.simple_list_item_1, expensesList);
+			//ArrayAdapter<Expense> adapter = new ArrayAdapter<Expense>(getActivity(),
+			//		android.R.layout.simple_list_item_1, expensesList);
+			OverviewListAdapter adapter = new OverviewListAdapter(getActivity(), expensesList);
 			listView.setAdapter(adapter);
 		}
 	}
