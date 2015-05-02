@@ -10,11 +10,11 @@ application for better management of finances.
 
 Contributors:
 
-Xiaoming Chen
-David Li
-Daniel Pang
-Jaehwan Park
-Tyler Pearse
+Xiaoming Chen, 
+David Li,
+Daniel Pang,
+Jaehwan Park,
+Tyler Pearse,
 Tai Lin Wu
 
 Installation:
