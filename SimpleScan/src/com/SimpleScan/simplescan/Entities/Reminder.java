@@ -3,7 +3,6 @@ package com.SimpleScan.simplescan.Entities;
 import java.io.Serializable;
 
 /**
- * @author pearse1
  *
  * Stores information for a reminder.
  */

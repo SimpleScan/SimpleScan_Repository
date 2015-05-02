@@ -24,7 +24,6 @@ import com.SimpleScan.simplescan.sqlite.SimpleScanContract.SharedExpenseTable;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract.UserTable;
 
 /**
- * @author pearse1
  *
  *         This class provides an interface for users to interact with the
  *         database.
@@ -69,8 +68,9 @@ public class DBManager {
 	}
 	
 	/**
-	 * added by Kevin Chen (may need code reivew with Tyler)
+	 * 
 	 * Adds the Profile info to the database
+	 * 
 	 * @param name the User name
 	 * @param the android device ID
 	 */
@@ -254,6 +254,18 @@ public class DBManager {
 		updateBudget(amount);
 	}
 	
+	/**
+	 * Edits an expense already in the database.
+	 * 
+	 * @param id the expense's id
+	 * @param sharedExpenseId the shared epense id
+	 * @param amount the new amount
+	 * @param date the new date
+	 * @param title the new title
+	 * @param category the new title
+	 * @param imageTitle the new image title
+	 * @param imagePath the new image path
+	 */
 	public void editExpense(int id, int sharedExpenseId, double amount, String date, String title, Category category,
 			String imageTitle, String imagePath){
 	
@@ -447,7 +459,6 @@ public class DBManager {
 	}
 
 	/**
-	 * added by Kevin Chen (may need code reivew with Tyler)
 	 * get a list of categories from the database
 	 */
 	public List<Category>getCategories()
@@ -474,7 +485,6 @@ public class DBManager {
 	}
 	
 	/**
-	 * added by Kevin Chen (may need code reivew with Tyler)
 	 * Adds a category to the database
 	 * @param name the category name
 	 * @param color the category color

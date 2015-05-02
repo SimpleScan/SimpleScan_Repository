@@ -4,9 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author pearse1
  *
- * Public Constructor.
+ * Stores information for an expense.
  */
 public class Expense implements Serializable {
 

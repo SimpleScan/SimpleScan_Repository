@@ -1,5 +1,9 @@
 package com.SimpleScan.simplescan.Entities;
 
+/**
+ * 
+ * Stores a user's profile information.
+ */
 public class Profile {
 	
 	private int id;

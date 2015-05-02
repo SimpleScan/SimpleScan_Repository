@@ -3,11 +3,7 @@ package com.SimpleScan.simplescan.Entities;
 import java.io.Serializable;
 import java.util.Date;
 
-// TEST TEST TEST ///
-
-/**
- * @author pearse1
- * 
+/** 
  * Stores information for a budget.
  */
 public class Budget implements Serializable {

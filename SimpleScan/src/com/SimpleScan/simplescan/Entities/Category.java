@@ -6,7 +6,6 @@ import java.io.Serializable;
 import android.graphics.Color;
 
 /**
- * @author pearse1
  *
  * Stores information for a category.
  */

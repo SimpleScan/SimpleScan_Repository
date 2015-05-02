@@ -5,7 +5,6 @@ import java.io.Serializable;
 import android.media.Image;
 
 /**
- * @author pearse1
  *
  * Stores information for a user contact.
  */

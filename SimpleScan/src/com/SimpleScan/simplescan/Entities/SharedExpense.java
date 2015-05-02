@@ -3,8 +3,6 @@ package com.SimpleScan.simplescan.Entities;
 /**
  * Represents a shared expense.
  * 
- * @author pearse1
- *
  */
 public class SharedExpense {
 

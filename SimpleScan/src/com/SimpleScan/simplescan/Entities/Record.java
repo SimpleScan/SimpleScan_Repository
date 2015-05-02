@@ -7,7 +7,6 @@ import java.util.Map;
 import android.media.Image;
 
 /**
- * @author pearse1
  * 
  * Stores information for a record.
  */

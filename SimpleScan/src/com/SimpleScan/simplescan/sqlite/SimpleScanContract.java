@@ -3,9 +3,12 @@ package com.SimpleScan.simplescan.sqlite;
 import android.provider.BaseColumns;
 
 /**
- * @author pearse1
  *
  * Represents a database "contract."  In other words, a schema for our database.
+ * 
+ * Each abstract class represents a table in the database.  Besides the TABLE_NAME, CREATE_TABLE, DELETE_TABLE, 
+ * each String constant in the abstract class represents a table column.
+ * 
  */
 public class SimpleScanContract {
 
