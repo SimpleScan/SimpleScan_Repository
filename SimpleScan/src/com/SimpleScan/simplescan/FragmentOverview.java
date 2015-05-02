@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.text.format.Time;
 
 public class FragmentOverview extends Fragment {
 	
@@ -65,8 +66,21 @@ public class FragmentOverview extends Fragment {
 			Budget budget = dbManager.getBudget();
 			display = "$" + budget.getCurrAmount();
 		} catch (Exception e) {
+			/*
 			FragmentEditBudget newFragment = FragmentEditBudget.createNewBudget(context);
 			context.changeFragment(newFragment, "Add Budget", false);
+			*/
+			Time today = new Time(Time.getCurrentTimezone());
+			today.setToNow();
+			String day = String.valueOf(today.monthDay);
+			String month = String.valueOf(today.month);
+			String monthNext = String.valueOf(today.month+1);
+			String year = String.valueOf(today.year);
+			Double iniBudget = 0.00; 
+			String newStartDate = month+"/"+day+"/"+year;
+			String newEndDate = monthNext+"/"+day+"/"+year;
+			dbManager.createBudget(iniBudget, newStartDate, newEndDate);
+			display = "$" + iniBudget;
 		}
 		textView.setText(display);
 		textView.setOnLongClickListener(new View.OnLongClickListener(){
