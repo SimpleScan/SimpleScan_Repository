@@ -4,16 +4,15 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author pearse1
  *
- * Public Constructor.
+ * Stores information for an expense.
  */
 public class Expense implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private int id;
-	
+	private int id = -1;
+	private int sharedId = -1;
 	private double amount;
 	private String title;
 	private String date;
@@ -36,6 +35,14 @@ public class Expense implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getSharedId() {
+		return sharedId;
+	}
+
+	public void setSharedId(int sharedId) {
+		this.sharedId = sharedId;
 	}
 
 	public double getAmount() {

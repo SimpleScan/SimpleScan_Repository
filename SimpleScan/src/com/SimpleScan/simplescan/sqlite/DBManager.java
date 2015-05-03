@@ -14,15 +14,16 @@ import com.SimpleScan.simplescan.Entities.Budget;
 import com.SimpleScan.simplescan.Entities.Category;
 import com.SimpleScan.simplescan.Entities.Expense;
 import com.SimpleScan.simplescan.Entities.Reminder;
+import com.SimpleScan.simplescan.Entities.SharedExpense;
 import com.SimpleScan.simplescan.Entities.User;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract.BudgetTable;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract.CategoryTable;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract.ExpenseTable;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract.ReminderTable;
+import com.SimpleScan.simplescan.sqlite.SimpleScanContract.SharedExpenseTable;
 import com.SimpleScan.simplescan.sqlite.SimpleScanContract.UserTable;
 
 /**
- * @author pearse1
  *
  *         This class provides an interface for users to interact with the
  *         database.
@@ -67,8 +68,9 @@ public class DBManager {
 	}
 	
 	/**
-	 * added by Kevin Chen (may need code reivew with Tyler)
+	 * 
 	 * Adds the Profile info to the database
+	 * 
 	 * @param name the User name
 	 * @param the android device ID
 	 */
@@ -136,7 +138,8 @@ public class DBManager {
 		// Define a projection that specifies which columns from the database
 		String[] columns = { ExpenseTable._ID, ExpenseTable.COLUMN_NAME_AMOUNT,
 				ExpenseTable.COLUMN_NAME_DATE, ExpenseTable.COLUMN_NAME_TITLE, 
-				ExpenseTable.COLUMN_NAME_IMAGE_TITLE, ExpenseTable.COLUMN_NAME_IMAGE_PATH, };
+				ExpenseTable.COLUMN_NAME_CATEGORY_NAME, ExpenseTable.COLUMN_NAME_IMAGE_TITLE,
+				ExpenseTable.COLUMN_NAME_IMAGE_PATH, };
 
 		String sortBy = ExpenseTable.COLUMN_NAME_DATE + " DESC " + limit;
 
@@ -156,11 +159,21 @@ public class DBManager {
 	 */
 	private List<Expense> loadExpenses(Cursor c) {
 		List<Expense> expenses = new ArrayList<Expense>();
+		List<Category> categories = getCategories();
+
 		c.moveToFirst();
 
 		while (!c.isAfterLast()) {
 			Expense e = new Expense();
 			e.setId(c.getInt(c.getColumnIndexOrThrow(ExpenseTable._ID)));
+			try{
+				// an exception will be thrown if sharedId is null
+				int sharedId = c.getInt(c.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_SHARED_ID));
+				e.setSharedId(sharedId);
+			} catch (Exception exception) 
+			{
+				exception.printStackTrace();
+			}
 			e.setTitle(c.getString(c
 					.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_TITLE)));
 			e.setAmount(c.getDouble(c
@@ -171,12 +184,34 @@ public class DBManager {
 					.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_IMAGE_TITLE)));
 			e.setImagePath(c.getString(c
 					.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_IMAGE_PATH)));
+			
+			// get category name and find its category color.
+			String cName = c.getString(c.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_CATEGORY_NAME));
+			if(cName != null){
+				Category category = findCategoryInList(categories, cName);
+				e.setCategory(category);
+			}
 
 			expenses.add(e);
 			c.moveToNext();
 		}
 
 		return expenses;
+	}
+
+	/**
+	 * Private helper function that finds a category in a list given a name.
+	 * 
+	 * @param categories the list to search through
+	 * @param categoryName the name of the category to be searched for.
+	 * @return a category from the list or null
+	 */
+	private Category findCategoryInList(List<Category> categories, String categoryName) {
+		for(Category c : categories){
+			if(c.getTitle().equals(categoryName))
+				return c;
+		}
+		return null;
 	}
 
 	/**
@@ -194,7 +229,7 @@ public class DBManager {
 	 *            a scanned image of the expense.
 	 */
 	public void addExpense(double amount, String date, String title,
-			Category category, String imageTitle, String imagePath) {
+		Category category, String imageTitle, String imagePath) {
 		db = dbHelper.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -202,9 +237,16 @@ public class DBManager {
 		values.put(ExpenseTable.COLUMN_NAME_DATE, date);
 		values.put(ExpenseTable.COLUMN_NAME_TITLE, title);
 		
-		if(imageTitle != null && imagePath != null){
+		if(category != null){
+			values.put(ExpenseTable.COLUMN_NAME_CATEGORY_NAME, category.getTitle());
+		}
+		
+		if(imageTitle != null) {
 			values.put(ExpenseTable.COLUMN_NAME_IMAGE_TITLE, imageTitle);
-			values.put(ExpenseTable.COLUMN_NAME_IMAGE_TITLE, imagePath);
+		}
+		
+		if(imagePath != null) { 
+			values.put(ExpenseTable.COLUMN_NAME_IMAGE_PATH, imagePath);
 		}
 
 		insert(ExpenseTable.TABLE_NAME, null, values);
@@ -212,20 +254,39 @@ public class DBManager {
 		updateBudget(amount);
 	}
 	
-	public void editExpense(int id, double amount, String date, String title,
+	/**
+	 * Edits an expense already in the database.
+	 * 
+	 * @param id the expense's id
+	 * @param sharedExpenseId the shared epense id
+	 * @param amount the new amount
+	 * @param date the new date
+	 * @param title the new title
+	 * @param category the new title
+	 * @param imageTitle the new image title
+	 * @param imagePath the new image path
+	 */
+	public void editExpense(int id, int sharedExpenseId, double amount, String date, String title, Category category,
 			String imageTitle, String imagePath){
 	
 		db = dbHelper.getWritableDatabase();
 		
 		ContentValues values = new ContentValues();
+		if(sharedExpenseId >= 0)
+		{
+			values.put(ExpenseTable.COLUMN_NAME_SHARED_ID, sharedExpenseId);
+		}
 		if(amount >= 0.0){
 			values.put(ExpenseTable.COLUMN_NAME_AMOUNT, amount);
-		}
+		}		
 		if(date != null){
 			values.put(ExpenseTable.COLUMN_NAME_DATE, date);
 		}
 		if(title != null){
 			values.put(ExpenseTable.COLUMN_NAME_TITLE, title);
+		}
+		if(category != null){
+			values.put(ExpenseTable.COLUMN_NAME_CATEGORY_NAME, category.getTitle());
 		}
 		if(imageTitle != null){
 			values.put(ExpenseTable.COLUMN_NAME_IMAGE_TITLE , imageTitle);
@@ -237,6 +298,27 @@ public class DBManager {
 		String[] whereArgs = {Integer.toString(id), };
 		
 		db.update(ExpenseTable.TABLE_NAME, values, "_id=?", whereArgs);
+	}
+	
+	/**
+	 * Deletes a specific expense (along with it's shared expense if it exists) from the expense table (and possibly shared
+	 * expense table)
+	 * 
+	 * @param expenseId the id of the expense
+	 */
+	public void deleteExpense(int expenseId){
+		SharedExpense se = getSharedExpense(expenseId);
+		
+		if(se != null){
+			int sharedExpenseId = se.getId();
+			
+			deleteSharedExpense(sharedExpenseId);
+		}
+		
+		String[] whereArgs = {Integer.toString(expenseId), };		
+		db = dbHelper.getWritableDatabase();
+		db.delete(ExpenseTable.TABLE_NAME, "_id=?", whereArgs);
+		close();
 	}
 	
 	/**
@@ -377,7 +459,6 @@ public class DBManager {
 	}
 
 	/**
-	 * added by Kevin Chen (may need code reivew with Tyler)
 	 * get a list of categories from the database
 	 */
 	public List<Category>getCategories()
@@ -404,7 +485,6 @@ public class DBManager {
 	}
 	
 	/**
-	 * added by Kevin Chen (may need code reivew with Tyler)
 	 * Adds a category to the database
 	 * @param name the category name
 	 * @param color the category color
@@ -431,7 +511,8 @@ public class DBManager {
 		// Define a projection that specifies which columns from the database
 		String[] columns = { ReminderTable._ID, ReminderTable.COLUMN_NAME_TITLE,
 				ReminderTable.COLUMN_NAME_BILLED_AMOUNT, ReminderTable.COLUMN_NAME_PAID_AMOUNT, 
-				ReminderTable.COLUMN_NAME_DUE_DATE, ReminderTable.COLUMN_NAME_REMIND_DATE };
+				ReminderTable.COLUMN_NAME_DUE_DATE, ReminderTable.COLUMN_NAME_REMIND_DATE,
+				ReminderTable.COLUMN_NAME_REMIND_AGAIN };
 
 		String sortBy = ExpenseTable._ID + " ASC;";
 
@@ -461,6 +542,7 @@ public class DBManager {
 			r.setPaidAmount(c.getDouble(c.getColumnIndexOrThrow(ReminderTable.COLUMN_NAME_PAID_AMOUNT)));
 			r.setDueDate(c.getString(c.getColumnIndexOrThrow(ReminderTable.COLUMN_NAME_DUE_DATE)));
 			r.setRemindDate(c.getString(c.getColumnIndexOrThrow(ReminderTable.COLUMN_NAME_REMIND_DATE)));
+			r.setRemindAgain((c.getInt(c.getColumnIndexOrThrow(ReminderTable.COLUMN_NAME_REMIND_AGAIN))>0));
 			
 			reminders.add(r);
 			c.moveToNext();
@@ -478,13 +560,14 @@ public class DBManager {
 	 * @param dueDate the due date
 	 * @param (optional) remindDate when to remind the user
 	 */
-	public void addReminder(String title, double billedAmount, double paidAmount, String dueDate, String remindDate){
+	public void addReminder(String title, double billedAmount, double paidAmount, String dueDate, String remindDate, boolean remindAgain){
 		db = dbHelper.getWritableDatabase();
 		
 		ContentValues values = new ContentValues();
 		values.put(ReminderTable.COLUMN_NAME_TITLE, title);
 		values.put(ReminderTable.COLUMN_NAME_BILLED_AMOUNT, billedAmount);		
 		values.put(ReminderTable.COLUMN_NAME_DUE_DATE, dueDate);
+		values.put(ReminderTable.COLUMN_NAME_REMIND_AGAIN, remindAgain);
 		
 		if(paidAmount >= 0.0){
 			values.put(ReminderTable.COLUMN_NAME_PAID_AMOUNT, paidAmount);
@@ -508,7 +591,7 @@ public class DBManager {
 	 * @param remindDate the date to remind the user
 	 */
 	public void editReminder(int id, String title, double billedAmount, double paidAmount,
-							 String dueDate, String remindDate){
+							 String dueDate, String remindDate, boolean remindAgain){
 		db = dbHelper.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		
@@ -527,6 +610,7 @@ public class DBManager {
 		if(remindDate != null){
 			values.put(ReminderTable.COLUMN_NAME_REMIND_DATE, remindDate);
 		}
+		values.put(ReminderTable.COLUMN_NAME_REMIND_AGAIN, remindAgain);
 		
 		String[] whereArgs = {Integer.toString(id), };
 		
@@ -545,6 +629,172 @@ public class DBManager {
 		String[] whereArgs = {Integer.toString(id), };
 		
 		db.delete(ReminderTable.TABLE_NAME, "_id=?", whereArgs);
+		close();
+	}
+	
+	/**
+	 * Adds a new shared expense into the shared expense table.
+	 * 
+	 * @param expenseId the expense id associated with the new shared expense
+	 * @param userId1 user1
+	 * @param hasPaid1 haspaid1
+	 * @param userId2 user2
+	 * @param hasPaid2 haspaid2
+	 * @param userId3 user3
+	 * @param hasPaid3 haspaid3
+	 */
+	public void addSharedExpense(int expenseId, String userId1, boolean hasPaid1,
+								                String userId2, boolean hasPaid2,
+								                String userId3, boolean hasPaid3){
+		db = dbHelper.getWritableDatabase();
+		
+		ContentValues values = new ContentValues();
+		
+		if(userId1 != null){
+			values.put(SharedExpenseTable.COLUMN_NAME_CONTACT_ID1, userId1);
+			values.put(SharedExpenseTable.COLUMN_NAME_HAS_PAID1, hasPaid1);
+		}
+		if(userId2 != null){
+			values.put(SharedExpenseTable.COLUMN_NAME_CONTACT_ID2, userId2);
+			values.put(SharedExpenseTable.COLUMN_NAME_HAS_PAID2, hasPaid2);
+		}
+		if(userId3 != null){
+			values.put(SharedExpenseTable.COLUMN_NAME_CONTACT_ID3, userId3);
+			values.put(SharedExpenseTable.COLUMN_NAME_HAS_PAID3, hasPaid3);
+		}
+
+        db.insert(SharedExpenseTable.TABLE_NAME, null, values);
+        // retrieve the newly created sharedexpense's id for the expense table
+        // Define a projection that specifies which columns from the database
+ 		String[] columns = { SharedExpenseTable._ID, };
+
+ 		String sortBy = SharedExpenseTable._ID + " DESC";
+
+ 		Cursor c = queryDatabase(SharedExpenseTable.TABLE_NAME, columns, null, null,
+ 				null, null, sortBy);
+ 		
+ 		c.moveToFirst();
+ 		int sharedId = c.getInt(c.getColumnIndexOrThrow(SharedExpenseTable._ID));
+        // update the expense with the new sharedid
+ 		editExpense(expenseId, sharedId, -1, null, null, null, null, null);
+	}
+	
+	/**
+	 * Updates the shared expense with new values.
+	 * 
+	 * @param sharedId id
+	 * @param userId1 userId1
+	 * @param hasPaid1 haspaid1
+	 * @param userId2 userId2
+	 * @param hasPaid2 haspaid2
+	 * @param userId3 userId3
+	 * @param hasPaid3 haspaid3
+	 */
+	public void editSharedExpense(int sharedId, String userId1, boolean hasPaid1,
+								                String userId2, boolean hasPaid2,
+								                String userId3, boolean hasPaid3){
+		db = dbHelper.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		
+		if(userId1 != null){
+			values.put(SharedExpenseTable.COLUMN_NAME_CONTACT_ID1, userId1);
+			if(hasPaid1 == true)
+				values.put(SharedExpenseTable.COLUMN_NAME_HAS_PAID1, 1);
+			else
+				values.put(SharedExpenseTable.COLUMN_NAME_HAS_PAID1, 0);
+		}
+		if(userId2 != null){
+			values.put(SharedExpenseTable.COLUMN_NAME_CONTACT_ID2, userId2);
+			if(hasPaid2 == true)
+				values.put(SharedExpenseTable.COLUMN_NAME_HAS_PAID2, 1);
+			else
+				values.put(SharedExpenseTable.COLUMN_NAME_HAS_PAID2, 0);
+		}
+		if(userId3 != null){
+			values.put(SharedExpenseTable.COLUMN_NAME_CONTACT_ID3, userId3);
+			if(hasPaid3 == true)
+				values.put(SharedExpenseTable.COLUMN_NAME_HAS_PAID3, 1);
+			else
+				values.put(SharedExpenseTable.COLUMN_NAME_HAS_PAID3, 0);
+		}	
+		
+		String[] whereArgs = {Integer.toString(sharedId), };
+		
+		db.update(SharedExpenseTable.TABLE_NAME, values, "_id=?", whereArgs);
+		close();
+	}
+	
+	/**
+	 * Gets a single shared expense from the database
+	 * 
+	 * @param expenseId the id of the expense the shared expense belongs to.
+	 * @return SharedExpense
+	 */
+	public SharedExpense getSharedExpense(int expenseId){
+		db = dbHelper.getReadableDatabase();
+		
+		// Define a projection that specifies which columns from the database
+		String[] columns = { ExpenseTable._ID, ExpenseTable.COLUMN_NAME_SHARED_ID, };		
+
+		String[] whereArgs = {Integer.toString(expenseId), };
+		
+		Cursor c = queryDatabase(ExpenseTable.TABLE_NAME, columns, "_id=?", whereArgs,
+				null, null, null);		
+		
+		try{
+			c.moveToFirst();
+			int sharedId = c.getInt(c.getColumnIndexOrThrow(ExpenseTable.COLUMN_NAME_SHARED_ID));
+			
+			String[] columns2 = { SharedExpenseTable._ID, SharedExpenseTable.COLUMN_NAME_CONTACT_ID1, SharedExpenseTable.COLUMN_NAME_HAS_PAID1,
+					SharedExpenseTable.COLUMN_NAME_CONTACT_ID2, SharedExpenseTable.COLUMN_NAME_HAS_PAID2,
+					SharedExpenseTable.COLUMN_NAME_CONTACT_ID3, SharedExpenseTable.COLUMN_NAME_HAS_PAID3, };
+			
+			String[] whereArgs2 = {Integer.toString(sharedId), };
+			
+			c = queryDatabase(SharedExpenseTable.TABLE_NAME, columns2, "_id=?", whereArgs2,
+					null, null, null);
+			
+			SharedExpense sharedExpense = loadSharedExpense(c);
+			close();
+			return sharedExpense;
+		} catch (Exception exception){
+			exception.printStackTrace();
+			close();
+			return null;
+		}
+		
+	}
+	
+	/**
+	 * Creates a SharedExpense object from a database cursor object.
+	 * 
+	 * @param c the cursor
+	 * @return SharedExpense
+	 */
+	public SharedExpense loadSharedExpense(Cursor c){
+		SharedExpense e = new SharedExpense();
+		c.moveToFirst();
+		e.setId(c.getInt(c.getColumnIndexOrThrow(SharedExpenseTable._ID)));
+		e.setUserId1(c.getString(c.getColumnIndexOrThrow(SharedExpenseTable.COLUMN_NAME_CONTACT_ID1)));		
+		e.setHasPaid1((c.getInt(c.getColumnIndexOrThrow(SharedExpenseTable.COLUMN_NAME_HAS_PAID1))>0));
+		e.setUserId2(c.getString(c.getColumnIndexOrThrow(SharedExpenseTable.COLUMN_NAME_CONTACT_ID2)));		
+		e.setHasPaid2((c.getInt(c.getColumnIndexOrThrow(SharedExpenseTable.COLUMN_NAME_HAS_PAID2))>0));
+		e.setUserId3(c.getString(c.getColumnIndexOrThrow(SharedExpenseTable.COLUMN_NAME_CONTACT_ID3)));		
+		e.setHasPaid3((c.getInt(c.getColumnIndexOrThrow(SharedExpenseTable.COLUMN_NAME_HAS_PAID3))>0));
+		return e;
+	}
+	
+	/**
+	 * Deletes a specific shared expense from the shared expense table.
+	 * 
+	 * @param id the id of the shared expense.
+	 */
+	public void deleteSharedExpense(int id){
+		db = dbHelper.getWritableDatabase();
+		
+		String[] whereArgs = {Integer.toString(id), };
+		
+		db.delete(SharedExpenseTable.TABLE_NAME, "_id=?", whereArgs);
 		close();
 	}
 

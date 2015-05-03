@@ -3,11 +3,9 @@ package com.SimpleScan.simplescan;
 import java.util.List;
 
 import com.parse.FindCallback;
-import com.parse.ParseACL;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -30,10 +28,8 @@ public class FragmentAddContact extends Fragment implements OnClickListener {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_add_contacts, container,
-				false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_add_contacts, container, false);
 		Button b = (Button) v.findViewById(R.id.insertContactButton);
 		b.setOnClickListener(this);
 		return v;
@@ -42,7 +38,7 @@ public class FragmentAddContact extends Fragment implements OnClickListener {
 	/* Send a contact request to another existing user */
 	public void addContact() {
 		EditText editText = (EditText) getView().findViewById(R.id.editContactText);
-		
+
 		int newContactID = Integer.parseInt(editText.getText().toString());
 		ParseQuery<ParseUser> query = ParseUser.getQuery();
 		query.whereEqualTo("username", newContactID + ""); // finds whether the
@@ -51,11 +47,9 @@ public class FragmentAddContact extends Fragment implements OnClickListener {
 		query.findInBackground(new FindCallback<ParseUser>() {
 			@Override
 			public void done(List<ParseUser> objects, com.parse.ParseException e) {
-				EditText editText = (EditText) getView().findViewById(
-						R.id.editContactText);
+				EditText editText = (EditText) getView().findViewById(R.id.editContactText);
 				TextView contactMessage = (TextView) getView().findViewById(R.id.contactMessage);
-				int newContactID = Integer.parseInt(editText.getText()
-						.toString());
+				int newContactID = Integer.parseInt(editText.getText().toString());
 				if (e == null) {
 					if (objects.size() == 1) {
 						ParseObject newContact = new ParseObject("ContactRequest");
@@ -84,7 +78,7 @@ public class FragmentAddContact extends Fragment implements OnClickListener {
 	public void onClick(View v) {
 		/* Hide the keyboard on input */
 		InputMethodManager inputManager = (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		inputManager.hideSoftInputFromWindow(this.getActivity().getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+		inputManager.hideSoftInputFromWindow(this.getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 		switch (v.getId()) {
 		case R.id.insertContactButton:
 			addContact();
