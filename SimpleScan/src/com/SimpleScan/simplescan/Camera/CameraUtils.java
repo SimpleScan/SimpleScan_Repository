@@ -7,13 +7,20 @@ import android.util.Log;
 
 public class CameraUtils {
 
-	/** Check if this device has a camera */
+	/**
+	 * Check if this device has a camera
+	 * @param context
+	 * @return boolean that represent whether the Camera is supported in the hardware
+	 */
 	public static boolean checkCameraHardware(Context context) {
 	    if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) return true;
 	    else return false;
 	}
 	
-	/** A safe way to get an instance of the Camera object. */
+	/**
+	 * A safe way to get an instance of the Camera object.
+	 * @return the Camera Instance
+	 */
 	public static Camera getCameraInstance(){
 	    Camera c = null;
 	    try {
@@ -24,6 +31,11 @@ public class CameraUtils {
 	    return c; // returns null if camera is unavailable
 	}
 	
+	/**
+	 * Check if this device support flash
+	 * @param context
+	 * @return boolean that represent whether the Camera is supported in the hardware
+	 */
 	public static boolean isFlashSupported(Context context){ 
     	return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);   	  
 	}

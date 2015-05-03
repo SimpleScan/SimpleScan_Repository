@@ -30,31 +30,58 @@ public class CameraEngine {
         }
     };
     
+    /**
+     * Show whether the camera is on
+     * @return boolean on
+     */
     public boolean isOn() {
         return on;
     }
     
+    /**
+     * Obtain the current camera instance
+     * @return the camera instance
+     */
     public Camera getCamera(){
     	return camera;
     }
     
+    /**
+     * Obtain the surfaceHolder that represents the camera view
+     * @return the surfaceHolder
+     */
     public SurfaceHolder getSurfaceHolder(){
     	return surfaceHolder;
     }
     
+    /**
+     * CameraEngine constructor
+     * @param surfaceHolder
+     */
     public CameraEngine(SurfaceHolder surfaceHolder){
         this.surfaceHolder = surfaceHolder;
     }
     
+    /**
+     * Request auto-focus
+     */
     public void requestFocus() {
         if (camera == null) return;
         if (isOn()) camera.autoFocus(autoFocusCallback);
     }
     
+    /**
+     * Check the current flash mode
+     * @return current flash mode
+     */
     public int checkFlashMode() {
     	return flashMode;
     }
     
+    /**
+     * Change/cycle the flash mode
+     * @param context
+     */
     public void cycleFlashMode(Context context) {
     	if(camera == null) return;
     	if(isOn()){
@@ -73,6 +100,9 @@ public class CameraEngine {
     	}
     }
     
+    /**
+     * Set the flash mode for the camera
+     */
     public void requestFlash() {
     	Parameters cam_parameters = camera.getParameters();
     	
@@ -89,6 +119,10 @@ public class CameraEngine {
     	camera.setParameters(cam_parameters);
     }
     
+    /**
+     * Zoom the camera based on the touch gesture
+     * @param event: the MotionEvent that represents the touch event
+     */
     public void requestZoom(MotionEvent event) {
     	switch(event.getAction() & MotionEvent.ACTION_MASK) {
         case MotionEvent.ACTION_POINTER_DOWN:
@@ -131,6 +165,9 @@ public class CameraEngine {
 		}
     }
     
+    /**
+     * Start and initialize CameraEngine
+     */
     public void start() {
         this.camera = CameraUtils.getCameraInstance();
         if (this.camera == null) return;        
@@ -147,6 +184,9 @@ public class CameraEngine {
         }
     }
     
+    /**
+     * Stop and release CameraEngine
+     */
     public void stop(){
         if(camera != null){
         	camera.cancelAutoFocus();
@@ -157,6 +197,12 @@ public class CameraEngine {
         flashMode = 0;
     }
     
+    /**
+     * Request camera instance to take a picture
+     * @param shutterCallback
+     * @param rawPictureCallback
+     * @param jpegPictureCallback
+     */
     public void takeShot(Camera.ShutterCallback shutterCallback, Camera.PictureCallback rawPictureCallback, Camera.PictureCallback jpegPictureCallback ){
     	if(isOn()) {
     		requestFlash();
