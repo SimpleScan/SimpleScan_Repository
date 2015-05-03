@@ -16,6 +16,11 @@ public class OverviewListAdapter extends BaseAdapter {
 	private Context context;
 	private static List<Expense> exp;
 	
+	/**
+	 * OverviewListAdapter constructor
+	 * @param context
+	 * @param expenses: expenses represented by the list
+	 */
 	public OverviewListAdapter(Context context, List<Expense> expenses) {
 		super();
 		this.exp = expenses;

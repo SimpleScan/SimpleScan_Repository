@@ -24,6 +24,10 @@ public class Filesystem {
 	protected static String _traindataPath = Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract/tessdata";
 	public static String _ImgDirPath = Environment.getExternalStorageDirectory() + "/SimpleScan/images";
 	
+	/**
+	 * Initialization function for the filesystem
+	 * @param context
+	 */
 	public static void init(Context context) {
 		File app_dir = new File(_appPath);
         if(!app_dir.exists()) {
@@ -38,6 +42,12 @@ public class Filesystem {
         }
 	}
 	
+	/**
+	 * Save a Bitmap to local filesystem
+	 * @param bitmap: Bitmap to be saved
+	 * @return The file path where Bitmap is saved
+	 * @throws IOException
+	 */
 	public static String saveBitmap (Bitmap bitmap) throws IOException {
     	
     	File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
@@ -92,7 +102,11 @@ public class Filesystem {
         }
 	}
 	
-	/** Create a file Uri for saving an image or video */
+    /**
+     * Create a file Uri for saving an image or video
+     * @param type: Media type to be stored
+     * @return the Uri
+     */
     public static Uri getOutputMediaFileUri(int type){
           return Uri.fromFile(getOutputMediaFile(type));
     }
