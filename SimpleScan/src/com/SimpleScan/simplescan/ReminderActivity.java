@@ -141,7 +141,7 @@ public class ReminderActivity extends Activity implements FragmentManager.OnBack
     }
 
     /**
-     * A fragment representing the front of the card.
+     * A fragment representing a list of reminders as the front of the card.
      */
     public static class CardFrontFragment extends Fragment {        
     	private View v;
@@ -155,6 +155,9 @@ public class ReminderActivity extends Activity implements FragmentManager.OnBack
         //For layoutchange_list_item
         private ViewGroup mContainerView;
    
+    	/**
+    	 * An empty constructor
+    	 */
     	public CardFrontFragment() {
         }
 
@@ -303,14 +306,12 @@ public class ReminderActivity extends Activity implements FragmentManager.OnBack
         	defaultCurDate = dateFormat.format(new Date());
         	
         	setUpEditReminder(v);
-        	//setUpDatePicker(v);
     		
             return v;
         }
         
         private void setUpEditReminder(View v) {
         	setUpReminderTextFields();
-        	//setUpRemindDaySpinner();	
         	setUpReminderDateFields(v);
 		
     		// Set button listener
