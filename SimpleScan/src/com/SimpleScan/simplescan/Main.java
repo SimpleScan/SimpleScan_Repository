@@ -7,6 +7,19 @@ import com.SimpleScan.simplescan.Tools.Filesystem;
 import com.SimpleScan.simplescan.sqlite.DBManager;
 
 import android.content.Intent;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+import android.annotation.TargetApi;
+import com.SimpleScan.simplescan.Entities.Expense;
+import com.SimpleScan.simplescan.Tools.Filesystem;
+import com.SimpleScan.simplescan.sqlite.DBManager;
+import com.parse.FindCallback;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,6 +53,7 @@ public class Main extends FragmentActivity implements OnItemClickListener {
 	static final String STATE_LEVEL = "mainLevel";
 	private int mCurrentScore;
 	private int mCurrentLevel;
+	private int myID;
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	protected void onCreate(Bundle saveInstatnceState) {
@@ -47,7 +61,9 @@ public class Main extends FragmentActivity implements OnItemClickListener {
 		setContentView(R.layout.activity_main);
 		
 		Filesystem.init(this);
-		
+		this.myID = Integer.parseInt(ParseUser.getCurrentUser().getUsername());
+		dbManager = new DBManager(this);
+		retrieveSharedExpense();
 		//enable the action bar
 		getActionBar().setHomeButtonEnabled(true);
 		getActionBar().setDisplayHomeAsUpEnabled(true);		
@@ -241,5 +257,39 @@ public class Main extends FragmentActivity implements OnItemClickListener {
 		}
 		else
 			return false;
+	}
+	/**
+	 * Retrieves a shared list of expenses to you when you were offline.
+	 */
+	public void retrieveSharedExpense() {
+		ParseQuery<ParseObject> pending_query = ParseQuery.getQuery("ShareRequest");
+		pending_query.whereEqualTo("id_receiver", myID);
+		pending_query.whereEqualTo("status", "pending");
+		pending_query.findInBackground(new FindCallback<ParseObject>() {
+			@Override
+			public void done(List<ParseObject> objects, com.parse.ParseException e) {
+				if (e == null) {
+					for (int i = 0; i < objects.size(); i++) {
+						SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+						Calendar calendar = Calendar.getInstance();
+						// Create the expense and save it
+						Expense newExpense = new Expense();
+						newExpense.setAmount(objects.get(i).getInt("amount"));
+						newExpense.setDate(sdf.format(calendar.getTime()));
+						newExpense.setTitle(objects.get(i).getString("title") + " shared by " + objects.get(i).getInt("id_sender"));
+						newExpense.setId(1);
+						newExpense.setSharedId(1);
+						dbManager.addExpense(newExpense.getAmount(), newExpense.getDate(), newExpense.getTitle(), null, null, null);
+						dbManager.editExpense(newExpense.getId(), 1, -1, null, null, null, null, null);
+						objects.get(i).put("status", "viewed");
+						objects.get(i).saveInBackground();
+					}
+
+				} else {
+					Log.d("contact", "Error: " + e.getMessage());
+					// Something went wrong.
+				}
+			}
+		});
 	}
 }
