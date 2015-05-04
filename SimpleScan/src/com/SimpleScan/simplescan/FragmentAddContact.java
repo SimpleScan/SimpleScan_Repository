@@ -43,41 +43,46 @@ public class FragmentAddContact extends Fragment implements OnClickListener {
 	public void addContact() {
 		EditText editText = (EditText) getView().findViewById(R.id.editContactText);
 		
-		int newContactID = Integer.parseInt(editText.getText().toString());
-		ParseQuery<ParseUser> query = ParseUser.getQuery();
-		query.whereEqualTo("username", newContactID + ""); // finds whether the
-															// input ID is an
-															// actual user
-		query.findInBackground(new FindCallback<ParseUser>() {
-			@Override
-			public void done(List<ParseUser> objects, com.parse.ParseException e) {
-				EditText editText = (EditText) getView().findViewById(
-						R.id.editContactText);
-				TextView contactMessage = (TextView) getView().findViewById(R.id.contactMessage);
-				int newContactID = Integer.parseInt(editText.getText()
-						.toString());
-				if (e == null) {
-					if (objects.size() == 1) {
-						ParseObject newContact = new ParseObject("ContactRequest");
-						newContact.put("id_receiver", newContactID);
-						newContact.put("id_sender", Integer.parseInt(ParseUser.getCurrentUser().getUsername()));
-						newContact.put("accepted", false);
-						newContact.put("rejected", false);
-						newContact.saveInBackground();
-						reloadContactFragment();
+		if(!editText.getText().toString().isEmpty() && editText.getText().toString() != "") {
+			int newContactID = Integer.parseInt(editText.getText().toString());
+			ParseQuery<ParseUser> query = ParseUser.getQuery();
+			query.whereEqualTo("username", newContactID + ""); // finds whether the
+																// input ID is an
+																// actual user
+			query.findInBackground(new FindCallback<ParseUser>() {
+				@Override
+				public void done(List<ParseUser> objects, com.parse.ParseException e) {
+					EditText editText = (EditText) getView().findViewById(
+							R.id.editContactText);
+					TextView contactMessage = (TextView) getView().findViewById(R.id.contactMessage);
+					int newContactID = Integer.parseInt(editText.getText()
+							.toString());
+					if (e == null) {
+						if (objects.size() == 1) {
+							ParseObject newContact = new ParseObject("ContactRequest");
+							newContact.put("id_receiver", newContactID);
+							newContact.put("id_sender", Integer.parseInt(ParseUser.getCurrentUser().getUsername()));
+							newContact.put("accepted", false);
+							newContact.put("rejected", false);
+							newContact.saveInBackground();
+							reloadContactFragment();
+						} else {
+							editText.setText("");
+							contactMessage.setText("Invalid ID. Please try again");
+							contactMessage.setTextColor(Color.RED);
+						}
 					} else {
-						editText.setText("");
-						contactMessage.setText("Invalid ID. Please try again");
-						contactMessage.setTextColor(Color.RED);
+						contactMessage.setText("Error. Something went wrong.");
+						// Something went wrong.
 					}
-				} else {
-					contactMessage.setText("Error. Something went wrong.");
-					// Something went wrong.
+	
 				}
-
-			}
-		});
-
+			});
+		} else {
+			TextView contactMessage = (TextView) getView().findViewById(R.id.contactMessage);
+			contactMessage.setText("Invalid ID. Please try again");
+			contactMessage.setTextColor(Color.RED);
+		}
 	}
 
 	@Override

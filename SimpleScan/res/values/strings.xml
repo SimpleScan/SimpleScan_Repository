@@ -9,13 +9,12 @@
     <string name="cate_color_prompt">Please select a color</string>
     <string-array name="menu">
         <item>Overall</item>
-        <item>View Expenses</item>
-        <item>View Contact List</item>
-        <item>Categories</item>
-        <item>View Profile</item>
-        <item>View Reminders</item>
-        <item>Connect</item>
+        <item>Expenses</item>
         <item>Shared Expenses</item>
+        <item>Categories</item>
+        <item>Contact List</item>
+        <item>Profile</item>
+        <item>Reminders</item>
     </string-array>
     <string name="dateFormat">MM/dd/yyyy</string> 
     <string-array name="cate_color">

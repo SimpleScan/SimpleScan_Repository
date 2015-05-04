@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#000000" >
+    android:background="@color/FlatBlue" >
 
     <TextView
         android:id="@+id/textView1"
@@ -16,49 +16,39 @@
         android:textColor="#ffffff"
         android:textSize="30sp" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/editContactText"
-    		android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-        	android:layout_centerVertical="true"
-            android:ems="10"
-            android:gravity="center"
-            android:inputType="number"
-            android:hint="Enter ID Here"
-            android:textColor="#ffffff" 
-            android:textSize="30sp" >
-			
-            <requestFocus />
-        </EditText>
+   <EditText
+       android:id="@+id/editContactText"
+	   android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+   	   android:layout_centerVertical="true"
+   	   android:layout_centerHorizontal="true"
+       android:gravity="center"
+       android:ems="10"
+       android:inputType="number"
+       android:hint="Enter ID Here"
+       android:textColor="@color/White" 
+       android:textSize="30sp" >
+       <requestFocus />
+   </EditText>
 
-        <TextView
-            android:id="@+id/contactMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/editContactText"
-            android:layout_centerHorizontal="true"
-            android:text="Enter the ID of your contact"
-            android:textColor="#ffffff" 
-            android:textSize="20sp"/>
+   <TextView
+       android:id="@+id/contactMessage"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_below="@+id/editContactText"
+       android:layout_centerHorizontal="true"
+       android:text="Enter the ID of your contact"
+       android:textColor="@color/White" 
+       android:textSize="20sp"/>
 
-    </RelativeLayout>
-
-    <Button
-        android:id="@+id/insertContactButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="Send Request"
-        android:background="#add8e6"
-       	android:paddingLeft="20dp"
-       	android:paddingRight="20dp" 
-       	android:layout_marginBottom="25dp"
-       	android:layout_alignParentBottom="true"
-        />
+   <Button
+       android:id="@+id/insertContactButton"
+       android:layout_width="60dp"
+       android:layout_height="60dp"
+       android:layout_centerHorizontal="true"
+       android:layout_margin="20dp"
+       android:layout_alignParentBottom="true" 
+       android:background="@drawable/add_icon"/>
 
 </RelativeLayout>

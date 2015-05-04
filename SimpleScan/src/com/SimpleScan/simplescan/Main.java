@@ -160,25 +160,20 @@ public class Main extends FragmentActivity implements OnItemClickListener {
 				newFragment = new FragmentExpenses();
 				break;
 			case 2:
-				newFragment = new FragmentContact();
+				newFragment = new FragmentViewShared();
 				break;
 			case 3:
 				newFragment = new FragmentCategories();
 				break;
 			case 4:
-				newFragment = new FragmentProfile();
+				newFragment = new FragmentContact();
 				break;
 			case 5:
-				startActivity(new Intent(this, ReminderActivity.class));
-				return;
-			case 6:
 				newFragment = new FragmentConnect();
 				break;
-				//newFragment = new FragmentNotification();
-				//break;
-			case 7:
-				newFragment = new FragmentViewShared();
-				break;
+			case 6:
+				startActivity(new Intent(this, ReminderActivity.class));
+				return;
 			default:
 				break;
 		}
