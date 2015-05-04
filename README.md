@@ -19,7 +19,16 @@ Tai Lin Wu
 
 The project_documentation.pdf is inside the root directory of the project folder.
 
+INSTALLATION:
 
+1. Download the SimpleScan.apk file above using the browser on your android device.
+2. Once it's downloaded, open "downloads" on your android device and tap the SimpleScan.apk file.
+3. Tap yes when prompted.  The application will now install on your phone.
+
+NOTE: You may need to go to Menu -> Settings -> Security -> and check "Unknown Sources" on your android device
+to allow downloading of this "3rd party" apk file.
+
+For more info or to install via computer and device, go to: http://www.androidpit.com/android-for-beginners-what-is-an-apk-file
 
 
 
