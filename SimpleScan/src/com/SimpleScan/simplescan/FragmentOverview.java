@@ -3,6 +3,7 @@ package com.SimpleScan.simplescan;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.SimpleScan.listadapter.OverviewListAdapter;
 import com.SimpleScan.simplescan.Entities.Budget;
 import com.SimpleScan.simplescan.Entities.Expense;
 import com.SimpleScan.simplescan.sqlite.DBManager;

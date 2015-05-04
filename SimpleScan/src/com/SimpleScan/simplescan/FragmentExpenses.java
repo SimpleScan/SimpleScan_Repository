@@ -14,6 +14,7 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Spinner;
 
+import com.SimpleScan.listadapter.ExpandableListAdapter;
 import com.SimpleScan.simplescan.sqlite.DBManager;
 import com.SimpleScan.simplescan.Entities.Expense;
 

@@ -1,7 +1,13 @@
-package com.SimpleScan.simplescan;
+package com.SimpleScan.listadapter;
 
 import java.util.List;
+
+import com.SimpleScan.simplescan.FragmentShareExpense;
+import com.SimpleScan.simplescan.Main;
+import com.SimpleScan.simplescan.R;
 import com.SimpleScan.simplescan.Entities.Expense;
+import com.SimpleScan.simplescan.R.id;
+import com.SimpleScan.simplescan.R.layout;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;

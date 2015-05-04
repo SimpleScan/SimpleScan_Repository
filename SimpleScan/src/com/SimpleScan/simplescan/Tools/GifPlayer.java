@@ -1,6 +1,9 @@
-package com.SimpleScan.simplescan;
+package com.SimpleScan.simplescan.Tools;
 
 import java.io.InputStream;
+
+import com.SimpleScan.simplescan.R;
+import com.SimpleScan.simplescan.R.drawable;
 
 import android.content.Context;
 import android.graphics.Canvas;

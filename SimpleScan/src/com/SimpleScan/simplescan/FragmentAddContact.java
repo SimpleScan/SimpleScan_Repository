@@ -59,8 +59,8 @@ public class FragmentAddContact extends Fragment implements OnClickListener {
 				if (e == null) {
 					if (objects.size() == 1) {
 						ParseObject newContact = new ParseObject("ContactRequest");
-						newContact.put("id_sender", newContactID);
-						newContact.put("id_receiver", Integer.parseInt(ParseUser.getCurrentUser().getUsername()));
+						newContact.put("id_receiver", newContactID);
+						newContact.put("id_sender", Integer.parseInt(ParseUser.getCurrentUser().getUsername()));
 						newContact.put("accepted", false);
 						newContact.put("rejected", false);
 						newContact.saveInBackground();
