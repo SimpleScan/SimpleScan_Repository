@@ -17,6 +17,8 @@ Jaehwan Park,
 Tyler Pearse,
 Tai Lin Wu
 
+The project_documentation.pdf is inside the root directory of the project folder.
+
 
 
 
