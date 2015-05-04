@@ -17,7 +17,7 @@ Jaehwan Park,
 Tyler Pearse,
 Tai Lin Wu
 
-Installation:
+
 
 
 
