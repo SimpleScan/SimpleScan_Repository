@@ -3,7 +3,6 @@ package com.SimpleScan.simplescan;
 import java.util.List;
 
 import com.parse.FindCallback;
-import com.parse.ParseACL;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -23,40 +22,43 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+/**
+ * 
+ * @author David
+ * Fragment to add a contact. Checks if the contact you have tried adding is actually a user
+ * then sends a contact request over. The other user can then choose to accept or reject the request.
+ *
+ */
 public class FragmentAddContact extends Fragment implements OnClickListener {
 
 	public FragmentAddContact() {
-		// Required empty public constructor
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_add_contacts, container,
-				false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_add_contacts, container, false);
 		Button b = (Button) v.findViewById(R.id.insertContactButton);
 		b.setOnClickListener(this);
 		return v;
 	}
 
-	/* Send a contact request to another existing user */
+	/**
+	 *  Send a contact request to another existing user 
+	 */
 	public void addContact() {
 		EditText editText = (EditText) getView().findViewById(R.id.editContactText);
-		
-		if(!editText.getText().toString().isEmpty() && editText.getText().toString() != "") {
+		if (!editText.getText().toString().isEmpty() && editText.getText().toString() != "") {
 			int newContactID = Integer.parseInt(editText.getText().toString());
 			ParseQuery<ParseUser> query = ParseUser.getQuery();
-			query.whereEqualTo("username", newContactID + ""); // finds whether the
-																// input ID is an
-																// actual user
+			query.whereEqualTo("username", newContactID + ""); 
+			//finds whether the input ID is an actual user, then find the user
+																 
 			query.findInBackground(new FindCallback<ParseUser>() {
 				@Override
 				public void done(List<ParseUser> objects, com.parse.ParseException e) {
-					EditText editText = (EditText) getView().findViewById(
-							R.id.editContactText);
+					EditText editText = (EditText) getView().findViewById(R.id.editContactText);
 					TextView contactMessage = (TextView) getView().findViewById(R.id.contactMessage);
-					int newContactID = Integer.parseInt(editText.getText()
-							.toString());
+					int newContactID = Integer.parseInt(editText.getText().toString());
 					if (e == null) {
 						if (objects.size() == 1) {
 							ParseObject newContact = new ParseObject("ContactRequest");
@@ -73,9 +75,8 @@ public class FragmentAddContact extends Fragment implements OnClickListener {
 						}
 					} else {
 						contactMessage.setText("Error. Something went wrong.");
-						// Something went wrong.
 					}
-	
+
 				}
 			});
 		} else {
@@ -89,7 +90,7 @@ public class FragmentAddContact extends Fragment implements OnClickListener {
 	public void onClick(View v) {
 		/* Hide the keyboard on input */
 		InputMethodManager inputManager = (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		inputManager.hideSoftInputFromWindow(this.getActivity().getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+		inputManager.hideSoftInputFromWindow(this.getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 		switch (v.getId()) {
 		case R.id.insertContactButton:
 			addContact();
@@ -97,7 +98,9 @@ public class FragmentAddContact extends Fragment implements OnClickListener {
 		}
 	}
 
-	/* Send it back to the contact fragment */
+	/** 
+	 * Send it back to the contact fragment 
+	 */
 	public void reloadContactFragment() {
 		Fragment fragment = new FragmentContact();
 		FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

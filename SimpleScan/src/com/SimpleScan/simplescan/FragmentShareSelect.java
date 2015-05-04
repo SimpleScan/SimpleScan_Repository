@@ -17,6 +17,14 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+/**
+ * 
+ * @author David
+ * This fragment allows users to select from a list of expenses the one that you want
+ * to share with the contact. It loads up all your available expenses, and upon sharing
+ * will cut your expense in half to share with your contact.
+ *
+ */
 public class FragmentShareSelect extends Fragment {
 
 	private int contactID;
@@ -55,7 +63,7 @@ public class FragmentShareSelect extends Fragment {
 				dbManager.addSharedExpense(e.getId(), contactID + "", false, (String) null, false, (String) null, false);
 				e.setAmount(e.getAmount() / 2);
 				dbManager.editExpense(e.getId(), 1, e.getAmount(), e.getDate(), e.getTitle(), e.getCategory(), e.getImageTitle(), e.getImagePath());
-				System.out.println(e.getAmount() + "\n");
+				/* Enter the new data into the parse database */
 				ParseObject newSE = new ParseObject("ShareRequest");
 				newSE.put("id_sender", myID);
 				newSE.put("id_receiver", contactID);
@@ -63,6 +71,7 @@ public class FragmentShareSelect extends Fragment {
 				newSE.put("title", e.getTitle());
 				newSE.put("amount", e.getAmount());
 				newSE.saveInBackground();
+				/* Switch to the share expense fragment */
 				Fragment fragment = new FragmentViewShared();
 				FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
