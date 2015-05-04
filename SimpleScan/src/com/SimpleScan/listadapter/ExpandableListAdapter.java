@@ -1,4 +1,4 @@
-package com.SimpleScan.simplescan;
+package com.SimpleScan.listadapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,7 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import com.SimpleScan.simplescan.R;
 import com.SimpleScan.simplescan.Entities.Expense;
+import com.SimpleScan.simplescan.R.id;
+import com.SimpleScan.simplescan.R.layout;
 
 import android.content.Context;
 import android.graphics.Typeface;

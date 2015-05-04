@@ -18,7 +18,6 @@ import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -205,25 +204,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 			updateRecordDateButton(OFF);
 			updateRecordAmtButton(TOGGLE);
     	}
-/*
-    	switch(theButton) {
-    	case "name" :
-    		updateRecordNameButton(TOGGLE);
-			updateRecordDateButton(OFF);
-			updateRecordAmtButton(OFF);
-    		break;
-    	case "date" :
-    		updateRecordNameButton(OFF);
-			updateRecordDateButton(TOGGLE);
-			updateRecordAmtButton(OFF);
-    		break;
-    	case "amt" :
-    		updateRecordNameButton(OFF);
-			updateRecordDateButton(OFF);
-			updateRecordAmtButton(TOGGLE);
-    		break;
-    	}
-*/
     	updateOCRIcons();
 		updateRectViewStatus();	
     }

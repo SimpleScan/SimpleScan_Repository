@@ -16,7 +16,11 @@ public class OCR {
 	
 	private static final String [] MONTHS = {"january", "febuary", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"};
 	
-	//For EditExpense, convert amount from String to double, for budget subtracting 
+	/**
+	 * Convert amount from String to double, for budget subtracting 
+	 * @param amtStr: String representation of the expense amount
+	 * @return amt: Double representation of the expense amount
+	 */
 	public static double amtStr2double (String amtStr) {
     	double amt=0;
     	String numStr="";
@@ -30,6 +34,12 @@ public class OCR {
     	return amt;
     }
 	
+	/**
+	 * Detect the text from a Bitmap
+	 * @param targetBitmap: the Bitmap where the text is extracted
+	 * @param detectOption: type of text detection
+	 * @return String representation of the text detected
+	 */
 	public static String detect_text(Bitmap targetBitmap, String detectOption){
     	TessBaseAPI baseApi = new TessBaseAPI(); 	
     	baseApi.init(Environment.getExternalStorageDirectory() + "/SimpleScan/tesseract/", "eng");

@@ -71,24 +71,44 @@ public class ZoomableImageView extends ImageView {
     private GestureDetector gestureDetector;
     private int defaultScale;
    
+    /**
+	 * Check whether the user requested cropping
+	 * @return boolean that represents whether it is in the cropping mode
+	 */
     public boolean isCroppingMode() {
     	return isCropping;
     }
     
+    /**
+     * Set the cropping mode upon user's request
+     * @param newCroppingMode
+     */
     public void setCroppingMode (boolean newCroppingMode) {
     	isCropping = newCroppingMode;
     	setFocusable(!isCropping);
         setFocusableInTouchMode(!isCropping);
     }
     
+    /**
+     * Get the default scale of the view
+     * @return defaultScale
+     */
     public int getDefaultScale() {
         return defaultScale;
     }
 
+    /**
+     * Set the default scale of the view
+     * @param defaultScale
+     */
     public void setDefaultScale(int defaultScale) {
         this.defaultScale = defaultScale;
     }
 
+    /**
+     * ZoomableImageView constructor that initialize all related variables
+     * @param context
+     */
     public ZoomableImageView(Context context) {
         super(context);
         
@@ -101,6 +121,11 @@ public class ZoomableImageView extends ImageView {
         gestureDetector = new GestureDetector(new MyGestureDetector());  
     }
    
+    /**
+     * ZoomableImageView constructor that initialize all related variables and specified attributes
+     * @param context
+     * @param attrs: attributes to be applied to the view
+     */
     public ZoomableImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
        
@@ -336,7 +361,11 @@ public class ZoomableImageView extends ImageView {
         float y = event.getY(0) + event.getY(1);
         point.set(x/2, y/2);
     }
-   
+    
+    /**
+    * Set the view with the input Bitmap
+    * @param b: Bitmap to be set
+    */
     public void setImageBitmap(Bitmap b) {       
         if(b != null) {
             imgBitmap = b;
@@ -440,6 +469,10 @@ public class ZoomableImageView extends ImageView {
         }
     }
    
+    /**
+     * Get current zoomed Bitmap represented by the view
+     * @return scaled_imgBitmap: current zoomed Bitmap
+     */
     public Bitmap getPhotoBitmap() {       
         return scaled_imgBitmap;
     }
@@ -536,7 +569,11 @@ public class ZoomableImageView extends ImageView {
         }
     };
 
-   class MyGestureDetector extends SimpleOnGestureListener {
+    /**
+	 * @author tdw6193
+	 *	Gesture dectector class
+	 */
+    class MyGestureDetector extends SimpleOnGestureListener {
         @Override
         public boolean onDoubleTap(MotionEvent event) {           
             if(!isCropping) {

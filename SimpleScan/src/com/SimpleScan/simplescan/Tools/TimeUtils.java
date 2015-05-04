@@ -14,6 +14,12 @@ public class TimeUtils {
 	public static final String THREE_DAYS = "3 days before due date";
 	public static final String ONE_WEEK = "1 week before due date";
 	
+	/**
+	 * Get the date representing the specified reminding days before the due date
+	 * @param dueDate
+	 * @param remindDays
+	 * @return reminding date
+	 */
 	public static String getRemindDate(String dueDate, String remindDays) {
 		String remindDate="";
 		
@@ -88,6 +94,11 @@ public class TimeUtils {
 		return remindDate;
 	}
 	
+	/**
+	 * Get the current date difference between the input date and current date
+	 * @param billDueDate
+	 * @return the date difference
+	 */
 	public static String getDateDiffStr(String billDueDate)
     {
         try
@@ -117,6 +128,11 @@ public class TimeUtils {
         return "";
     }
 	
+	/**
+	 * Convert the date format from String to Integer
+	 * @param remindDateStr: String representation of the reminding date
+	 * @return remindDateInt: Integer representation of the reminding date
+	 */
 	public static int remindDateStr2Int(String remindDateStr) {
 		int remindDateInt = 0;
 		if(remindDateStr==ONE_DAY) remindDateInt = 1;
@@ -126,10 +142,19 @@ public class TimeUtils {
 		return remindDateInt;
 	}
 	
+	/**
+	 * Convert days 2 seconds
+	 * @param days
+	 * @return seconds
+	 */
 	public static int days2sec(int days) {
 		return days*24*60*60;
 	}
 	
+	/**
+	 * Get current day in the current month
+	 * @return the day in month
+	 */
 	public static int getDaysInMonth() {
 		int repeatDays = 0;
 		Calendar cal = Calendar.getInstance();

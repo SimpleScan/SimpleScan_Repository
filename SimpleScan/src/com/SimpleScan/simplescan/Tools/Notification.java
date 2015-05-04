@@ -2,21 +2,24 @@ package com.SimpleScan.simplescan.Tools;
 
 import com.SimpleScan.simplescan.Main;
 import com.SimpleScan.simplescan.R;
-import com.SimpleScan.simplescan.R.drawable;
-
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 
 public class Notification {
 	
 	private NotificationCompat.Builder mBuilder;
 	
+	/**
+	 * Notification constructor
+	 * @param context
+	 * @param text: Notification text
+	 * @param statusText: Notification status text
+	 * @param curIntent: Intent after notification is pressed
+	 */
 	public Notification (Context context, String text, String statusText, boolean curIntent) {
 		Intent resultIntent;
 		if(curIntent) resultIntent = ((Activity) context).getIntent();
@@ -30,6 +33,14 @@ public class Notification {
 				.setContentIntent(resultPendingIntent);
 	}
 	
+	/**
+	 * Notification constructor with specified title
+	 * @param context
+	 * @param title: Notification title
+	 * @param text: Notification text
+	 * @param statusText: Notification status text
+	 * @param curIntent: Intent after notification is pressed
+	 */
 	public Notification (Context context, String title, String text, String statusText, boolean curIntent) {
 		Intent resultIntent;
 		if(curIntent) resultIntent = ((Activity) context).getIntent();
@@ -41,10 +52,19 @@ public class Notification {
 				.setContentIntent(resultPendingIntent); //automically jump into the app when the user clicks it in the panel.
 	}
 	
+	/**
+	 * Get the builder that represents the notification
+	 * @return
+	 */
 	public NotificationCompat.Builder getNotification() {
 		return mBuilder;
 	}
 	
+	/**
+	 * Send the notification represented by the ID
+	 * @param context
+	 * @param id: Notification ID
+	 */
 	public void sendNotification(Context context, int id) {
 		NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
 		mNotifyMgr.notify(id, mBuilder.build());

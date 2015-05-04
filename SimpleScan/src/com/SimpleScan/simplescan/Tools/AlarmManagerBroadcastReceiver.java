@@ -47,6 +47,14 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 		wl.release();
 	}
 	
+	/**
+	 * Set a repeated alarm
+	 * @param context
+	 * @param id: Alarm ID
+	 * @param setDate: Date that specified when the alarm will go off
+	 * @param frequency: Frequency of the repetition of the alarm
+	 * @param notificationMSG: Message to be displayed when the alarm goes off
+	 */
 	public void setRepeatedDateAlarm(Context context, int id, String setDate, int frequency, String notificationMSG) {
 		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		PendingIntent pIntent = alarmPIntent(context, id, false, notificationMSG);
@@ -58,6 +66,13 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 		}
 	}
 	
+	/**
+	 * Set an one-time alarm
+	 * @param context
+	 * @param id: Alarm ID
+	 * @param setDate: Date that specified when the alarm will go off
+	 * @param notificationMSG: Message to be displayed when the alarm goes off
+	 */
 	public void setOneTimeDateAlarm(Context context, int id, String setDate, String notificationMSG){
 		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		PendingIntent pIntent = alarmPIntent(context, id, true, notificationMSG);		
@@ -69,6 +84,11 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 		}
 	}
 	
+	/**
+	 * Cancel the alarm specified by the ID
+	 * @param context
+	 * @param id: Alarm ID
+	 */
 	public void cancelAlarm(Context context, int id) {
 		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		Intent alarmIntent = new Intent(context, AlarmManagerBroadcastReceiver.class);
